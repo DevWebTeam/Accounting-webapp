@@ -1,7 +1,7 @@
 import Currency from '../models/currency.js';
 
 // Create a new currency
-const createCurrency = async (req, res) => {
+export const createCurrency = async (req, res) => {
     try {
         const currency = new Currency(req.body);
         await currency.save();
@@ -12,7 +12,7 @@ const createCurrency = async (req, res) => {
 };
 
 // Get all currencies
-const getAllCurrencies = async (req, res) => {
+export const getAllCurrencies = async (req, res) => {
     try {
         const currencies = await Currency.find();
         res.status(200).send(currencies);
@@ -22,7 +22,7 @@ const getAllCurrencies = async (req, res) => {
 };
 
 // Get a currency by ID
-const getCurrencyById = async (req, res) => {
+export const getCurrencyById = async (req, res) => {
     try {
         const currency = await Currency.findById(req.params.id);
         if (!currency) {
@@ -35,7 +35,7 @@ const getCurrencyById = async (req, res) => {
 };
 
 // Update a currency by ID
-const updateCurrencyById = async (req, res) => {
+export const updateCurrencyById = async (req, res) => {
     try {
         const currency = await Currency.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!currency) {
@@ -48,7 +48,7 @@ const updateCurrencyById = async (req, res) => {
 };
 
 // Patch for currency
-const patchCurrency = async (req, res) => {
+export const patchCurrency = async (req, res) => {
     try {
         const { operation, priceInDollar } = req.body;
         const updates = {};
@@ -82,7 +82,7 @@ const patchCurrency = async (req, res) => {
 };
 
 // Delete a currency by ID
-const deleteCurrencyById = async (req, res) => {
+export const deleteCurrencyById = async (req, res) => {
     try {
         const currency = await Currency.findByIdAndDelete(req.params.id);
         if (!currency) {
@@ -92,13 +92,4 @@ const deleteCurrencyById = async (req, res) => {
     } catch (error) {
         res.status(500).send(error);
     }
-};
-
-export default {
-    createCurrency,
-    getAllCurrencies,
-    getCurrencyById,
-    updateCurrencyById,
-    patchCurrency,
-    deleteCurrencyById
 };

@@ -1,7 +1,7 @@
 import Notification from '../models/notification.js';
 
 // Create a new notification
-const createNotification = async (req, res) => {
+export const createNotification = async (req, res) => {
     try {
         const notification = new Notification(req.body);
         await notification.save();
@@ -12,7 +12,7 @@ const createNotification = async (req, res) => {
 };
 
 // Get all notifications
-const getAllNotifications = async (req, res) => {
+export const getAllNotifications = async (req, res) => {
     try {
         const notifications = await Notification.find().populate('user');
         res.status(200).send(notifications);
@@ -22,7 +22,7 @@ const getAllNotifications = async (req, res) => {
 };
 
 // Get a notification by ID
-const getNotificationById = async (req, res) => {
+export const getNotificationById = async (req, res) => {
     try {
         const notification = await Notification.findById(req.params.id).populate('user');
         if (!notification) {
@@ -35,9 +35,9 @@ const getNotificationById = async (req, res) => {
 };
 
 // Update a notification by ID
-const updateNotificationById = async (req, res) => {
+export const updateNotificationById = async (req, res) => {
     try {
-        const notification = await Notification.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate('user');
+            const notification = await Notification.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate('user');
         if (!notification) {
             return res.status(404).send();
         }
@@ -48,7 +48,7 @@ const updateNotificationById = async (req, res) => {
 };
 
 // Delete a notification by ID
-const deleteNotificationById = async (req, res) => {
+export const deleteNotificationById = async (req, res) => {
     try {
         const notification = await Notification.findByIdAndDelete(req.params.id);
         if (!notification) {
@@ -59,6 +59,7 @@ const deleteNotificationById = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
 
 export default {
     createNotification,
