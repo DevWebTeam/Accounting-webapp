@@ -1,15 +1,23 @@
 import Client from '../models/client.js';
 
 // Function to create a new client
+
+
 export const createClient = async (req, res) => {
+    console.log("Request Body:", req.body); // Log the request body for debugging
     try {
         const client = new Client(req.body);
         await client.save();
         res.status(201).send(client);
     } catch (error) {
-        res.status(400).send(error);
+        console.error("Error creating client:", error);
+        res.status(400).send({
+            message: "Error creating client",
+            error: error.message || error
+        });
     }
 };
+
 
 // Function to get all clients
 export const getAllClients = async (req, res) => {

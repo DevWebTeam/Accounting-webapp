@@ -1,7 +1,7 @@
 import Transaction from '../models/transaction.js';
 
 // Create a new transaction
-const createTransaction = async (req, res) => {
+export const createTransaction = async (req, res) => {
     try {
         const transaction = new Transaction(req.body);
         await transaction.save();
@@ -12,7 +12,7 @@ const createTransaction = async (req, res) => {
 };
 
 // Get all transactions
-const getAllTransactions = async (req, res) => {
+export const getAllTransactions = async (req, res) => {
     try {
         const transactions = await Transaction.find()
             .populate('fromClient')
@@ -27,7 +27,7 @@ const getAllTransactions = async (req, res) => {
 };
 
 // Get a transaction by ID
-const getTransactionById = async (req, res) => {
+export const getTransactionById = async (req, res) => {
     try {
         const transaction = await Transaction.findById(req.params.id)
             .populate('fromClient')
@@ -45,7 +45,7 @@ const getTransactionById = async (req, res) => {
 };
 
 // Update a transaction by ID
-const updateTransactionById = async (req, res) => {
+export const updateTransactionById = async (req, res) => {
     try {
         const transaction = await Transaction.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
             .populate('fromClient')
@@ -63,7 +63,7 @@ const updateTransactionById = async (req, res) => {
 };
 
 // Archive a transaction by ID
-const archiveTransactionById = async (req, res) => {
+export const archiveTransactionById = async (req, res) => {
     try {
         const transaction = await Transaction.findById(req.params.id);
         if (!transaction) {
@@ -77,8 +77,9 @@ const archiveTransactionById = async (req, res) => {
     }
 };
 
+
 // Unarchive a transaction by ID
-const unarchiveTransactionById = async (req, res) => {
+export const unarchiveTransactionById = async (req, res) => {
     try {
         const transaction = await Transaction.findById(req.params.id);
         if (!transaction) {
@@ -93,7 +94,7 @@ const unarchiveTransactionById = async (req, res) => {
 };
 
 // Delete a transaction by ID
-const deleteTransactionById = async (req, res) => {
+export const deleteTransactionById = async (req, res) => {
     try {
         const transaction = await Transaction.findByIdAndDelete(req.params.id);
         if (!transaction) {

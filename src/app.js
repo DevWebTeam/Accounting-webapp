@@ -1,14 +1,17 @@
+/* import bodyParser from "body-parser"; */
 import express from "express";
-import bodyParser from "body-parser";
-import financesRoute from "./routes/financial-management.js";
+import './configs/connects.js';
 import clientsRoute from "./routes/client-management.js";
 import currenciesRoute from "./routes/currencies-management.js";
-import notificationsRoute from "./routes/notifications.js"
+import financesRoute from "./routes/financial-management.js";
+import notificationsRoute from "./routes/notifications.js";
 
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
+/* app.use(bodyParser.urlencoded({ extended: true })); */
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 
 

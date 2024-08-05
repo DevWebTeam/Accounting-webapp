@@ -1,10 +1,8 @@
 import express from "express";
 import {
-    createNotification,
+    deleteNotificationById,
     getAllNotifications,
-    getNotificationById,
-    updateNotificationById,
-    deleteNotificationById
+    getNotificationById
 } from "../controllers/notificationsControllers.js";
 
 
@@ -16,7 +14,7 @@ router.get("/", getAllNotifications);
 
 router.get("/notification", getNotificationById);
 
-router.delete("/delete", deleteNotificatonById);
+router.delete("/delete", deleteNotificationById);
 
 
 

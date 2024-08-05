@@ -1,5 +1,5 @@
 import express from "express";
-import {
+/* import {
     createTransaction,
     getAllTransactions,
     getTransactionById,
@@ -8,7 +8,7 @@ import {
     unarchiveTransactionById,
     deleteTransactionById
 } from "../controllers/transactionControllers.js"
-
+ */
 
 
 const router = express.Router();
