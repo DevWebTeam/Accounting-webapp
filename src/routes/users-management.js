@@ -13,13 +13,13 @@ const router = express();
 
 router.get("/", getAllUsers);
 
-router.get("/user", getUserById);
+router.get("/user/:id", getUserById);
 
-router.post("/add", createUserById);
+router.post("/add", createUser);
 
 router.patch("/user/Update", updateUserById);
 
-router.delete("/user/delete", deleteUserById);
+router.delete("/user/delete/:id", deleteUserById);
 
 
 

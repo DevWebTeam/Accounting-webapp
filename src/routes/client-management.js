@@ -18,9 +18,9 @@ router.get("/client", getClientById);
 
 router.post("/add", createClient);
 
-router.patch("/client/update", updateClientById);
+router.patch("/client/update/:id", updateClientById);
 
-router.delete("/client/delete", deleteClientById);
+router.delete("/client/delete/:id", deleteClientById);
 
 
 

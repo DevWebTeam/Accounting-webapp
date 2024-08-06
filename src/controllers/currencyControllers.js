@@ -1,7 +1,17 @@
 import Currency from '../models/currency.js';
+import bodyParser from 'body-parser';
+import express from "express";
+
+const controller = express();
+controller.use(bodyParser.urlencoded({extended: true}));
+controller.use(express.json());
+
+
+
+
 
 // Create a new currency
-const createCurrency = async (req, res) => {
+export const createCurrency = async (req, res) => {
     try {
         const currency = new Currency(req.body);
         await currency.save();
@@ -12,85 +22,71 @@ const createCurrency = async (req, res) => {
 };
 
 // Get all currencies
-const getAllCurrencies = async (req, res) => {
+export const getAllCurrencies = async (req, res) => {
     try {
         const currencies = await Currency.find();
-        res.status(200).send(currencies);
+        const data = currencies.map(currency => {
+            return {
+                _id: currency._id,
+                icon: currency.icon,
+                nameInArabic: currency.nameInArabic,
+                code: currency.code,
+                exchRate: currency.exchRate,
+                priorityCu: currency.priorityCu
+            }
+        })
+
+        console.log(data)
+        res.status(200).send(data);
     } catch (error) {
         res.status(500).send(error);
     }
 };
 
 // Get a currency by ID
-const getCurrencyById = async (req, res) => {
+export const getCurrencyById = async (req, res) => {
     try {
+        
+        console.log("\nreq params:", req.params);
         const currency = await Currency.findById(req.params.id);
-        if (!currency) {
-            return res.status(404).send();
-        }
-        res.status(200).send(currency);
+        console.log("\nquery result:", currency);
+        
+        res.status(200).json(currency);
+
     } catch (error) {
-        res.status(500).send(error);
+        console.log("Error:", error.message);
+        res.status(500).json("error fetching currency");
     }
 };
 
-// Update a currency by ID
-const updateCurrencyById = async (req, res) => {
-    try {
-        const currency = await Currency.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!currency) {
-            return res.status(404).send();
-        }
-        res.status(200).send(currency);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-};
 
-// Patch for currency
-const patchCurrency = async (req, res) => {
+// Patch for currency all fields required
+export const patchCurrencyById = async (req, res) => {
     try {
-        const { operation, priceInDollar } = req.body;
-        const updates = {};
-        
-        if (operation) {
-            if (!['multiply', 'divide'].includes(operation)) {
-                return res.status(400).send({ error: 'Invalid operation. Must be "multiply" or "divide".' });
-            }
-            updates.operation = operation;
-        }
-        
-        if (priceInDollar !== undefined) {
-            if (typeof priceInDollar !== 'number') {
-                return res.status(400).send({ error: 'priceInDollar must be a number.' });
-            }
-            updates.priceInDollar = priceInDollar;
-        }
-        
-        if (Object.keys(updates).length === 0) {
-            return res.status(400).send({ error: 'At least one field (operation or priceInDollar) must be provided for update.' });
-        }
+
+        const updates = req.body;
+        console.log(updates);
         
         const currency = await Currency.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
-        if (!currency) {
-            return res.status(404).send();
-        }
-        res.status(200).send(currency);
+        
+
+        res.status(200).json(currency);
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).json(error.message);
     }
 };
 
 // Delete a currency by ID
-const deleteCurrencyById = async (req, res) => {
+export const deleteCurrencyById = async (req, res) => {
     try {
-        const currency = await Currency.findByIdAndDelete(req.params.id);
-        if (!currency) {
-            return res.status(404).send();
-        }
-        res.status(200).send(currency);
+        console.log(req.params);
+        const result = await Currency.findByIdAndDelete(req.params.id);
+        console.log(result);
+
+
+        res.status(200).redirect("/currencies");
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error.message);
     }
 };
 
@@ -98,7 +94,6 @@ export default {
     createCurrency,
     getAllCurrencies,
     getCurrencyById,
-    updateCurrencyById,
-    patchCurrency,
+    patchCurrencyById,
     deleteCurrencyById
 };

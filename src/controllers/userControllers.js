@@ -1,7 +1,7 @@
 import User from '../models/user.js';
 
 // Create a new user
-const createUser = async (req, res) => {
+export const createUser = async (req, res) => {
     try {
         const user = new User(req.body);
         await user.save();
@@ -12,7 +12,7 @@ const createUser = async (req, res) => {
 };
 
 // Get all users
-const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find();
         res.status(200).send(users);
@@ -22,7 +22,7 @@ const getAllUsers = async (req, res) => {
 };
 
 // Get a user by ID
-const getUserById = async (req, res) => {
+export const getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -35,7 +35,7 @@ const getUserById = async (req, res) => {
 };
 
 // Update a user by ID
-const updateUserById = async (req, res) => {
+export const updateUserById = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!user) {
@@ -48,7 +48,7 @@ const updateUserById = async (req, res) => {
 };
 
 // Update a user's role by ID
-const updateUserRoleById = async (req, res) => {
+export const updateUserRoleById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -63,7 +63,7 @@ const updateUserRoleById = async (req, res) => {
 };
 
 // Delete a user by ID
-const deleteUserById = async (req, res) => {
+export const deleteUserById = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {

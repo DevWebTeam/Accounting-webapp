@@ -28,4 +28,4 @@ totalCredit: {
 },
 });
 
-export default mongoose.model('Client', clientschema);
+export default mongoose.model('Client', clientSchema);
