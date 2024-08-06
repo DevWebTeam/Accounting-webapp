@@ -34,6 +34,21 @@ export const getCurrencyById = async (req, res) => {
     }
 };
 
+// Get a currency by name in English or name in Arabic
+export const getCurrencyByName = async (req, res) => {
+    try {
+        const currency = await Currency.findOne({
+            $or: [{ nameInEnglish: req.params.name }, { nameInArabic: req.params.name }]
+        });
+        if (!currency) {
+            return res.status(404).send();
+        }
+        res.status(200).send(currency);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
 // Update a currency by ID
 export const updateCurrencyById = async (req, res) => {
     try {

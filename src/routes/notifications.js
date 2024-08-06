@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.get("/", getAllNotifications);
 
-router.get("/notification", getNotificationById);
+router.get("/notification/:id", getNotificationById);
 
-router.delete("/delete", deleteNotificationById);
+router.delete("/delete/:id", deleteNotificationById);
 
 
 

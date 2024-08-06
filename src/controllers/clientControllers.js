@@ -42,6 +42,19 @@ export const getClientById = async (req, res) => {
     }
 };
 
+// Get a client by name
+export const getClientByName = async (req, res) => {
+    try {
+        const client = await Client.findOne({ name: req.params.name });
+        if (!client) {
+            return res.status(404).send();
+        }
+        res.status(200).send(client);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
 // Function to update a client by ID
 export const updateClientById = async (req, res) => {
     try {
@@ -71,6 +84,7 @@ export default {
     createClient,
     getAllClients,
     getClientById,
+    getClientByName,
     updateClientById,
     deleteClientById
 };

@@ -1,11 +1,12 @@
 import express from "express";
 import {
     createCurrency,
+    deleteCurrencyById,
     getAllCurrencies,
     getCurrencyById,
-    updateCurrencyById,
+    getCurrencyByName,
     patchCurrency,
-    deleteCurrencyById
+    updateCurrencyById
 } from "../controllers/currencyControllers.js";
 
 
@@ -21,6 +22,8 @@ router.post("/add", createCurrency);
 router.get("/currency", getCurrencyById);
 
 router.patch("/currency/update", updateCurrencyById);
+
+router.get('/name/:name', getCurrencyByName);
 
 router.patch("/currency/patch", patchCurrency);
 

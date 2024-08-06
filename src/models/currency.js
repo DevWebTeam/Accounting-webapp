@@ -4,12 +4,23 @@ const currencySchema = new mongoose.Schema({
     icon: {
         type: String
     },
-    name: {
+    nameInEnglish: {
         type: String,
         required: true
     },
     nameInArabic: {
         type: String,
+        required: true
+    },
+    code: {
+        type: String,
+        maxlength: 3,
+        set: v => v.toUpperCase(),
+        required: true
+    },
+    symbol: {
+        type: String,
+        maxlength: 3,
         required: true
     },
     // darb wla 9isma
@@ -22,7 +33,7 @@ const currencySchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    priceInDollar: {
+    exchRate: {
         type: Number,
         required: true
     },
