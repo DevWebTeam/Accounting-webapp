@@ -29,17 +29,9 @@ creditForUs: {
     type: Number,
     required: true
 },
-deptedForUsDollars: {
-    type: Number,
-    required: true
-},
-creditForUsDollars: {
-    type: Number,
-    required: true
-},
+
 ResultInDollars: {
     type: Number,
-    required: true
 },
 description: {
     type: String,

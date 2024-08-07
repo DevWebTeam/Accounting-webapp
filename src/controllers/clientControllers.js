@@ -1,15 +1,23 @@
 import Client from '../models/client.js';
 
 // Function to create a new client
+
+
 export const createClient = async (req, res) => {
+    console.log("Request Body:", req.body); // Log the request body for debugging
     try {
         const client = new Client(req.body);
         await client.save();
         res.status(201).send(client);
     } catch (error) {
-        res.status(400).send(error);
+        console.error("Error creating client:", error);
+        res.status(400).send({
+            message: "Error creating client",
+            error: error.message || error
+        });
     }
 };
+
 
 // Function to get all clients
 export const getAllClients = async (req, res) => {
@@ -25,6 +33,19 @@ export const getAllClients = async (req, res) => {
 export const getClientById = async (req, res) => {
     try {
         const client = await Client.findById(req.params.id);
+        if (!client) {
+            return res.status(404).send();
+        }
+        res.status(200).send(client);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+// Get a client by name
+export const getClientByName = async (req, res) => {
+    try {
+        const client = await Client.findOne({ name: req.params.name });
         if (!client) {
             return res.status(404).send();
         }
@@ -63,6 +84,7 @@ export default {
     createClient,
     getAllClients,
     getClientById,
+    getClientByName,
     updateClientById,
     deleteClientById
 };

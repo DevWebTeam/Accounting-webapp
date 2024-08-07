@@ -24,11 +24,11 @@ const currencySchema = new mongoose.Schema({
         required: true
     },
     // darb wla 9isma
-    operation: {
+    /* operation: {
         type: String,
         enum: ['multiply', 'divide'],
         required: true
-    },
+    }, */
     priorityCu: {
         type: Number,
         required: true

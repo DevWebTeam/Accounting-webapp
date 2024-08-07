@@ -34,6 +34,18 @@ export const getNotificationById = async (req, res) => {
     }
 };
 
+/* // Update a notification by ID
+export const updateNotificationById = async (req, res) => {
+    try {
+            const notification = await Notification.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate('user');
+        if (!notification) {
+            return res.status(404).send();
+        }
+        res.status(200).send(notification);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+}; */
 
 // Delete a notification by ID
 export const deleteNotificationById = async (req, res) => {
@@ -48,10 +60,11 @@ export const deleteNotificationById = async (req, res) => {
     }
 };
 
+
 export default {
     createNotification,
     getAllNotifications,
     getNotificationById,
-    updateNotificationById,
+    /* updateNotificationById, */
     deleteNotificationById
 };

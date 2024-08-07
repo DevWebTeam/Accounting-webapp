@@ -1,11 +1,12 @@
 import express from "express";
 import {
     createClient,
+    deleteClientById,
     getAllClients,
     getClientById,
-    updateClientById,
-    deleteClientById
-} from "../controllers/clientControllers.js"
+    getClientByName,
+    updateClientById
+} from "../controllers/clientControllers.js";
 
 
 const router = express.Router();
@@ -18,9 +19,11 @@ router.get("/client", getClientById);
 
 router.post("/add", createClient);
 
-router.patch("/client/update/:id", updateClientById);
+router.patch("/client/update", updateClientById);
 
-router.delete("/client/delete/:id", deleteClientById);
+router.get('/name/:name',getClientByName);
+
+router.delete("/client/delete", deleteClientById);
 
 
 

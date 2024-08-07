@@ -1,24 +1,30 @@
 import express from "express";
 import {
     createCurrency,
+    deleteCurrencyById,
     getAllCurrencies,
     getCurrencyById,
-    patchCurrencyById,
-    deleteCurrencyById
+    getCurrencyByName,
+    updateCurrencyById
 } from "../controllers/currencyControllers.js";
 
 
 const router = express.Router();
 
+
+
+
 router.get("/", getAllCurrencies);
 
 router.post("/add", createCurrency);
 
-router.get("/currency/:id", getCurrencyById);
+router.get("/currency", getCurrencyById);
 
-router.patch("/currency/patch/:id", patchCurrencyById);
+router.patch("/currency/update", updateCurrencyById);
 
-router.delete("/currency/delete/:id", deleteCurrencyById);
+router.get('/name/:name', getCurrencyByName);
+
+router.delete("/currency/delete", deleteCurrencyById);
 
 
 

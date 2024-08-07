@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const clientSchema = new mongoose.Schema({
+const clientschema = new mongoose.Schema({
 name: {
     type: String,
     required: true,
@@ -28,4 +28,4 @@ totalCredit: {
 },
 });
 
-export default mongoose.model('Client', clientSchema);
+export default mongoose.model('Client', clientschema);

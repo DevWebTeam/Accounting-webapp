@@ -1,10 +1,8 @@
 import express from "express";
 import {
-    createNotification,
+    deleteNotificationById,
     getAllNotifications,
-    getNotificationById,
-    updateNotificationById,
-    deleteNotificationById
+    getNotificationById
 } from "../controllers/notificationsControllers.js";
 
 
