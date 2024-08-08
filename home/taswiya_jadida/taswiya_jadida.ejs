@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>تبديل المحتوى باستخدام أزرار الراديو</title>
+    <link rel="stylesheet" href="taswiya_jadida.css">
+</head>
+<body>
+
+<h2>تبديل المحتوى باستخدام أزرار الراديو</h2>
+
+<div class="radio-container">
+    <label class="radio-label">
+        <input type="radio" name="content" id="content1" checked>
+        <span>المحتوى الأول</span>
+    </label>
+    <label class="radio-label">
+        <input type="radio" name="content" id="content2">
+        <span>المحتوى الثاني</span>
+    </label>
+    <label class="radio-label">
+        <input type="radio" name="content" id="content3">
+        <span>المحتوى الثالث</span>
+    </label>
+</div>
+
+<div class="content content1">
+    <h3>المحتوى الأول</h3>
+    <textarea placeholder="أدخل تعليقك هنا..." rows="5" cols="50"></textarea>
+    <div class="input-group">
+        <input type="text" placeholder="ابحث واختر المستخدم" class="input-field" id="user1">
+        <input type="text" placeholder="اختر العملة" class="input-field" id="currency1">
+        <input type="text" placeholder="أدخل المبلغ" class="input-field" id="amount1">
+    </div>
+    <div class="input-group">
+        <input type="text" placeholder="ابحث واختر المستخدم" class="input-field" id="user2">
+        <input type="text" placeholder="اختر العملة" class="input-field" id="currency2">
+        <input type="text" placeholder="أدخل المبلغ" class="input-field" id="amount2">
+    </div>
+    <div class="total-container">
+        <h4>المبلغ الإجمالي:</h4>
+        <span id="totalAmount">0</span>
+    </div>
+    <button type="button" id="confirmButton">تأكيد المعاملة</button>
+</div>
+
+<div class="content content2">
+    <h3>المحتوى الثاني</h3>
+    <form id="transactionForm">
+        <div class="input-group row">
+            <input type="text" placeholder="أدخل الوصف" class="input-field">
+            <input type="number" placeholder="أدخل المبلغ" class="input-field">
+            <input type="text" placeholder="اختر العملة" class="input-field">
+        </div>
+        <div class="columns-container">
+            <div class="column">
+                <input type="text" placeholder="اختر الحساب" class="input-field">
+                <input type="text" placeholder="اختر العملة" class="input-field">
+                <input type="number" placeholder="أدخل سعر الإخلاء" class="input-field">
+                <input type="number" placeholder="أدخل المبلغ" class="input-field">
+                <input type="number" placeholder="أدخل النسبة المئوية" class="input-field">
+                <input type="number" placeholder="أدخل المبلغ الإجمالي" class="input-field">
+            </div>
+            <div class="column">
+                <input type="text" placeholder="اختر الحساب" class="input-field">
+                <input type="text" placeholder="اختر العملة" class="input-field">
+                <input type="number" placeholder="أدخل سعر الإخلاء" class="input-field">
+                <input type="number" placeholder="أدخل المبلغ" class="input-field">
+                <input type="number" placeholder="أدخل النسبة المئوية" class="input-field">
+                <input type="number" placeholder="أدخل المبلغ الإجمالي" class="input-field">
+            </div>
+        </div>
+        <div class="total-container">
+            <h4>المبلغ الإجمالي للمعاملة:</h4>
+            <span id="transactionTotalAmount">0</span>
+        </div>
+        <button type="button" id="validateButton">تأكيد المعاملة</button>
+    </form>
+</div>
+
+<div class="content content3">
+    <h3>المحتوى الثالث</h3>
+    <div class="input-group row" >
+        <input type="text" placeholder="أدخل الوصف" class="input-field">
+        <div class="radio-container small">
+            <label class="radio-label small">
+                <input type="radio" name="option" value="option1" checked>
+                <span>الخيار الأول</span>
+            </label>
+            <label class="radio-label small">
+                <input type="radio" name="option" value="option2">
+                <span>الخيار الثاني</span>
+            </label>
+        </div>
+    </div>
+    <div class="input-group row">
+        <input type="text" placeholder="أدخل المستخدم" class="input-field">
+        <input type="text" placeholder="اختر العملة" class="input-field">
+        <input type="number" placeholder="أدخل المبلغ" class="input-field">
+    </div>
+    <button type="button" id="confirmButton3">تأكيد</button>
+</div>
+
+<script src="taswiya_jadida.js"></script>
+</body>
+</html>

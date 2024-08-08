@@ -1,0 +1,182 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-right: 300px;
+    height: 100%;
+}
+
+.container h2 {margin-top: 0;}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    color: white;
+    background-color: rgb(49, 49, 49);
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="date"],
+input[type="radio"] {
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+    display: none;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+
+.radio-group label {
+    padding: 5% 8%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 0 3px;
+
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: gray;
+    color: white;
+    
+}
+
+.currency-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.currency-list input[type="radio"] {
+    margin: 0;
+    display:none
+}
+
+.currency-list label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.currency-list input[type="radio"]:checked + label {
+    background-color: gray;
+    color: white;
+}
+
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: rgb(0, 175, 0);
+}
+
+
+
+/* -------- container-------*/
+
+
+.container {
+    padding: 20px;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.table-container {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    background-color: rgb(207, 207, 207);
+}
+
+.squares-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px 0 10px;
+    bottom: 50px;
+}
+
+.square {
+    width: 200px;
+    height: 100px;
+    margin: 0 10px 0 10px;
+    background-color: rgb(222, 217, 217);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border-radius: 8px;
+    bottom: 50px;
+}

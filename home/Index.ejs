@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Example</title>
+  <link rel="stylesheet" href="Style.css">
+  
+</head>
+<body>
+  <div class="container">
+    <div class="main-content">
+      <h2 class="home-title">الإدارة المالية </h2>
+      <div class="options">
+        <a class="option" href="almirania_l3ama/almz.ejs">الميزانية العامة</a>
+        <a class="option" href="#">دفتر الحسابات</a>
+        <a class="option" href="#">دفتر اليومية</a>
+        <a class="option" href="taswiya_jadida/taswiya_jadida.ejs">تسوية جديدة</a>
+      </div>
+      <div class="counters">
+        <div class="counter">
+          <span class="counter-value"><a href="#">0$</a></span>
+          <span class="counter-label">الأرباح و الخسائر اليومية</span>
+        </div>
+        <div class="counter">
+          <span class="counter-value"><a href="#">0$</a></span>
+          <span class="counter-label">الرصيد المقوم الاجمالي</span>
+        </div>
+      </div>
+
+      <button id="toggle-table">إخفاء الجدول</button>
+
+      <div class="user-dashboard" id="dash-container">
+        <table>
+          <thead>
+            <tr>
+              <th>رصيد المقوم</th>
+              <th>رصيد العملة</th>
+              <th>العملة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Repeat the row below 10 times for 10 users -->
+            <tr>
+              <td><a href="user1.html">-726,543.552</a></td>
+              <td><a href="user1.html">-726,543.552</a></td>
+              <td><a href="user1.html">الدولار الأمريكي</a></td>
+            </tr>
+            <tr>
+              <td><a href="user2.html">-133,119.645</a></td>
+              <td><a href="user2.html">-124.995</a></td>
+              <td><a href="user2.html">يورو</a></td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sidebar">
+      <a href="#option1">الادارة المالية</a>
+      <a href="#">ادارة العملاء</a>
+      <a href="idaratl3oumlat/id_devise.ejs">ادارة العملات</a>
+      <a href="#option4">الاشعارات</a>
+      <a href="#option5">الإحصائيات</a>
+      <a href="#option6">الأسئلة الشائعة</a>
+      <a href="#option7">إعدادات النظام</a>
+    </div>
+  </div>
+  <script src="/home/index.js"></script>
+</body>
+</html>
