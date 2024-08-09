@@ -18,13 +18,13 @@ router.get("/", getAllCurrencies);
 
 router.post("/add", createCurrency);
 
-router.get("/currency", getCurrencyById);
+router.get("/currency/:id", getCurrencyById);
 
-router.patch("/currency/update", updateCurrencyById);
+router.patch("/currency/update/:id", updateCurrencyById);
 
 router.get('/name/:name', getCurrencyByName);
 
-router.delete("/currency/delete", deleteCurrencyById);
+router.delete("/currency/delete/:id", deleteCurrencyById);
 
 
 

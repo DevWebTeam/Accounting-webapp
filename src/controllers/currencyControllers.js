@@ -28,6 +28,7 @@ export const getCurrencyById = async (req, res) => {
         if (!currency) {
             return res.status(404).send();
         }
+        
         res.status(200).send(currency);
     } catch (error) {
         res.status(500).send(error);
@@ -52,7 +53,7 @@ export const getCurrencyByName = async (req, res) => {
 // Update a currency by ID
 export const updateCurrencyById = async (req, res) => {
     try {
-        const currency = await Currency.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const currency = await Currency.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
         if (!currency) {
             return res.status(404).send();
         }
@@ -61,6 +62,7 @@ export const updateCurrencyById = async (req, res) => {
         res.status(400).send(error);
     }
 };
+
 
 
 // Delete a currency by ID

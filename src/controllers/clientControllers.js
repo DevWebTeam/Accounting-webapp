@@ -58,7 +58,7 @@ export const getClientByName = async (req, res) => {
 // Function to update a client by ID
 export const updateClientById = async (req, res) => {
     try {
-        const client = await Client.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const client = await Client.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
         if (!client) {
             return res.status(404).send();
         }
@@ -67,6 +67,7 @@ export const updateClientById = async (req, res) => {
         res.status(400).send(error);
     }
 };
+
 
 // Function to delete a client by ID
 export const deleteClientById = async (req, res) => {

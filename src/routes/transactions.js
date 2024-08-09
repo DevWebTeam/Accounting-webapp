@@ -1,30 +1,55 @@
 import express from 'express';
 import {
-    /*     archiveTransactionById, */
+    archiveTransaction,
     createTransaction,
+    deleteTransactionById,
+    getTransactionById,
+    getTransactionsByClient,
+    getTransactionsByClientGroupedByCurrency,
+    getTransactionsByCurrency,
+    getTransactionsByNames,
+    getTransactionsByNamesAndDate,
+    unarchiveTransaction,
+    updateTransaction
 } from '../controllers/transactionControllers.js';
 
 const router = express.Router();
 
 
 router.post('/new', createTransaction);
-/* 
-router.get('/GetAll', getAllTransactions);
 
-router.get('/Get/:id', getTransactionById);
 
-router.get('/by-currency/:currencyNameInArabic', getTransactionsByCurrency);
+router.put('/update/:id', updateTransaction);
 
+// Route to get a transaction by its ID
+router.get('/get/:id', getTransactionById);
+
+// Route to get transactions by client name
 router.get('/by-client/:clientName', getTransactionsByClient);
 
-router.get('/transactions/client/:clientName', getTransactionsByClientGroupedByCurrency);
+// Route to get transactions by currency name
+router.get('/by-currency/:currencyNameInArabic', getTransactionsByCurrency);
 
-router.put('/update/:id', updateTransactionById);
+// Route to delete a transaction by its ID
+router.delete('/delete/:id', deleteTransactionById);
 
-router.patch('/update/:id/archive', archiveTransactionById);
+//grouped by currency
+router.get('/by-client-gr-currency/:clientName', getTransactionsByClientGroupedByCurrency);
 
-router.patch('/update/:id/unarchive', unarchiveTransactionById);
+//grouped by client
+router.get('/by-currency-gr-client/:clientName', getTransactionsByClientGroupedByCurrency);
 
-router.delete('/delete/:id', deleteTransactionById); */
+//archive
+router.patch('/update/:id/archive', archiveTransaction);
+
+//unarchive
+router.patch('/update/:id/unarchive', unarchiveTransaction);
+
+// Get transactions based on client names and currency names
+router.post('/transactions-by-names', getTransactionsByNames);
+
+// Get transactions based on client names and currency names and date
+router.post('/transactions-by-names-and-date', getTransactionsByNamesAndDate);
+
 
 export default router;

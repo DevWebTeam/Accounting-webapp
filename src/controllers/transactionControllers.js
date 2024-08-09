@@ -3,44 +3,33 @@ import Client from '../models/client.js';
 import Currency from '../models/currency.js';
 import Transaction from '../models/transaction.js';
 import User from '../models/user.js';
+import createNotification from './notificationsControllers.js';
 
 // Function to limit the number of decimal places
 const toShortNumber = (num, digits) => {
     return Number(num.toFixed(digits));
 };
 
-// Create a new transaction
+const generateTransactionNumber = async () => {
+    const lastTransaction = await Transaction.findOne().sort({ transactionNumber: -1 }).exec();
+    return lastTransaction ? lastTransaction.transactionNumber + 1 : 1;
+};
+
+
+// Create
 export const createTransaction = async (req, res) => {
     try {
-        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUs, creditForUs, description, type, userName } = req.body;
+        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic,deptedForUsNum ,creditForUsNum , description, type, userName } = req.body;
 
         const fromClient = await Client.findOne({ name: fromClientName });
         const toClient = await Client.findOne({ name: toClientName });
 
-        if (!fromClient || !toClient) {
-            return res.status(404).send({ error: 'Client not found' });
-        }
 
         const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
         const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
 
-        if (!fromCurrency || !toCurrency) {
-            return res.status(404).send({ error: 'Currency not found' });
-        }
 
         const user = await User.findOne({ username: userName });
-        if (!user) {
-            return res.status(404).send({ error: 'User not found' });
-        }
-
-        // Ensure deptedForUs and creditForUs are numbers
-        const deptedForUsNum = Number(deptedForUs);
-        const creditForUsNum = Number(creditForUs);
-
-        // Check if the conversion was successful
-        if (isNaN(deptedForUsNum) || isNaN(creditForUsNum) || isNaN(fromCurrency.exchRate) || isNaN(toCurrency.exchRate)) {
-            return res.status(400).send({ error: 'Invalid input data' });
-        }
 
         // Perform calculations
         const resultInDollars = (creditForUsNum * fromCurrency.exchRate) - (deptedForUsNum * toCurrency.exchRate);
@@ -48,33 +37,36 @@ export const createTransaction = async (req, res) => {
         // Limit the number of decimal places
         const shortResultInDollars = toShortNumber(resultInDollars, 2);
 
-        // Ensure `results` is a valid number
-        if (isNaN(shortResultInDollars)) {
-            return res.status(400).send({ error: 'Invalid calculation for ResultInDollars' });
-        }
+        const transactionNumber = await generateTransactionNumber();
 
         const transaction = new Transaction({
             _id: new mongoose.Types.ObjectId(),  // Ensure _id is in ObjectId format
             fromClient: fromClient._id,
             toClient: toClient._id,
-            fromNameCurrency: fromCurrency._id,
-            toNameCurrency: toCurrency._id,
+            fromCurrency: fromCurrency._id,
+            toCurrency: toCurrency._id,
             deptedForUs: deptedForUsNum,
             creditForUs: creditForUsNum,
             ResultInDollars: shortResultInDollars,
             description: description,
             type: type,
-            user: user._id,
-            date: Date.now()
+            date: Date.now(),
+            fromClientName:fromClientName,
+            toClientName:toClientName,
+            fromNameCurrency:fromCurrencyNameInArabic,
+            toNameCurrency:toCurrencyNameInArabic,
+            user:user._id,
+            userName:userName,
+            transactionNumber: transactionNumber,
         });
 
         await transaction.save();
 
         // Update client and currency balances with limited decimal places
-        fromClient.totalCredit = toShortNumber(fromClient.totalCredit + (deptedForUsNum * fromCurrency.exchRate), 2);
-        toClient.totalCredit = toShortNumber(toClient.totalCredit - (creditForUsNum * toCurrency.exchRate), 2);
-        fromCurrency.credit = toShortNumber(fromCurrency.credit - deptedForUsNum, 2);
-        toCurrency.credit = toShortNumber(toCurrency.credit + creditForUsNum, 2);
+        fromClient.totalDebt = toShortNumber(fromClient.totalDebt + (creditForUsNum * fromCurrency.exchRate), 2);
+        toClient.totalCredit = toShortNumber(toClient.totalCredit + (deptedForUsNum * toCurrency.exchRate), 2);
+        fromCurrency.credit = toShortNumber(fromCurrency.credit + deptedForUsNum, 2);
+        toCurrency.credit = toShortNumber(toCurrency.credit - creditForUsNum, 2);
 
         await fromClient.save();
         await toClient.save();
@@ -87,390 +79,526 @@ export const createTransaction = async (req, res) => {
     }
 };
 
-/* // Function to update a transaction by ID
-export const updateTransactionById = async(req, res)=> {
+// Update
+export const updateTransaction = async (req, res) => {
     try {
-        const {
-            fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUs, creditForUs, description, type, userName
-        } = req.body;
+        const id = req.params.id;
+        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum, creditForUsNum, description, type, userName } = req.body;
 
-        const transaction = await Transaction.findById(req.params.id);
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
-
-        if (fromClientName) {
-            const fromClient = await Client.findOne({ name: fromClientName });
-            if (fromClient) transaction.fromClient = fromClient._id;
-        }
-        if (toClientName) {
-            const toClient = await Client.findOne({ name: toClientName });
-            if (toClient) transaction.toClient = toClient._id;
-        }
-        if (fromCurrencyNameInArabic) {
-            const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
-            if (fromCurrency) transaction.fromNameCurrency = fromCurrency._id;
-        }
-        if (toCurrencyNameInArabic) {
-            const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
-            if (toCurrency) transaction.toNameCurrency = toCurrency._id;
-        }
-        if (userName) {
-            const user = await User.findOne({ username: userName });
-            if (user) transaction.user = user._id;
+        const transaction = await Transaction.findById(id);
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' });
         }
 
-        if (deptedForUs !== undefined) transaction.deptedForUs = Number(deptedForUs);
-        if (creditForUs !== undefined) transaction.creditForUs = Number(creditForUs);
-        if (description) transaction.description = description;
-        if (type) transaction.type = type;
+        const fromClient = await Client.findOne({ name: fromClientName });
+        const toClient = await Client.findOne({ name: toClientName });
+        const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
+        const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
+        const user = await User.findOne({ username: userName });
 
-        // Recalculate results
-        const fromCurrency = await Currency.findById(transaction.fromNameCurrency);
-        const toCurrency = await Currency.findById(transaction.toNameCurrency);
+        const oldFromClient = await Client.findById(transaction.fromClient);
+        const oldToClient = await Client.findById(transaction.toClient);
+        const oldFromCurrency = await Currency.findById(transaction.fromCurrency);
+        const oldToCurrency = await Currency.findById(transaction.toCurrency);
 
-        if (fromCurrency && toCurrency) {
-            const results = (transaction.creditForUs * fromCurrency.exchRate) - (transaction.deptedForUs * toCurrency.exchRate);
-            transaction.ResultInDollars = results;
-        }
+        oldFromClient.totalDebt = toShortNumber(oldFromClient.totalDebt - (transaction.creditForUs * oldFromCurrency.exchRate), 2);
+        oldToClient.totalCredit = toShortNumber(oldToClient.totalCredit - (transaction.deptedForUs * oldToCurrency.exchRate), 2);
+        oldFromCurrency.credit = toShortNumber(oldFromCurrency.credit - transaction.deptedForUs, 2);
+        oldToCurrency.credit = toShortNumber(oldToCurrency.credit + transaction.creditForUs, 2);
+
+        await oldFromClient.save();
+        await oldToClient.save();
+        await oldFromCurrency.save();
+        await oldToCurrency.save();
+
+        const resultInDollars = (creditForUsNum * fromCurrency.exchRate) - (deptedForUsNum * toCurrency.exchRate);
+        const shortResultInDollars = toShortNumber(resultInDollars, 2);
+
+        transaction.fromClient = fromClient._id;
+        transaction.toClient = toClient._id;
+        transaction.fromCurrency = fromCurrency._id;
+        transaction.toCurrency = toCurrency._id;
+        transaction.deptedForUs = deptedForUsNum;
+        transaction.creditForUs = creditForUsNum;
+        transaction.ResultInDollars = shortResultInDollars;
+        transaction.description = description;
+        transaction.type = type;
+        // Optionally update date or keep original
+        transaction.date = Date.now();
+        transaction.fromClientName = fromClientName;
+        transaction.toClientName = toClientName;
+        transaction.fromNameCurrency = fromCurrencyNameInArabic;
+        transaction.toNameCurrency = toCurrencyNameInArabic;
+        transaction.user = user._id;
+        transaction.userName = userName;
 
         await transaction.save();
 
+        // Update client and currency balances with new values
+        fromClient.totalDebt = toShortNumber(fromClient.totalDebt + (creditForUsNum * fromCurrency.exchRate), 2);
+        toClient.totalCredit = toShortNumber(toClient.totalCredit + (deptedForUsNum * toCurrency.exchRate), 2);
+        fromCurrency.credit = toShortNumber(fromCurrency.credit + deptedForUsNum, 2);
+        toCurrency.credit = toShortNumber(toCurrency.credit - creditForUsNum, 2);
+
+        await fromClient.save();
+        await toClient.save();
+        await fromCurrency.save();
+        await toCurrency.save();
+
+        await createNotification(user._id, `Transaction ${transactionNumber} updated by ${userName}.`);
+
+
         res.status(200).send(transaction);
     } catch (error) {
-        res.status(400).send({ error: error.message });
-    }
-}
-// Function to get all transactions
-export const getAllTransactions = async (req, res) => {
-    try {
-        const transactions = await Transaction.find()
-            .populate('fromClient', 'name')
-            .populate('toClient', 'name')
-            .populate('fromNameCurrency', 'nameInArabic')
-            .populate('toNameCurrency', 'nameInArabic')
-            .populate('user', 'username');
-
-        const formattedTransactions = transactions.map(transaction => ({
-            ...transaction._doc,
-            fromClientName: transaction.fromClient.name,
-            toClientName: transaction.toClient.name,
-            fromCurrencyNameInArabic: transaction.fromNameCurrency.nameInArabic,
-            toCurrencyNameInArabic: transaction.toNameCurrency.nameInArabic,
-            userName: transaction.user.username
-        }));
-
-        res.status(200).send(formattedTransactions);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(400).send(error);
     }
 };
 
-// Function to get a transaction by ID
+//delete
+export const deleteTransactionById = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const transaction = await Transaction.findById(id);
+        
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' });
+        }
+
+        // Fetch client and currency details related to the transaction
+        const fromClient = await Client.findById(transaction.fromClient);
+        const toClient = await Client.findById(transaction.toClient);
+        const fromCurrency = await Currency.findById(transaction.fromCurrency);
+        const toCurrency = await Currency.findById(transaction.toCurrency);
+
+        // Revert balances for clients and currencies
+        fromClient.totalDebt = toShortNumber(fromClient.totalDebt - (transaction.creditForUs * fromCurrency.exchRate), 2);
+        toClient.totalCredit = toShortNumber(toClient.totalCredit - (transaction.deptedForUs * toCurrency.exchRate), 2);
+        fromCurrency.credit = toShortNumber(fromCurrency.credit - transaction.deptedForUs, 2);
+        toCurrency.credit = toShortNumber(toCurrency.credit + transaction.creditForUs, 2);
+
+        await fromClient.save();
+        await toClient.save();
+        await fromCurrency.save();
+        await toCurrency.save();
+
+        // Delete the transaction
+        await Transaction.findByIdAndDelete(id);
+
+        await createNotification(user._id, `Transaction ${transaction.transactionNumber} deleted.`);
+
+
+        res.status(200).send({ message: 'Transaction deleted successfully' });
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+//getbyID
 export const getTransactionById = async (req, res) => {
     try {
-        const transaction = await Transaction.findById(req.params.id)
+        const id = req.params.id;
+        const transaction = await Transaction.findById(id)
             .populate('fromClient', 'name')
             .populate('toClient', 'name')
-            .populate('fromNameCurrency', 'nameInArabic')
-            .populate('toNameCurrency', 'nameInArabic')
+            .populate('fromCurrency', 'nameInArabic')
+            .populate('toCurrency', 'nameInArabic')
             .populate('user', 'username');
 
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
-
-        const formattedTransaction = {
-            ...transaction._doc,
-            fromClientName: transaction.fromClient.name,
-            toClientName: transaction.toClient.name,
-            fromCurrencyNameInArabic: transaction.fromNameCurrency.nameInArabic,
-            toCurrencyNameInArabic: transaction.toNameCurrency.nameInArabic,
-            userName: transaction.user.username
-        };
-
-        res.status(200).send(formattedTransaction);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
-
-// Function to get transactions by currency
-export const getTransactionsByCurrency = async (req, res) => {
-    try {
-        const { currencyNameInArabic } = req.params;
-
-        const currency = await Currency.findOne({ nameInArabic: currencyNameInArabic });
-        if (!currency) return res.status(404).send({ error: 'Currency not found' });
-
-        const transactions = await Transaction.find({
-            $or: [
-                { fromNameCurrency: currency._id },
-                { toNameCurrency: currency._id }
-            ]
-        })
-        .populate('fromClient', 'name')
-        .populate('toClient', 'name')
-        .populate('fromNameCurrency', 'nameInArabic')
-        .populate('toNameCurrency', 'nameInArabic')
-        .populate('user', 'username');
-
-        const formattedTransactions = transactions.map(transaction => ({
-            ...transaction._doc,
-            fromClientName: transaction.fromClient.name,
-            toClientName: transaction.toClient.name,
-            fromCurrencyNameInArabic: transaction.fromNameCurrency.nameInArabic,
-            toCurrencyNameInArabic: transaction.toNameCurrency.nameInArabic,
-            userName: transaction.user.username
-        }));
-
-        res.status(200).send(formattedTransactions);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
-
-// Function to get transactions by client
-export const getTransactionsByClient = async (req, res) => {
-    try {
-        const { clientName } = req.params;
-
-        const client = await Client.findOne({ name: clientName });
-        if (!client) return res.status(404).send({ error: 'Client not found' });
-
-        const transactions = await Transaction.find({
-            $or: [
-                { fromClient: client._id },
-                { toClient: client._id }
-            ]
-        })
-        .populate('fromClient', 'name')
-        .populate('toClient', 'name')
-        .populate('fromNameCurrency', 'nameInArabic')
-        .populate('toNameCurrency', 'nameInArabic')
-        .populate('user', 'username');
-
-        const formattedTransactions = transactions.map(transaction => ({
-            ...transaction._doc,
-            fromClientName: transaction.fromClient.name,
-            toClientName: transaction.toClient.name,
-            fromCurrencyNameInArabic: transaction.fromNameCurrency.nameInArabic,
-            toCurrencyNameInArabic: transaction.toNameCurrency.nameInArabic,
-            userName: transaction.user.username
-        }));
-
-        res.status(200).send(formattedTransactions);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
-
-// Function to update a transaction by ID
-export const updateyId = async (req, res) => {
-    try {
-        const {
-            fromClientName,
-            toClientName,
-            fromCurrencyNameInArabic,
-            toCurrencyNameInArabic,
-            deptedForUs,
-            creditForUs,
-            description,
-            type,
-            userName
-        } = req.body;
-
-        const transaction = await Transaction.findById(req.params.id);
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
-
-        if (fromClientName) {
-            const fromClient = await Client.findOne({ name: fromClientName });
-            if (fromClient) transaction.fromClient = fromClient._id;
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' });
         }
-        if (toClientName) {
-            const toClient = await Client.findOne({ name: toClientName });
-            if (toClient) transaction.toClient = toClient._id;
-        }
-        if (fromCurrencyNameInArabic) {
-            const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
-            if (fromCurrency) transaction.fromNameCurrency = fromCurrency._id;
-        }
-        if (toCurrencyNameInArabic) {
-            const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
-            if (toCurrency) transaction.toNameCurrency = toCurrency._id;
-        }
-        if (userName) {
-            const user = await User.findOne({ username: userName });
-            if (user) transaction.user = user._id;
-        }
-
-        if (deptedForUs !== undefined) transaction.deptedForUs = Number(deptedForUs);
-        if (creditForUs !== undefined) transaction.creditForUs = Number(creditForUs);
-        if (description) transaction.description = description;
-        if (type) transaction.type = type;
-
-        // Recalculate results
-        const fromCurrency = await Currency.findById(transaction.fromNameCurrency);
-        const toCurrency = await Currency.findById(transaction.toNameCurrency);
-
-        if (fromCurrency && toCurrency) {
-            const results = (transaction.creditForUs * fromCurrency.exchRate) - (transaction.deptedForUs * toCurrency.exchRate);
-            transaction.ResultInDollars = results;
-        }
-
-        await transaction.save();
 
         res.status(200).send(transaction);
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        res.status(400).send(error);
     }
 };
 
-// Function to get transactions by client and group by currency
+//getall
+export const getAllTransactions = async (req, res) => {
+    try {
+        const transactions = await Transaction.find({})
+            .populate('fromClient', 'name')
+            .populate('toClient', 'name')
+            .populate('fromCurrency', 'nameInArabic')
+            .populate('toCurrency', 'nameInArabic')
+            .populate('user', 'username');
+
+        if (transactions.length === 0) {
+            return res.status(404).send({ message: 'No transactions found' });
+        }
+
+        res.status(200).send(transactions);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+//getbyclient
+export const getTransactionsByClient = async (req, res) => {
+    try {
+        const clientName = req.params.clientName;
+        const transactions = await Transaction.find({
+            $or: [
+                { fromClientName: clientName },
+                { toClientName: clientName }
+            ]
+        })
+            .populate('fromClient', 'name')
+            .populate('toClient', 'name')
+            .populate('fromCurrency', 'nameInArabic')
+            .populate('toCurrency', 'nameInArabic')
+            .populate('user', 'username');
+
+        if (transactions.length === 0) {
+            return res.status(404).send({ error: 'No transactions found for this client' });
+        }
+
+        res.status(200).send(transactions);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+//getbycurrency
+export const getTransactionsByCurrency = async (req, res) => {
+    try {
+        const currencyNameInArabic = req.params.currencyNameInArabic;
+        const transactions = await Transaction.find({
+            $or: [
+                { fromNameCurrency: currencyNameInArabic },
+                { toNameCurrency: currencyNameInArabic }
+            ]
+        })
+            .populate('fromClient', 'name')
+            .populate('toClient', 'name')
+            .populate('fromCurrency', 'nameInArabic')
+            .populate('toCurrency', 'nameInArabic')
+            .populate('user', 'username');
+
+        if (transactions.length === 0) {
+            return res.status(404).send({ error: 'No transactions found for this currency' });
+        }
+
+        res.status(200).send(transactions);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+};
+
+
 export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
     try {
         const clientName = req.params.clientName;
 
-        const client = await Client.findOne({ name: clientName });
-        if (!client) return res.status(404).send({ error: 'Client not found' });
-
         const transactions = await Transaction.aggregate([
-            {
-                $lookup: {
-                    from: 'currencies',
-                    localField: 'fromNameCurrency',
-                    foreignField: '_id',
-                    as: 'fromCurrency'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'currencies',
-                    localField: 'toNameCurrency',
-                    foreignField: '_id',
-                    as: 'toCurrency'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'clients',
-                    localField: 'fromClient',
-                    foreignField: '_id',
-                    as: 'fromClient'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'clients',
-                    localField: 'toClient',
-                    foreignField: '_id',
-                    as: 'toClient'
-                }
-            },
-            { $unwind: '$fromCurrency' },
-            { $unwind: '$toCurrency' },
-            { $unwind: '$fromClient' },
-            { $unwind: '$toClient' },
             {
                 $match: {
                     $or: [
-                        { fromClient: client._id },
-                        { toClient: client._id }
+                        { fromClientName: clientName },
+                        { toClientName: clientName }
                     ]
                 }
             },
             {
-                $group: {
-                    _id: {
-                        fromCurrency: { $cond: [{ $eq: ['$fromClient._id', client._id] }, '$fromCurrency.nameInArabic', null] },
-                        toCurrency: { $cond: [{ $eq: ['$toClient._id', client._id] }, '$toCurrency.nameInArabic', null] }
-                    },
-                    totalDebtedForUs: {
-                        $sum: {
-                            $cond: [{ $eq: ['$fromClient._id', client._id] }, '$deptedForUs', 0]
+                $facet: {
+                    fromClientTransactions: [
+                        { $match: { fromClientName: clientName } },
+                        {
+                            $group: {
+                                _id: "$fromNameCurrency",
+                                totalCreditForUs: { $sum: "$creditForUs" },
+                                transactionIds: { $push: "$_id" }
+                            }
                         }
-                    },
-                    totalCreditForUs: {
-                        $sum: {
-                            $cond: [{ $eq: ['$toClient._id', client._id] }, '$creditForUs', 0]
+                    ],
+                    toClientTransactions: [
+                        { $match: { toClientName: clientName } },
+                        {
+                            $group: {
+                                _id: "$toNameCurrency",
+                                totalDeptedForUs: { $sum: "$deptedForUs" },
+                                transactionIds: { $push: "$_id" }
+                            }
                         }
-                    },
-                    transactions: {
-                        $push: {
-                            _id: '$_id',
-                            fromClientName: '$fromClient.name',
-                            toClientName: '$toClient.name',
-                            fromCurrencyNameInArabic: '$fromCurrency.nameInArabic',
-                            toCurrencyNameInArabic: '$toCurrency.nameInArabic',
-                            userName: '$user.username',
-                            deptedForUs: '$deptedForUs',
-                            creditForUs: '$creditForUs',
-                            description: '$description',
-                            type: '$type',
-                            results: '$ResultInDollars',
-                            date: '$date'
-                        }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    merged: {
+                        $setUnion: [
+                            {
+                                $map: {
+                                    input: "$fromClientTransactions",
+                                    as: "from",
+                                    in: {
+                                        currencyName: "$$from._id",
+                                        totalCreditForUs: "$$from.totalCreditForUs",
+                                        totalDeptedForUs: { $literal: 0 },
+                                        transactionIds: "$$from.transactionIds"
+                                    }
+                                }
+                            },
+                            {
+                                $map: {
+                                    input: "$toClientTransactions",
+                                    as: "to",
+                                    in: {
+                                        currencyName: "$$to._id",
+                                        totalCreditForUs: { $literal: 0 },
+                                        totalDeptedForUs: "$$to.totalDeptedForUs",
+                                        transactionIds: "$$to.transactionIds"
+                                    }
+                                }
+                            }
+                        ]
                     }
+                }
+            },
+            {
+                $unwind: "$merged"
+            },
+            {
+                $group: {
+                    _id: "$merged.currencyName",
+                    totalCreditForUs: { $sum: "$merged.totalCreditForUs" },
+                    totalDeptedForUs: { $sum: "$merged.totalDeptedForUs" },
+                    transactionIds: { $push: "$merged.transactionIds" }
                 }
             },
             {
                 $project: {
                     _id: 0,
-                    currency: {
-                        $cond: {
-                            if: { $ne: ['$_id.fromCurrency', null] },
-                            then: '$_id.fromCurrency',
-                            else: '$_id.toCurrency'
-                        }
-                    },
-                    totalDebtedForUs: 1,
+                    currencyName: "$_id",
                     totalCreditForUs: 1,
-                    transactions: 1
+                    totalDeptedForUs: 1,
+                    transactionIds: { 
+                        $reduce: {
+                            input: "$transactionIds",
+                            initialValue: [],
+                            in: { $concatArrays: ["$$value", "$$this"] }
+                        }
+                    }
                 }
-            },
-            { $sort: { 'currency': 1 } }
+            }
         ]);
 
         res.status(200).send(transactions);
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(500).send(error);
     }
 };
 
-// Function to archive a transaction by ID
-export const archiveTransactionById = async (req, res) => {
+
+export const getTransactionsByCurrencyGroupedByClient = async (req, res) => {
     try {
-        const transaction = await Transaction.findById(req.params.id);
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
+        const currencyName = req.params.currencyName;
 
-        transaction.archived = true;
-        await transaction.save();
+        const transactions = await Transaction.aggregate([
+            {
+                $match: {
+                    $or: [
+                        { fromNameCurrency: currencyName },
+                        { toNameCurrency: currencyName }
+                    ]
+                }
+            },
+            {
+                $facet: {
+                    fromCurrencyTransactions: [
+                        { $match: { fromNameCurrency: currencyName } },
+                        {
+                            $group: {
+                                _id: "$fromClientName",
+                                totalCreditForUs: { $sum: "$creditForUs" },
+                                transactionIds: { $push: "$_id" }
+                            }
+                        }
+                    ],
+                    toCurrencyTransactions: [
+                        { $match: { toNameCurrency: currencyName } },
+                        {
+                            $group: {
+                                _id: "$toClientName",
+                                totalDeptedForUs: { $sum: "$deptedForUs" },
+                                transactionIds: { $push: "$_id" }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                $project: {
+                    merged: {
+                        $setUnion: [
+                            {
+                                $map: {
+                                    input: "$fromCurrencyTransactions",
+                                    as: "from",
+                                    in: {
+                                        clientName: "$$from._id",
+                                        totalCreditForUs: "$$from.totalCreditForUs",
+                                        totalDeptedForUs: { $literal: 0 },
+                                        transactionIds: "$$from.transactionIds"
+                                    }
+                                }
+                            },
+                            {
+                                $map: {
+                                    input: "$toCurrencyTransactions",
+                                    as: "to",
+                                    in: {
+                                        clientName: "$$to._id",
+                                        totalCreditForUs: { $literal: 0 },
+                                        totalDeptedForUs: "$$to.totalDeptedForUs",
+                                        transactionIds: "$$to.transactionIds"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                $unwind: "$merged"
+            },
+            {
+                $group: {
+                    _id: "$merged.clientName",
+                    totalCreditForUs: { $sum: "$merged.totalCreditForUs" },
+                    totalDeptedForUs: { $sum: "$merged.totalDeptedForUs" },
+                    transactionIds: { $push: "$merged.transactionIds" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    clientName: "$_id",
+                    totalCreditForUs: 1,
+                    totalDeptedForUs: 1,
+                    transactionIds: {
+                        $reduce: {
+                            input: "$transactionIds",
+                            initialValue: [],
+                            in: { $concatArrays: ["$$value", "$$this"] }
+                        }
+                    }
+                }
+            }
+        ]);
 
-        res.status(200).send(transaction);
+        res.status(200).send(transactions);
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        res.status(500).send(error);
     }
 };
 
-// Function to unarchive a transaction by ID
-export const unarchiveTransactionById = async (req, res) => {
+//functions
+const getClientIdsByNames = async (names) => {
+    const clients = await Client.find({ name: { $in: names } });
+    return clients.map(client => client._id);
+};
+const getCurrencyIdsByNames = async (names) => {
+    const currencies = await Currency.find({ nameInArabic: { $in: names } });
+    return currencies.map(currency => currency._id);
+};
+
+// Get transactions based on client names and currency names
+export const getTransactionsByNames = async (req, res) => {
+    const { clientNames, currencyNames } = req.body;
+
     try {
-        const transaction = await Transaction.findById(req.params.id);
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
+        // Get client and currency IDs
+        const clientIds = await getClientIdsByNames(clientNames);
+        const currencyIds = await getCurrencyIdsByNames(currencyNames);
 
-        transaction.archived = false;
-        await transaction.save();
+        // Query transactions
+        const transactions = await Transaction.find({
+            $or: [
+                { fromClient: { $in: clientIds }, fromCurrency: { $in: currencyIds } },
+                { toClient: { $in: clientIds }, toCurrency: { $in: currencyIds } }
+            ]
+        }).populate([
+            { path: 'fromClient', select: 'name' },
+            { path: 'toClient', select: 'name' },
+            { path: 'fromCurrency', select: 'nameInArabic' },
+            { path: 'toCurrency', select: 'nameInArabic' }
+        ]);
 
-        res.status(200).send(transaction);
+        res.status(200).send(transactions);
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        res.status(500).send(error);
     }
 };
 
-// Function to delete a transaction by ID
-export const deleteTransactionById = async (req, res) => {
+// Get transactions based on client names, currency names, and date range
+export const getTransactionsByNamesAndDate = async (req, res) => {
+    const { clientNames, currencyNames, startDate, endDate } = req.body;
+
     try {
-        const transaction = await Transaction.findByIdAndDelete(req.params.id);
-        if (!transaction) return res.status(404).send({ error: 'Transaction not found' });
+        // Get client and currency IDs
+        const clientIds = await getClientIdsByNames(clientNames);
+        const currencyIds = await getCurrencyIdsByNames(currencyNames);
+
+        // Convert dates to ISO format
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        // Query transactions
+        const transactions = await Transaction.find({
+            $or: [
+                { fromClient: { $in: clientIds }, fromCurrency: { $in: currencyIds } },
+                { toClient: { $in: clientIds }, toCurrency: { $in: currencyIds } }
+            ],
+            date: { $gte: start, $lte: end }
+        }).populate([
+            { path: 'fromClient', select: 'name' },
+            { path: 'toClient', select: 'name' },
+            { path: 'fromCurrency', select: 'nameInArabic' },
+            { path: 'toCurrency', select: 'nameInArabic' }
+        ]);
+
+        res.status(200).send(transactions);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+
+
+//archive
+export const archiveTransaction = async (req, res) => {
+    try {
+        const id  = req.params.id;
+        const transaction = await Transaction.findByIdAndUpdate(id, { archived: true }, { new: true });
+
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' });
+        }
+
+        await createNotification(transaction.user, `Transaction ${transaction.transactionNumber} archived.`);
 
         res.status(200).send(transaction);
     } catch (error) {
-        res.status(500).send({ error: error.message });
+        res.status(500).send(error);
     }
-}; */
+};
+
+//unarchive
+export const unarchiveTransaction = async (req, res) => {
+    try {
+        const id  = req.params.id;
+        const transaction = await Transaction.findByIdAndUpdate(id, { archived: false }, { new: true });
+
+        if (!transaction) {
+            return res.status(404).send({ error: 'Transaction not found' });
+        }
+
+        await createNotification(transaction.user, `Transaction ${transaction.transactionNumber} unarchived.`);
+
+        res.status(200).send(transaction);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
