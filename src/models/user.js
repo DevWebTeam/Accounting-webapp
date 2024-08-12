@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
+
+
 const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true
+    },
     number: {
         type: String,
         required: true
@@ -10,20 +16,19 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    username: {
-        type: String,
-        unique: true
-    },
-    nameInsideApp: {
-        type: String
-    },
     password: {
         type: String,
         required: true
     },
     role: {
         type: String,
+        enum: ['admin', 'manager', 'user'],
+        default: "user",
         required: true
+    },
+    banned: {
+        type: Boolean,
+        default: false,
     }
 });
 

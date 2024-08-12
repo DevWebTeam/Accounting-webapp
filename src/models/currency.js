@@ -21,25 +21,19 @@ const currencySchema = new mongoose.Schema({
     symbol: {
         type: String,
         maxlength: 3,
-        required: true
-    },
-    // darb wla 9isma
-    operation: {
-        type: String,
-        enum: ['multiply', 'divide'],
+        set: v => v.toUpperCase(),
         required: true
     },
     priorityCu: {
         type: Number,
-        required: true
+        default: 100
     },
     exchRate: {
         type: Number,
         required: true
     },
     credit: {
-        type: Number,
-        required: true
+    type: Number,
     }
 });
 

@@ -4,24 +4,23 @@ import {
     getAllUsers,
     getUserById,
     updateUserById,
-    updateUserRoleById,
-    deleteUserById
+    // updateUserRoleById,
+    deleteUserById,
 } from "../controllers/userControllers.js"
 
-const router = express();
+
+const router = express.Router();
 
 
-router.get("/", getAllUsers);
+router.get("/",getAllUsers);
 
 router.get("/user/:id", getUserById);
 
 router.post("/add", createUser);
 
-router.patch("/user/Update", updateUserById);
+router.patch("/user/Update/:id", updateUserById);
 
 router.delete("/user/delete/:id", deleteUserById);
-
-
 
 
 

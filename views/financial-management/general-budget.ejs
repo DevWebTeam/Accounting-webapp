@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Sidebar</title>
+    <link rel="stylesheet" href="/home/almirania_l3ama/almz.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Barre de recherche -->
+        <h2>الميزانية العامة</h2>
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="ابحث هنا...">
+        </div>
+
+        <!-- Tableau -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>رابط 1</th>
+                        <th>رابط 2</th>
+                        <th>رابط 3</th>
+                        <th>رابط 4</th>
+                        <th>رابط 5</th>
+                        <th>رابط 6</th>
+                        <th>رابط 7</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="#">رابط A1</a></td>
+                        <td><a href="#">رابط B1</a></td>
+                        <td><a href="#">رابط C1</a></td>
+                        <td><a href="#">رابط D1</a></td>
+                        <td><a href="#">رابط E1</a></td>
+                        <td><a href="#">رابط F1</a></td>
+                        <td><a href="#">رابط G1</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">رابط A2</a></td>
+                        <td><a href="#">رابط B2</a></td>
+                        <td><a href="#">رابط C2</a></td>
+                        <td><a href="#">رابط D2</a></td>
+                        <td><a href="#">رابط E2</a></td>
+                        <td><a href="#">رابط F2</a></td>
+                        <td><a href="#">رابط G2</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#">رابط A3</a></td>
+                        <td><a href="#">رابط B3</a></td>
+                        <td><a href="#">رابط C3</a></td>
+                        <td><a href="#">رابط D3</a></td>
+                        <td><a href="#">رابط E3</a></td>
+                        <td><a href="#">رابط F3</a></td>
+                        <td><a href="#">رابط G3</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Affichages en forme de carré -->
+        <div class="squares-container">
+            <div class="square">1</div>
+            <div class="square">2</div>
+            <div class="square">3</div>
+            <div class="square">4</div>
+            <div class="square">5</div>
+        </div>
+    </div>
+    <div class="sidebar">
+        <h2>تصفية البيانات</h2>
+
+        <div class="filter-section">
+            <label for="date-filter">اختر التاريخ:</label>
+            <input type="date" id="date-filter" name="date-filter">
+        </div>
+
+        <div class="filter-section">
+            <label>اختر النوع</label>
+            <div class="radio-group">
+                <input type="radio" id="day" name="range" value="day">
+                <label for="day">صندوق العملات</label>
+                <input type="radio" id="interval" name="range" value="interval">
+                <label for="interval">الصندوق المقوم</label>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <label for="currency">اختر العملة</label>
+            <div class="currency-list">
+                <input type="radio" id="usd" name="currency" value="usd">
+                <label for="usd">دولار أمريكي (USD)</label>
+                <input type="radio" id="eur" name="currency" value="eur">
+                <label for="eur">يورو (EUR)</label>
+                <input type="radio" id="jpy" name="currency" value="jpy">
+                <label for="jpy">ين ياباني (JPY)</label>
+                <input type="radio" id="gbp" name="currency" value="gbp">
+                <label for="gbp">جنيه استرليني (GBP)</label>
+                <input type="radio" id="aud" name="currency" value="aud">
+                <label for="aud">دولار أسترالي (AUD)</label>
+                <input type="radio" id="cad" name="currency" value="cad">
+                <label for="cad">دولار كندي (CAD)</label>
+                <input type="radio" id="chf" name="currency" value="chf">
+                <label for="chf">فرنك سويسري (CHF)</label>
+            </div>
+        </div>
+
+        <button id="filter-button">تصفية</button>
+    </div>
+
+    <script src="almz.js"></script>
+</body>
+</html>

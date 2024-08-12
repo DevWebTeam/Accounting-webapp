@@ -9,9 +9,6 @@ name: {
 number: {
     type: String
 },
-email: {
-    type: String
-},
 priorityCli: {
     type: Number
 },

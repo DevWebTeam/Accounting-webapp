@@ -8,6 +8,7 @@ import {
     unarchiveTransactionById,
     deleteTransactionById
 } from "../controllers/transactionControllers.js"
+import { checkIfBanned } from "../controllers/functions.js";
 
 
 
@@ -29,13 +30,13 @@ router.get("/ledger", );
 
 
 //*journal
-router.get("/journal", );
+router.get("/journal", checkIfBanned() );
 
 
 
 
 //* reconciliation
-router.get("/reconciliation", );
+router.get("/reconciliation", checkIfBanned());
 
 
 

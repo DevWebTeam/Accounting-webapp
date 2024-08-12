@@ -52,6 +52,5 @@ export default {
     createNotification,
     getAllNotifications,
     getNotificationById,
-    updateNotificationById,
     deleteNotificationById
 };

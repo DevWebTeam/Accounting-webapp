@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Financify</title>
+        <link rel="stylesheet" href="styles/login-signup.css">
+    </head>
+    <body>
+        
+
+        <nav>
+            <a href="/login"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="rgba(255,255,255,1)"><path d="M8.36853 12L13.1162 3.03212L14.8838 3.9679L10.6315 12L14.8838 20.0321L13.1162 20.9679L8.36853 12Z"></path></svg>Log in</a>
+        </nav>
+
+        <div id="signup">
+            <form action="/signup" method="post" class="container">
+                <h2>Sign up</h2>
+                <input type="text" name="username" placeholder="username" required maxlength="20">
+                <input type="email" name="email" placeholder="email" required>
+                <input type="password" name="password" placeholder="enter password" required>
+                <input type="password" name="password2" placeholder="retype password" required>
+                <input type="number" name="number"  placeholder="phone number (optional)" maxlength="13">
+                <input type="submit" value="Sign up" class="submit">
+            </form>
+        </div>
+    </body>
+</html>

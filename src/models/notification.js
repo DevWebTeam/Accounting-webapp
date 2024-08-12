@@ -9,12 +9,12 @@ const notificationSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    user: {
+    username: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    createdAt: {
+    date: {
         type: Date,
         default: Date.now
     }

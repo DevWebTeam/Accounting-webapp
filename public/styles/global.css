@@ -1,0 +1,126 @@
+body * {
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    text-align: center;
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    background-color: aliceblue;
+}
+
+button {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #8080802c;
+}
+
+h1 {
+    font-size:xx-large;
+    height: 10%;
+}
+
+input::placeholder {
+    opacity: 0.5;
+}
+
+
+/*container so both side bar and content be inside*/
+.container {
+    display: grid;
+    grid-template-rows: 100vh;
+    grid-template-columns: 3.5fr 1fr;
+    column-gap: 20px;
+}
+
+#content {
+    grid-column: 1;
+    margin: 20px;
+}
+
+/*data which is in the table*/
+.data:hover {
+    cursor: pointer;
+    background-color: rgba(31, 32, 32, 0.178);
+    color: rgb(255, 254, 254);
+}
+
+
+/*the forms*/
+.add-form, .modify-form {
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    width: 60%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    padding: 10px 0;
+    left: 10%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+    
+.add-form div, .modify-form div{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+
+
+/*button to show add-form*/
+.add-btn {
+    width: 50px;
+    height: 30px;
+    border-radius: 5px;
+    margin: 0 0 10px 65%;
+}
+
+/*button to submit the form*/
+.submit-btn {
+    background-color: #0c997ae1;
+    color: white;
+    border-radius: 5px;
+    border: 0;
+    cursor: pointer;
+    width: 150px;
+    height: 35px;
+    margin-top: 35px;
+}
+
+.submit-btn:hover {
+    background-color: #0c997ab4;
+}
+
+.delete-btn {
+    background-color: rgba(216, 0, 0, 0.699);
+}
+
+/*button to close the form*/
+.close {
+    padding: 8px;
+    align-self: end;
+    margin-right: 10px;
+    border-radius: 30%;
+}
+
+    
+.close:hover{
+    background-color: rgba(220, 220, 220, 0.219);
+}
+
+
+/*to hide the forms*/
+.hidden {
+    display: none;
+}
