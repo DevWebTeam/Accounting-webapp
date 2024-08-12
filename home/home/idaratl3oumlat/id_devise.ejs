@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="id_devise.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=M+PLUS+1:wght@100..900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="title">الادارة العملات</h2>
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="ابحث هنا...">
+        </div>
+
+        <!-- Tableau -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>أيقونة</th>
+                        <th>اسم العملة</th>
+                        <th>الرمز</th>
+                        <th>نوع التصفية</th>
+                        <th>سعر التصفية</th>
+                        <th>الأهمية</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$</td>
+                        <td>دولار أمريكي</td>
+                        <td>USD</td>
+                        <td>بيع</td>
+                        <td>1.00</td>
+                        <td>عالية</td>
+                    </tr>
+                    <tr>
+                        <td>€</td>
+                        <td>يورو</td>
+                        <td>EUR</td>
+                        <td>شراء</td>
+                        <td>0.85</td>
+                        <td>متوسطة</td>
+                    </tr>
+                    <tr>
+                        <td>¥</td>
+                        <td>ين ياباني</td>
+                        <td>JPY</td>
+                        <td>بيع</td>
+                        <td>110.00</td>
+                        <td>منخفضة</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="sidebar">
+            <a href="/home/Index.ejs">الادارة المالية</a>
+            <a href="#option2">ادارة العملاء</a>
+            <a href="#option3">ادارة العملات</a>
+            <a href="#option4">الاشعارات</a>
+            <a href="#option5">الإحصائيات</a>
+            <a href="#option6">الأسئلة الشائعة</a>
+            <a href="#option7">إعدادات النظام</a>
+          </div>
+    </div>
+    <script src="id_devise.js"></script>
+</body>
+</html>

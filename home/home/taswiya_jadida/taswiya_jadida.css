@@ -1,0 +1,152 @@
+body {
+    font-family: "IBM Plex Sans Arabic", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    background-color: #f4f4f9;
+    direction: rtl;
+    justify-content: center;
+    text-align: center;
+    margin: 20px;
+}
+
+.radio-container {
+    display: inline;
+    
+}
+
+.radio-label {
+    position: relative;
+    
+    margin: 0 10px 0 10px;
+    padding: 10px 60px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.radio-label input[type="radio"] {
+    display: none;
+}
+
+.radio-label span {
+    cursor: pointer;  
+}
+
+
+input[type="radio"]:checked + label  {
+    background-color: #cce7ff;
+    border-color: #2196F3;
+}
+
+.content {
+    display: none;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.content1 h5{
+    margin: 1%;
+    text-align: right;
+}
+
+.input-group {
+    
+    display: flex;
+    justify-content: center;
+    column-gap: 5%;
+}
+
+
+.input-group.row input {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+
+.input-field {
+    display: inline;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+.input-group.row .input-field {
+    width: calc(100% - 10px);
+}
+
+.input-group.row .input-title {
+    width: calc(100% - 10px);
+    margin-bottom: 1%;
+    text-align: right;
+}
+
+.columns-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+
+.column {
+    flex: 1;
+}
+
+.column .input-field {
+    width: 100%;
+}
+
+.column h4 {
+    margin: 1% 0%;
+    text-align: right;
+    width: 100%;
+}
+
+.column-1 {
+    flex: 1;
+    flex-direction: column;
+    text-align: right;
+}
+.column-1 .input-field {
+    width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0b7dda;
+}
+
+.total-container {
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+input[type="radio"]:checked + span {
+    background-color: #cce7ff;
+    border-color: #2196F3;
+}
+
+.radio-container.small {
+    gap: 5px;
+}
+
+.radio-label.small {
+    padding: 2% 17%;
+    margin-top: ;
+
+}
+

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>titre</title>
+    <link rel="stylesheet" href="taswiya_jadida.css">
+</head>
+<body>
+
+<h2>حركة تسوية جديدة</h2>
+
+<div class="radio-container">
+    <label class="radio-label">
+        <input type="radio" name="content" id="content1" checked>
+        <span>حركة تسوية</span>
+    </label>
+    <label class="radio-label">
+        <input type="radio" name="content" id="content2">
+        <span>حركة حوالة</span>
+    </label>
+    <label class="radio-label">
+        <input type="radio" name="content" id="content3">
+        <span>حركة متعددة</span>
+    </label>
+</div>
+
+<div class="content content1">
+    <form id="transactionForm1">
+            <div class="input-group row"><h4 class="input-title">البيان</h4></div>
+            <div class="input-group row"><input type="text" placeholder="أدخل البيان" class="input-field" ></div>
+        
+            <div class="input-group row">
+                <h4 class="input-title">المستخدم</h4>
+                <h4 class="input-title">العملة</h4>
+                <h4 class="input-title">المبلغ</h4>
+            </div>
+            
+            <div class="input-group row">
+                <input type="text" placeholder="ابحث واختر المستخدم" class="input-field" id="user1">
+                <input type="text" placeholder="اختر العملة" class="input-field" id="currency1">
+                <input type="text" placeholder="أدخل المبلغ" class="input-field" id="amount1">
+            </div>
+        
+        
+            <div class="input-group row">
+                <h4 class="input-title">المستخدم</h4>
+                <h4 class="input-title">العملة</h4>
+                <h4 class="input-title">المبلغ</h4>
+            </div>
+    
+            <div class="input-group row">
+                <input type="text" placeholder="ابحث واختر المستخدم" class="input-field" id="user2">
+            
+                <input type="text" placeholder="اختر العملة" class="input-field" id="currency2">
+            
+                <input type="text" placeholder="أدخل المبلغ" class="input-field" id="amount2">
+            </div>
+            
+                   
+        
+        <div class="total-container">
+            <h4 class="input-title">المبلغ الإجمالي:</h4>
+            <span id="totalAmount">0</span>
+        </div>
+        <button type="button" id="confirmButton">تأكيد المعاملة</button>
+    </form>   
+</div>
+
+<div class="content content2">
+    
+    <form id="transactionForm2">
+        <div class="input-group row">
+            <h4 class="input-title">البيان</h4>     
+            <h4 class="input-title">مبلغ الحوالة</h4>      
+            <h4 class="input-title" >عملة الحوالة </h4>         
+        </div>
+        <div class="input-group row">
+            <input type="text" placeholder="أدخل الوصف" class="input-field">
+            <input type="number" placeholder="أدخل المبلغ" class="input-field">
+            <input type="text" placeholder="اختر العملة" class="input-field"> 
+
+        </div>
+        <div class="columns-container">
+            <div class="column">
+                <h4 class="input-title">من حساب</h4>
+                <input type="text" placeholder="اختر الحساب" class="input-field">
+                <h4 class="input-title">العملة</h4>
+                <input type="text" placeholder="اختر العملة" class="input-field">
+                <h4 class="input-title">سعر الصرف</h4>
+                <input type="number" placeholder="أدخل سعر الصرف" class="input-field">
+                <h4 class="input-title">الأجور</h4>
+                <input type="number" placeholder="أدخل مبلغ العمولة" class="input-field">                
+                <input type="number" placeholder="أدخل نسبة العمولة" class="input-field">
+                <h4 class="input-title">إجمالي مبلغ لنا</h4>
+                <input type="number" placeholder="أدخل مبلغ لنا" class="input-field">
+            </div>
+            <div class="column">
+                <h4 class="input-title">إلى حساب</h4>
+                <input type="text" placeholder="اختر الحساب" class="input-field">
+                <h4 class="input-title">العملة</h4>
+                <input type="text" placeholder="اختر العملة" class="input-field">
+                <h4 class="input-title">سعر الصرف</h4>
+                <input type="number" placeholder="أدخل سعر الصرف" class="input-field">
+                <h4 class="input-title">الأجور</h4>
+                <input type="number" placeholder="أدخل مبلغ العمولة" class="input-field">                
+                <input type="number" placeholder="أدخل نسبة العمولة" class="input-field">
+                <h4 class="input-title">إجمالي مبلغ علينا</h4>
+                <input type="number" placeholder="أدخل مبلغ علينا" class="input-field">
+            </div>
+        </div>
+        <div class="total-container">
+            <h4 class="input-title">المبلغ الإجمالي للمعاملة:</h4>
+            <span id="transactionTotalAmount">0</span>
+        </div>
+        <button type="button" id="validateButton">تأكيد المعاملة</button>
+    </form>
+</div>
+
+<div class="content content3">
+    <form id="transactionForm3">
+        <div class="columns-container">
+            <div class="column-1">
+                <h4 class="input-title">البيان</h4>
+                <input type="text" placeholder="أدخل البيان" class="input-field">
+                
+            </div>
+            <div class="column-1">
+                    <h4 class="input-title">طرف الحركة</h4>
+                    <div class="radio-container small">
+                        <label class="radio-label small">
+                            <input type="radio" name="option" value="option1" checked>
+                            <span>مدين لنا</span>
+                        </label>
+                        <label class="radio-label small">
+                            <input type="radio" name="option" value="option2">
+                            <span>دائن علينا</span>
+                        </label>
+                    </div>
+            </div>
+        </div>
+        
+        <div class="input-group row">
+            <h4 class="input-title">الحساب</h4>
+            <h4 class="input-title">العملة</h4>
+            <h4 class="input-title">المبلغ</h4>
+        </div>
+        
+        <div class="input-group row">
+            <input type="text" placeholder="أدخل الحساب" class="input-field">
+            <input type="text" placeholder="اختر العملة" class="input-field">
+            <input type="number" placeholder="أدخل المبلغ" class="input-field">
+        </div>
+        <button type="button" id="confirmButton3">تأكيد</button>
+    </form>
+</div>
+
+<script src="taswiya_jadida.js"></script>
+</body>
+</html>

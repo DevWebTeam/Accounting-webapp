@@ -1,0 +1,25 @@
+.sidebar {
+    height: 100vh; /* Full height of the viewport */
+    width: 250px; /* Width of the sidebar */
+    background-color: #333; /* Background color of the sidebar */
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    align-items: center; /* Center items horizontally */
+    padding-top: 20px; /* Padding at the top */
+    position: fixed; /* Fixed position */
+    top: 0;
+    right: 0; /* Align to the right */
+  }
+  
+  .sidebar a {
+    padding: 15px;
+    text-decoration: none;
+    color: white; /* Text color */
+    width: 100%; /* Full width of the sidebar */
+    text-align: center; /* Center text */
+    display: block; /* Make the links block elements */
+  }
+  
+  .sidebar a:hover {
+    background-color: #575757; /* Background color on hover */
+  }
