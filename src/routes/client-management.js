@@ -22,7 +22,7 @@ router.get("/client/:id",checkIfAuthorized(), getClientById);
 
 router.post("/add",checkIfAuthorized(), createClient);
 
-router.patch("/client/update/:id",checkIfAuthorized(), updateClientById);
+router.patch("/client/patch/:id",checkIfAuthorized(), updateClientById);
 
 router.delete("/client/delete/:id",checkIfAuthorized(), deleteClientById);
 
@@ -31,9 +31,9 @@ router.delete("/client/delete/:id",checkIfAuthorized(), deleteClientById);
 //groups
 router.get('/groups', getAllGroups);
 
-router.post('/groups/add', checkIfAuthorized(['admin', 'manager']), createGroup);
+router.post('/groups/add', checkIfAuthorized(), createGroup);
 
-router.delete('/groups/delete/:id', checkIfAuthorized(['admin', 'manager']), deleteGroupById);
+router.delete('/groups/delete/:id', checkIfAuthorized(), deleteGroupById);
 
 
 

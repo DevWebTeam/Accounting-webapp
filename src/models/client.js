@@ -6,11 +6,15 @@ name: {
     required: true,
     unique: true
 },
+email: {
+    type: String
+},
 number: {
     type: String
 },
 priorityCli: {
-    type: Number
+    type: Number,
+    default: 100
 },
 group: {
     type: String

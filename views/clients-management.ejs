@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financify</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/clients.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+</head>
+<body>
+
+    <main class="container">
+        <section id="content">
+            <h1>إدارة العملاء</h1>
+            <form action="/clients/add" method="post" class="add-form hidden">
+                <button type="button" class="close">X</button>
+                <div>
+                    <input type="text" name="name" placeholder="أدخل الاسم الكامل" required>
+                    <label for="name">الاسم الكامل</label>
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="أدخل البريد الإلكتروني">
+                    <label for="email">البريد الإلكتروني</label>
+                </div>
+                <div>
+                    <input type="text" name="group" placeholder="اختار مجموعة العميل">
+                    <label for="group">مجموعة العميل</label>
+                </div>
+                <div>
+                    <input type="tel" name="number" placeholder="أدخل رقم الجوال">
+                    <label for="tel">رقم الجوال</label>
+                </div>
+                <div>
+                    <input type="number" name="priorityCli" placeholder="مثال: 3" min="1">
+                    <label for="priorityCli">أهمية العميل</label>
+                </div>
+                <input type="submit" value="أضف العميل"  class="submit-btn">
+            </form>
+
+            <form method="post" class="modify-form hidden">
+                <button type="button" class="close">X</button>
+                <div>
+                    <input type="text" name="name" placeholder="أدخل الاسم الكامل" required id="name">
+                    <label for="name">الاسم الكامل</label>
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="أدخل البريد الإلكتروني" id="email">
+                    <label for="email">البريد الإلكتروني</label>
+                </div>
+                <div>
+                    <input type="text" name="group" placeholder="اختار مجموعة العميل" id="group">
+                    <label for="group">مجموعة العميل</label>
+                </div>
+                <div>
+                    <input type="tel" name="number" placeholder="أدخل رقم الجوال" id="number">
+                    <label for="tel">رقم الجوال</label>
+                </div>
+                <div>
+                    <input type="number" name="priorityCli" placeholder="مثال: 3" min="1" id="priorityCli">
+                    <label for="priorityCli">أهمية العميل</label>
+                </div>
+
+                <div>
+                    <input type="submit" value="حذف العميل"  class="submit-btn delete-btn">
+                    <input type="submit" value="تعديل العميل" class="submit-btn patch-btn">
+                </div>
+            </form>
+
+
+            <div id="group-table" class="hidden">
+                <div class="btn-container">
+                    <button  type="button" class="group-add-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
+                    </button>
+
+                    <button type="button" class="close group-close">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
+                    </button>
+                </div>
+
+                <!-- form to add groups -->
+                 <div>
+
+                 </div>
+                <form action="/clients/groups/add" method="post" id="group-form" class="hidden">
+                    <div class="group-close-container">
+                        <button class="group-close-form close">X</button>
+                    </div>
+                    <div>
+                        <input type="text" name="name" placeholder="أدخل اسم المجموعة" required class="group-input">
+                    </div>
+                    <input type="submit" value="أضف المجموعة" class="submit-btn">
+                </form>
+
+                <h3>مجموعة العملاء</h3>
+
+                <div class="group-list">
+                    <% if (locals.groups) { %>
+                        <% groups.forEach(group => { %>
+                            <div class="group">
+                                <button class="dlt-btn" id="<%= group._id %>">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(250,7,7,1)"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 4V6H15V4H9Z"></path></svg>
+                                </button>
+                                <p class="group-data"><%= group.name %></p>
+                            </div>
+                        <% }) %>
+                    <% } %>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="clients-table">
+                <button id="group-btn" class="add-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(49,49,49,1)"><path d="M2 22C2 17.5817 5.58172 14 10 14C14.4183 14 18 17.5817 18 22H16C16 18.6863 13.3137 16 10 16C6.68629 16 4 18.6863 4 22H2ZM10 13C6.685 13 4 10.315 4 7C4 3.685 6.685 1 10 1C13.315 1 16 3.685 16 7C16 10.315 13.315 13 10 13ZM10 11C12.21 11 14 9.21 14 7C14 4.79 12.21 3 10 3C7.79 3 6 4.79 6 7C6 9.21 7.79 11 10 11ZM18.2837 14.7028C21.0644 15.9561 23 18.752 23 22H21C21 19.564 19.5483 17.4671 17.4628 16.5271L18.2837 14.7028ZM17.5962 3.41321C19.5944 4.23703 21 6.20361 21 8.5C21 11.3702 18.8042 13.7252 16 13.9776V11.9646C17.6967 11.7222 19 10.264 19 8.5C19 7.11935 18.2016 5.92603 17.041 5.35635L17.5962 3.41321Z"></path></svg>
+                </button>
+
+                <button id="add-btn" class="add-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(49,49,49,1)"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
+                </button>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاهميه</th>
+                            <th>المجموعة</th>
+                            <th>الجوال</th>
+                            <th>الاسم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (locals.clients) {%>
+                            <% clients.forEach(client => { %>
+                                <tr class="data" id="<%= client._id  %>">
+                                    <td><%= client.priorityCli %></td>
+                                    <td><%= client.group %></td>
+                                    <td><%= client.number %></td>
+                                    <td><%= client.name %></td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+
+        <%- include('sidebar.ejs') %>
+
+    </main>
+
+
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="js/clients-management-script.js"></script>
+    
+</body>
+</html>

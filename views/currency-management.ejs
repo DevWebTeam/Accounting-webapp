@@ -11,116 +11,127 @@
 
     <body>
     
-    <main class="container">
+        <main class="container">
 
-        <section id="content">
-                <h1>إدارة العملات</h1>
+            <section id="content">
+                    <h1>إدارة العملات</h1>
 
-                <form action="/currencies/add" method="post" class="add-form hidden">
-                    <button class="close">X</button>
-                    <div>
-                        <input type="text" name="nameInArabic" placeholder="أدخل اسم العملة بالعربية" required>
-                        <label for="nameInArabic">اسم العملة</label>
-                    </div>
-                    <div>
-                        <input type="text" name="nameInEnglish" placeholder="أدخل اسم العملة بالإنجليزية" required>
-                        <label for="nameInEnglish">اسم العملة بالانجليزي</label>
-                    </div>
-                    <div>
-                        <input type="text" name="code" placeholder="USD :مثال"" maxlength="3" required>
-                        <label for="code">رمز العملة الدولي</label>
 
-                    </div>
-                    <div>
-                        <input type="text" name="symbol" placeholder="$ :مثال" maxlength="3" required>
-                        <label for="symbol">رمز العملة النصتي</label>
-                    </div>
-                    <div>
-                        <input type="number" name="exchRate" placeholder="مثال:0.0075" step="0.0001" required>
-                        <label for="exchRate">السعر بالدولار</label>
-                    </div>
-                    <div>
-                        <input type="number" name="priorityCu" placeholder="مثال: 3">
-                        <label for="priorityCu">أهمية العملة</label>
-                    </div>
-                
-                    <input type="submit" value="إضافة العملة" class="submit-btn">
 
-                </form>
+                    <!-- add form -->
+                    <form action="/currencies/add" method="post" class="add-form hidden">
+                        <button type="button" class="close">X</button>
+                        <div>
+                            <input type="text" name="nameInArabic" placeholder="أدخل اسم العملة بالعربية" required>
+                            <label for="nameInArabic">اسم العملة</label>
+                        </div>
+                        <div>
+                            <input type="text" name="nameInEnglish" placeholder="أدخل اسم العملة بالإنجليزية" required>
+                            <label for="nameInEnglish">اسم العملة بالانجليزي</label>
+                        </div>
+                        <div>
+                            <input type="text" name="code" placeholder="USD :مثال"" maxlength="3" required>
+                            <label for="code">رمز العملة الدولي</label>
 
-                <form method="post" class="modify-form hidden">
+                        </div>
+                        <div>
+                            <input type="text" name="symbol" placeholder="$ :مثال" maxlength="3" required>
+                            <label for="symbol">رمز العملة النصتي</label>
+                        </div>
+                        <div>
+                            <input type="number" name="exchRate" placeholder="مثال:0.0075" step="0.0001" required>
+                            <label for="exchRate">السعر بالدولار</label>
+                        </div>
+                        <div>
+                            <input type="number" name="priorityCu" placeholder="مثال: 3">
+                            <label for="priorityCu">أهمية العملة</label>
+                        </div>
+                    
+                        <input type="submit" value="إضافة العملة" class="submit-btn">
 
-                    <button type="button" class="close">X</button>
+                    </form>
 
-                    <div>
-                        <input type="text" name="nameInArabic" placeholder="أدخل اسم العملة بالعربية" required id="nameInArabic">
-                        <label for="nameInArabic">اسم العملة</label>
+
+
+                    <!-- modify form -->
+                    <form method="post" class="modify-form hidden">
+
+                        <button type="button" class="close">X</button>
+
+                        <div>
+                            <input type="text" name="nameInArabic" placeholder="أدخل اسم العملة بالعربية" required id="nameInArabic">
+                            <label for="nameInArabic">اسم العملة</label>
+                        </div>
+                        <div>
+                            <input type="text" name="nameInEnglish" placeholder="أدخل اسم العملة بالإنجليزية" required id="nameInEnglish">
+                            <label for="nameInEnglish">اسم العملة بالانجليزي</label>
+                        </div>
+                        <div>
+                            <input type="text" name="code" placeholder="USD :مثال" maxlength="3" required id="code">
+                            <label for="code">رمز العملة الدولي</label>
+
+                        </div>
+                        <div>
+                            <input type="text" name="symbol" placeholder="$ :مثال" maxlength="3" required id="symbol">
+                            <label for="symbol">رمز العملة النصتي</label>
+                        </div>
+                        <div>
+                            <input type="number" name="exchRate" placeholder="0.23 :مثال" step="0.0001" required id="exchRate">
+                            <label for="exchRate">السعر بالدولار</label>
+                        </div>
+                        <div>
+                            <input type="number" name="priorityCu" placeholder="مثال: 3" min="1" id="priorityCu">
+                            <label for="priorityCu">أهمية العملة</label>
+                        </div>
+
+                        <div class="btn-container">
+                            <input type="submit" value="حذف العملة" class="submit-btn delete-btn">
+                            <input type="submit" value="حفظ التغييرات" class="submit-btn patch-btn">
+                        </div>
+
+                    </form>
+
+                    
+                    <div id="currencies-table">
+                        <button id="add-btn" class="add-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(49,49,49,1)"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
+                        </button>
+
+                        <table>
+                        <thead>
+                            <tr>
+                                <th>الأهمية</th>
+                                <th>سعر الصرف</th>
+                                <th>الرمز</th>
+                                <th>اسم العملة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.currencies) { %>   
+                                <% currencies.forEach(currency => { %>
+                                    <tr class="data" id="<%= currency._id %>">
+                                        <td><%= currency.priorityCu %></td>
+                                        <td><%= currency.exchRate %></td>
+                                        <td><%= currency.code %></td>
+                                        <td><%= currency.nameInArabic %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                        </table>
                     </div>
-                    <div>
-                        <input type="text" name="nameInEnglish" placeholder="أدخل اسم العملة بالإنجليزية" required id="nameInEnglish">
-                        <label for="nameInEnglish">اسم العملة بالانجليزي</label>
-                    </div>
-                    <div>
-                        <input type="text" name="code" placeholder="USD :مثال" maxlength="3" required id="code">
-                        <label for="code">رمز العملة الدولي</label>
+            </section>
 
-                    </div>
-                    <div>
-                        <input type="text" name="symbol" placeholder="$ :مثال" maxlength="3" required id="symbol">
-                        <label for="symbol">رمز العملة النصتي</label>
-                    </div>
-                    <div>
-                        <input type="number" name="exchRate" placeholder="0.23 :مثال" step="0.0001" required id="exchRate">
-                        <label for="exchRate">السعر بالدولار</label>
-                    </div>
-                    <div>
-                        <input type="number" name="priorityCu" placeholder="مثال: 3" min="1" id="priorityCu">
-                        <label for="priorityCu">أهمية العملة</label>
-                    </div>
-                    <div class="btn-container">
-                        <input type="submit" value="حذف العملة" class="submit-btn delete-btn">
-                        <input type="submit" value="حفظ التغييرات" class="submit-btn patch-btn">
-                    </div>
+            <%- include('sidebar.ejs') %>
 
-                </form>
+        </main>
 
-                <div id="currencies-table">
-                <button id="add-btn" class="add-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(49,49,49,1)"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
-                </button>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الأهمية</th>
-                            <th>سعر الصرف</th>
-                            <th>الرمز</th>
-                            <th>اسم العملة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (locals.currencies) { %>   
-                            <% currencies.forEach(currency => { %>
-                                <tr class="data" id="<%= currency._id %>">
-                                    <td><%= currency.priorityCu %></td>
-                                    <td><%= currency.exchRate %></td>
-                                    <td><%= currency.code %></td>
-                                    <td><%= currency.nameInArabic %></td>
-                                </tr>
-                            <% }) %>
-                        <% } %>
-                    </tbody>
-                </table>
-                </div>
-        </section>
 
-        <%- include('sidebar.ejs') %>
-
-    </main>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <script src="js/currency-management-script.js"></script>
+
     </body>
 </html>
-

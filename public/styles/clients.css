@@ -1,0 +1,104 @@
+#content table {
+    /* background-color: #31313118; */
+    /* background-color: #3e5e598a; */
+    background-color: #0c997a77;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 0 auto 20px;
+    width: 700px;
+    padding: 20px;
+}
+
+#clients-table {
+    margin-top: 50px;
+}
+
+
+
+#group-table {
+    position: fixed;
+    left: 12%;
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    z-index: 3;
+}
+
+.group-list {
+    overflow-y: auto;
+    max-height: 40vh;
+}
+
+.group-list::-webkit-scrollbar {
+    background-color: #0023263f;
+    border-radius: 5px;
+}
+
+.group-list::-webkit-scrollbar-thumb {
+    background-color: #0c997a77;
+    border-radius: 5px;
+}
+
+div.group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: rgba(0, 0, 0, 0.075); */
+    background-color: #0c997a77;
+    border-radius: 10px;
+    height: 70px;
+    width: 300px;
+    margin: 10px auto;
+}
+
+.btn-container {
+    display:flex;
+    justify-content: space-between;
+}
+
+
+.group-close {
+    border-radius: 30%;
+}
+
+.group-add-btn:hover {
+    background-color: rgba(220, 220, 220, 0.219);
+    border-radius: 5px;
+    height: 30px;
+    width: 50px;
+}
+
+.dlt-btn {
+    margin: 0 20px;
+    border-radius: 10px;
+}
+
+.dlt-btn:hover {
+    background-color: rgba(255, 0, 0, 0.295);
+    color: white;
+}
+
+.group p {
+    margin: 0 20px;
+}
+
+
+#group-form {
+    position: fixed;
+    z-index: 10;
+    left: 22%;
+    background-color: white;
+    width: 30%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.group-close-container {
+    display: flex;
+    justify-content: flex-end;
+}
+

@@ -62,11 +62,8 @@ export const getCurrencyById = async (req, res) => {
 // Patch for currency all fields required
 export const patchCurrencyById = async (req, res) => {
     try {
-        console.log("patch currency");
         if (req.isAuthenticated()) {
-            const updates = req.body;
-            console.log(updates);
-            await Currency.findByIdAndUpdate(req.params.id , updates, { new: true, runValidators: true });
+            await Currency.findByIdAndUpdate(req.params.id , req.body, { new: true, runValidators: true });
             res.status(200).json({message: "patch successeful"})
         } else {
             res.redirect("/login");
