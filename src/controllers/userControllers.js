@@ -75,11 +75,28 @@ export const deleteUserById = async (req, res) => {
     }
 };
 
+
+// Function to get userName by userId
+export const getUserNameById = async (userId) => {
+    try {
+        const user = await User.findById(userId).select('userName');
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user.username;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Error fetching userName');
+    }
+};
+
+
 export default {
     createUser,
     getAllUsers,
     getUserById,
     updateUserById,
     updateUserRoleById,
-    deleteUserById
+    deleteUserById,
+    getUserNameById
 };

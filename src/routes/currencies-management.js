@@ -5,7 +5,6 @@ import {
     getAllCurrencies,
     getCurrencyById,
     getCurrencyByName,
-    patchCurrency,
     updateCurrencyById
 } from "../controllers/currencyControllers.js";
 
@@ -19,15 +18,13 @@ router.get("/", getAllCurrencies);
 
 router.post("/add", createCurrency);
 
-router.get("/currency", getCurrencyById);
+router.get("/currency/:id", getCurrencyById);
 
-router.patch("/currency/update", updateCurrencyById);
+router.patch("/currency/update/:id", updateCurrencyById);
 
 router.get('/name/:name', getCurrencyByName);
 
-router.patch("/currency/patch", patchCurrency);
-
-router.delete("/currency/delete", deleteCurrencyById);
+router.delete("/currency/delete/:id", deleteCurrencyById);
 
 
 

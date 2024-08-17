@@ -28,6 +28,7 @@ export const getCurrencyById = async (req, res) => {
         if (!currency) {
             return res.status(404).send();
         }
+        
         res.status(200).send(currency);
     } catch (error) {
         res.status(500).send(error);
@@ -52,7 +53,7 @@ export const getCurrencyByName = async (req, res) => {
 // Update a currency by ID
 export const updateCurrencyById = async (req, res) => {
     try {
-        const currency = await Currency.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const currency = await Currency.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true, runValidators: true });
         if (!currency) {
             return res.status(404).send();
         }
@@ -62,39 +63,7 @@ export const updateCurrencyById = async (req, res) => {
     }
 };
 
-// Patch for currency
-export const patchCurrency = async (req, res) => {
-    try {
-        const { operation, priceInDollar } = req.body;
-        const updates = {};
-        
-        if (operation) {
-            if (!['multiply', 'divide'].includes(operation)) {
-                return res.status(400).send({ error: 'Invalid operation. Must be "multiply" or "divide".' });
-            }
-            updates.operation = operation;
-        }
-        
-        if (priceInDollar !== undefined) {
-            if (typeof priceInDollar !== 'number') {
-                return res.status(400).send({ error: 'priceInDollar must be a number.' });
-            }
-            updates.priceInDollar = priceInDollar;
-        }
-        
-        if (Object.keys(updates).length === 0) {
-            return res.status(400).send({ error: 'At least one field (operation or priceInDollar) must be provided for update.' });
-        }
-        
-        const currency = await Currency.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
-        if (!currency) {
-            return res.status(404).send();
-        }
-        res.status(200).send(currency);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-};
+
 
 // Delete a currency by ID
 export const deleteCurrencyById = async (req, res) => {

@@ -1,12 +1,11 @@
 import express from "express";
 import {
     createUser,
+    deleteUserById,
     getAllUsers,
     getUserById,
-    updateUserById,
-    updateUserRoleById,
-    deleteUserById
-} from "../controllers/userControllers.js"
+    updateUserById
+} from "../controllers/userControllers.js";
 
 const router = express();
 
@@ -15,7 +14,7 @@ router.get("/", getAllUsers);
 
 router.get("/user", getUserById);
 
-router.post("/add", createUserById);
+router.post("/add", createUser);
 
 router.patch("/user/Update", updateUserById);
 

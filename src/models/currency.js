@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Transaction from './transaction.js';
 
 const currencySchema = new mongoose.Schema({
     icon: {
@@ -10,7 +11,8 @@ const currencySchema = new mongoose.Schema({
     },
     nameInArabic: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     code: {
         type: String,
@@ -21,12 +23,6 @@ const currencySchema = new mongoose.Schema({
     symbol: {
         type: String,
         maxlength: 3,
-        required: true
-    },
-    // darb wla 9isma
-    operation: {
-        type: String,
-        enum: ['multiply', 'divide'],
         required: true
     },
     priorityCu: {
@@ -43,4 +39,13 @@ const currencySchema = new mongoose.Schema({
     }
 });
 
+currencySchema.pre('findOneAndUpdate', async function(next) {
+    const update = this.getUpdate();
+    if (update.nameInArabic) {
+        const currencyId = this.getQuery()._id;
+        await Transaction.updateMany({ fromCurrency: currencyId }, { fromNameCurrency: update.nameInArabic });
+        await Transaction.updateMany({ toCurrency: currencyId }, { toNameCurrency: update.nameInArabic });
+    }
+    next();
+});
 export default mongoose.model('Currency', currencySchema);
