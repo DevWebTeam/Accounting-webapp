@@ -1,6 +1,6 @@
 import Client from '../models/client.js';
 
-// Function to create a new client
+// Function to create a ew client
 
 
 export const createClient = async (req, res) => {
