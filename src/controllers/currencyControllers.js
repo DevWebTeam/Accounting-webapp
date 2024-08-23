@@ -21,6 +21,16 @@ export const getAllCurrencies = async (req, res) => {
     }
 };
 
+export const mappingCurrency = async (req, res) => {
+    try {
+        const currencyNames = await Currency.find({}, {nameInArabic:1,_id:0});
+        const names= currencyNames.map(Currency => Currency.nameInArabic);
+        res.status(200).json(names);
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while fetching currency names.', error });
+    }
+};
+
 // Get a currency by ID
 export const getCurrencyById = async (req, res) => {
     try {
@@ -62,8 +72,6 @@ export const updateCurrencyById = async (req, res) => {
         res.status(400).send(error);
     }
 };
-
-
 
 // Delete a currency by ID
 export const deleteCurrencyById = async (req, res) => {

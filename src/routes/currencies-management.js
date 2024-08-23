@@ -5,6 +5,7 @@ import {
     getAllCurrencies,
     getCurrencyById,
     getCurrencyByName,
+    mappingCurrency,
     updateCurrencyById
 } from "../controllers/currencyControllers.js";
 
@@ -15,6 +16,8 @@ const router = express.Router();
 
 
 router.get("/", getAllCurrencies);
+
+router.get("/map",mappingCurrency)
 
 router.post("/add", createCurrency);
 

@@ -5,6 +5,7 @@ import {
     getAllClients,
     getClientById,
     getClientByName,
+    mappingClients,
     updateClientById
 } from "../controllers/clientControllers.js";
 
@@ -14,6 +15,8 @@ const router = express.Router();
 
 
 router.get("/", getAllClients);
+
+router.get("/map",mappingClients)
 
 router.get("/client", getClientById);
 

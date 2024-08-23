@@ -1,6 +1,6 @@
 import Client from '../models/client.js';
 
-// Function to create a ew client
+// Function to create a new client
 
 
 export const createClient = async (req, res) => {
@@ -26,6 +26,18 @@ export const getAllClients = async (req, res) => {
         res.status(200).send(clients);
     } catch (error) {
         res.status(500).send(error);
+    }
+};
+
+export const mappingClients = async (req, res) => {
+    try {
+        const clientNames = await Client.find({}, 'name');
+        
+        const names = clientNames.map(client => client.name);
+
+        res.status(200).json(names);
+    } catch (error) {
+        res.status(500).json({ message: 'Error occurred while fetching client names.', error });
     }
 };
 

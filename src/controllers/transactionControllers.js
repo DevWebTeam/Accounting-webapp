@@ -31,16 +31,15 @@ export const createTransaction = async (req, res) => {
 
         const user = await User.findOne({ username: userName });
 
-        // Perform calculations
+
         const resultInDollars = (creditForUsNum * fromCurrency.exchRate) - (deptedForUsNum * toCurrency.exchRate);
 
-        // Limit the number of decimal places
         const shortResultInDollars = toShortNumber(resultInDollars, 2);
 
         const transactionNumber = await generateTransactionNumber();
 
         const transaction = new Transaction({
-            _id: new mongoose.Types.ObjectId(),  // Ensure _id is in ObjectId format
+            _id: new mongoose.Types.ObjectId(),
             fromClient: fromClient._id,
             toClient: toClient._id,
             fromCurrency: fromCurrency._id,
@@ -62,11 +61,10 @@ export const createTransaction = async (req, res) => {
 
         await transaction.save();
 
-        // Update client and currency balances with limited decimal places
         fromClient.totalDebt = toShortNumber(fromClient.totalDebt + (creditForUsNum * fromCurrency.exchRate), 2);
         toClient.totalCredit = toShortNumber(toClient.totalCredit + (deptedForUsNum * toCurrency.exchRate), 2);
-        fromCurrency.credit = toShortNumber(fromCurrency.credit + deptedForUsNum, 2);
-        toCurrency.credit = toShortNumber(toCurrency.credit - creditForUsNum, 2);
+        fromCurrency.credit = toShortNumber(fromCurrency.credit + creditForUsNum, 2);
+        toCurrency.credit = toShortNumber(toCurrency.credit - deptedForUsNum, 2);
 
         await fromClient.save();
         await toClient.save();
@@ -79,7 +77,7 @@ export const createTransaction = async (req, res) => {
     }
 };
 
-// Update
+
 export const updateTransaction = async (req, res) => {
     try {
         const id = req.params.id;
