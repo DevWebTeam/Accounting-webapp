@@ -1,0 +1,57 @@
+#sidebar {
+    grid-column: 2;
+    background-color: #002326;
+    color: white;
+}
+
+.search-form {
+    height: fit-content;
+}
+
+.search-form .search-input {
+    width: 60%;
+}
+
+.search-form .search-btn {
+    width: fit-content;
+}
+
+.general-budget-container {
+    height: 60vh;
+}
+
+
+.general-budget-table {
+    background-color: #B9D2E6;
+    border-radius: 10px;
+    border: 1px solid black;
+    margin: 35px auto;
+    max-height: 55vh;
+    width: 95%;
+    overflow-y: scroll;
+}
+
+.resume {
+    display: flex;
+    justify-content: space-between;
+}
+
+.resume div {
+    background-color: #B9D2E6;
+    height: fit-content;
+    width: 150px;
+    border-radius: 10px;
+}
+
+.bar {
+    display: flex;
+}
+
+.bar a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    text-align: center;
+}

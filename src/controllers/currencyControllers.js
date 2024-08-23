@@ -10,6 +10,9 @@ controller.use(express.json());
 
 
 
+
+
+
 // Create a new currency
 export const createCurrency = async (req, res) => {
     try {
@@ -27,12 +30,16 @@ export const createCurrency = async (req, res) => {
 
 
 
+
+
+
 // Get all currencies
 export const getAllCurrencies = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            const currencies = await Currency.find().sort({priorityCu: 1});
-            res.status(200).render("currency-management.ejs", {currencies: currencies})
+            const result = await Currency.find().sort({priorityCu: 1});
+
+            res.status(200).render("currency-management.ejs", {currencies: result});
         } else {
             res.redirect("/login");
         }
@@ -40,6 +47,10 @@ export const getAllCurrencies = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
+
+
+
 
 // Get a currency by ID
 export const getCurrencyById = async (req, res) => {
@@ -59,6 +70,9 @@ export const getCurrencyById = async (req, res) => {
 };
 
 
+
+
+
 // Patch for currency all fields required
 export const patchCurrencyById = async (req, res) => {
     try {
@@ -72,6 +86,10 @@ export const patchCurrencyById = async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+
+
+
 
 // Delete a currency by ID
 export const deleteCurrencyById = async (req, res) => {

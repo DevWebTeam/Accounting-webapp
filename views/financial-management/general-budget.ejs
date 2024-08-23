@@ -3,113 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Sidebar</title>
-    <link rel="stylesheet" href="/home/almirania_l3ama/almz.css">
+    <title>Financify</title>
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/styles/general-budget.css">
 </head>
-<body>
-    <div class="container">
-        <!-- Barre de recherche -->
-        <h2>الميزانية العامة</h2>
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="ابحث هنا...">
-        </div>
+    <body>
+        <main class="container">
+            <section id="content">
+                <div class="bar">
+                    <a href="/finances">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z"></path></svg>الإدارة المالية
+                    </a>
+                </div>
+                <h2>الميزانية العامة</h2>
 
-        <!-- Tableau -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>رابط 1</th>
-                        <th>رابط 2</th>
-                        <th>رابط 3</th>
-                        <th>رابط 4</th>
-                        <th>رابط 5</th>
-                        <th>رابط 6</th>
-                        <th>رابط 7</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><a href="#">رابط A1</a></td>
-                        <td><a href="#">رابط B1</a></td>
-                        <td><a href="#">رابط C1</a></td>
-                        <td><a href="#">رابط D1</a></td>
-                        <td><a href="#">رابط E1</a></td>
-                        <td><a href="#">رابط F1</a></td>
-                        <td><a href="#">رابط G1</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">رابط A2</a></td>
-                        <td><a href="#">رابط B2</a></td>
-                        <td><a href="#">رابط C2</a></td>
-                        <td><a href="#">رابط D2</a></td>
-                        <td><a href="#">رابط E2</a></td>
-                        <td><a href="#">رابط F2</a></td>
-                        <td><a href="#">رابط G2</a></td>
-                    </tr>
-                    <tr>
-                        <td><a href="#">رابط A3</a></td>
-                        <td><a href="#">رابط B3</a></td>
-                        <td><a href="#">رابط C3</a></td>
-                        <td><a href="#">رابط D3</a></td>
-                        <td><a href="#">رابط E3</a></td>
-                        <td><a href="#">رابط F3</a></td>
-                        <td><a href="#">رابط G3</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                <div class="general-budget-container">
 
-        <!-- Affichages en forme de carré -->
-        <div class="squares-container">
-            <div class="square">1</div>
-            <div class="square">2</div>
-            <div class="square">3</div>
-            <div class="square">4</div>
-            <div class="square">5</div>
-        </div>
-    </div>
-    <div class="sidebar">
-        <h2>تصفية البيانات</h2>
+                    <form action="" method="post" class="search-form">
+                        <input type="search" name="search-account"  placeholder="ابحث عن حساب" class="search-input">
+                        <input type="submit" value="S" class="search-btn">
+                    </form>
 
-        <div class="filter-section">
-            <label for="date-filter">اختر التاريخ:</label>
-            <input type="date" id="date-filter" name="date-filter">
-        </div>
 
-        <div class="filter-section">
-            <label>اختر النوع</label>
-            <div class="radio-group">
-                <input type="radio" id="day" name="range" value="day">
-                <label for="day">صندوق العملات</label>
-                <input type="radio" id="interval" name="range" value="interval">
-                <label for="interval">الصندوق المقوم</label>
-            </div>
-        </div>
+                    <table class="general-budget-table">
+                        <thead>
+                            <tr>
+                                <th>اسم العملة</th>
+                                <th>رصيد دائن علينا</th>
+                                <th>رصيد مدين لنا</th>
+                                <th>إجمالي دائن علينا</th>
+                                <th>إجمالي مدين لنا</th>
+                                <th>اسم الحساب</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.clients) {%>
+                                <% clients.forEach(client => { %>
+                                    <tr class="data" id=<%= client._id %>>
+                                        <td>الدولار المقوم</td>
+                                        <td><%= client.balanceCredit %></td>
+                                        <td><%= client.balanceDebt %></td>
+                                        <td><%= client.totalCredit %></td>
+                                        <td><%= client.totalDebt %></td>
+                                        <td><%= client.name %></td>
+                                        <td><%= %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
 
-        <div class="filter-section">
-            <label for="currency">اختر العملة</label>
-            <div class="currency-list">
-                <input type="radio" id="usd" name="currency" value="usd">
-                <label for="usd">دولار أمريكي (USD)</label>
-                <input type="radio" id="eur" name="currency" value="eur">
-                <label for="eur">يورو (EUR)</label>
-                <input type="radio" id="jpy" name="currency" value="jpy">
-                <label for="jpy">ين ياباني (JPY)</label>
-                <input type="radio" id="gbp" name="currency" value="gbp">
-                <label for="gbp">جنيه استرليني (GBP)</label>
-                <input type="radio" id="aud" name="currency" value="aud">
-                <label for="aud">دولار أسترالي (AUD)</label>
-                <input type="radio" id="cad" name="currency" value="cad">
-                <label for="cad">دولار كندي (CAD)</label>
-                <input type="radio" id="chf" name="currency" value="chf">
-                <label for="chf">فرنك سويسري (CHF)</label>
-            </div>
-        </div>
+                </div>
+            
+                <div class="resume">
+                    <div>
+                        <p>الفرق</p>
+                        <p><%= total.diff %></p>
+                    </div>
+                    <div>
+                        <p>رصيد دالن علينا</p>
+                        <p><%= total.balanceCredit %></p>
+                    </div>
+                    <div>
+                        <p>رصيد دالن علينا</p>
+                        <p><%= total.balanceDebt %></p>
 
-        <button id="filter-button">تصفية</button>
-    </div>
+                    </div>
+                    <div>
+                        <p>إجمالي دالن علينا</p>
+                        <p><%= total.CreditOnUs %></p>
 
-    <script src="almz.js"></script>
-</body>
+                    </div>
+                    <div>
+                        <p>إجمالي مدين لنا</p>
+                        <p><%= total.DebtOnUs %></p>
+
+                    </div>
+                </div>
+
+            </section>
+
+
+            <section id="sidebar">
+                sidebar
+            </section>
+
+
+        </main>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="js/general-budget-script.js"></script>
+
+    </body>
 </html>

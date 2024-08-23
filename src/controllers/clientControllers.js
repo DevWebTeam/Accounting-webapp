@@ -19,7 +19,7 @@ export const createClient = async (req, res) => {
 };
 
 // Function to get all clients
-export const getAllClients = async (req, res) => {
+export const getAllClients = async (req, res, next) => {
     try {
 
         if (req.isAuthenticated()) {
@@ -29,7 +29,6 @@ export const getAllClients = async (req, res) => {
         } else {
             res.redirect("/login");
         }
-        
     } catch (error) {
         res.status(500).send(error.message);
     }

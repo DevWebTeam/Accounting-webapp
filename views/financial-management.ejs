@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+    <link rel="stylesheet" href="styles/financial-management.css">
+</head>
+    <body>
+        <main class="container">
+
+            <section id="content">
+                <h1 class="home-title">الإدارة المالية </h1>
+
+                <div class="options">
+                    <div>
+                        <a href="/finances/general-budget">الميزانية العامة</a>
+                    </div>
+                    <div>
+                        <a href="/finances/ledger">دفتر الحسابات</a>
+                    </div>
+                    <div>
+                        <a href="/finances/journal">دفتر اليومية</a>
+                    </div>
+                    <div>
+                        <a href="/finances/reconciliation">تسوية جديدة</a>
+                    </div>
+                </div>
+
+
+
+                <div class="finances-content">
+                    <div class="total-container">
+                        <div>
+                            <h4>الأرباح والخسائر اليومية</h4>
+                            <% if (locals.total) { %>
+                                <p class="total-data"><%= total.totalEarnings %>$</p>
+                            <% } %>
+                        </div>
+                        <div>
+                            <h4>الرصيد المقوم الإجمالي</h4>
+                            <% if (locals.total) { %>
+                                <p class="total-data"><%= total.totalInDoll %>$</p>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <table class="finances-table">
+                        <thead>
+                            <tr>
+                                <th>الرصيد المقوم</th>
+                                <th>رصيد العملة</th>
+                                <th>العملة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.currencies) { %>
+                                <% currencies.forEach(currency => { %>
+                                    <tr class="data"  id=<%= currency._id %>>
+                                        <td><%= currency.creditInDoll %></td>
+                                        <td><%= currency.credit %></td>
+                                        <td><%= currency.nameInArabic %></td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </section>
+
+
+
+
+
+
+
+            <%- include('sidebar.ejs') %>
+
+        </main>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="js/financial-management-script.js"></script>
+
+    </body>
+</html>

@@ -1,0 +1,98 @@
+body {
+    background-color: aliceblue;
+}
+
+body * {
+    text-align: center;
+    font-family: Helvetica, sans-serif;
+    font-size: large;
+    margin: 0;
+}
+
+
+.bar {
+    display: flex;
+}
+
+.bar a {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bar a:hover {
+    background-color: rgba(0, 0, 0, 0.068);
+    border-radius: 5px;
+}
+
+.view {
+    background-color: white;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 90%;
+}
+
+.overview-data {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 15vh;
+    margin: 0 auto;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.overview-data div {
+    margin: 0 auto;
+}
+
+.overview-data div > p {
+    background-color: #0c997a5e;
+    border-radius: 20px;
+    padding: 5px;
+    margin: 4px 0;
+    width: 150px;
+}
+
+.submit-btn {
+    border: 0;
+    border-radius: 5px;
+    background-color: #0c997aab;
+    cursor: pointer;
+    width: 10%;
+    height: 5vh;
+    margin: 10px auto;
+}
+
+.submit-btn:hover {
+    background-color: #0c997a7c;
+}
+
+.row {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 30px auto;
+}
+
+.count {
+    background-color: #0c997a49;
+    border-radius: 10px;
+    height: 5vh;
+    width: 90%;
+    margin: auto;
+    
+}
+
+table {
+    background-color: #0c997a77;
+    width: 90%;
+    margin: 10px auto;
+    border-radius: 10px;
+}
+
+.data:hover {
+    background-color: rgba(0, 0, 0, 0.151);
+    color: white;
+}

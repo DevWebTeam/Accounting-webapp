@@ -33,7 +33,8 @@ const currencySchema = new mongoose.Schema({
         required: true
     },
     credit: {
-    type: Number,
+        type: Number,
+        default: 0
     }
 });
 

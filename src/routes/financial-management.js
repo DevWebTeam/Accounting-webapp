@@ -1,44 +1,80 @@
-import express from "express";
+import express from 'express';
 import {
+    archiveTransaction,
     createTransaction,
-    getAllTransactions,
+    deleteTransactionById,
     getTransactionById,
-    updateTransactionById,
-    archiveTransactionById,
-    unarchiveTransactionById,
-    deleteTransactionById
-} from "../controllers/transactionControllers.js"
-import { checkIfBanned } from "../controllers/functions.js";
-
-
+    getTransactionsByClient,
+    getTransactionsByClientGroupedByCurrency,
+    getTransactionsByCurrency,
+    getTransactionsByNames,
+    getTransactionsByNamesAndDate,
+    unarchiveTransaction,
+    updateTransaction,
+    getGeneralBudget,
+    getFinances,
+    getReconciliation,
+    getJournal,
+    getLedger
+} from '../controllers/transactionControllers.js';
 
 const router = express.Router();
 
 
+router.get('/hisab', (req, res) => {
+    res.render('financial-management/account-statment.ejs');
+})
 
-router.get("/", );
+router.get('/general-budget', getGeneralBudget);
 
+router.get('/ledger', getLedger);
 
+router.get("/journal", getJournal);
 
-//*budget
-router.get("/General-budget", );
-
-
-
-//*ledger
-router.get("/ledger", );
-
-
-//*journal
-router.get("/journal", checkIfBanned() );
+router.get("/reconciliation", getReconciliation);
+    
+router.get('/', getFinances);
 
 
 
 
-//* reconciliation
-router.get("/reconciliation", checkIfBanned());
 
 
+
+router.post('/new', createTransaction);
+
+
+router.put('/update/:id', updateTransaction);
+
+// Route to get a transaction by its ID
+router.get('/get/:id', getTransactionById);
+
+// Route to get transactions by client name
+router.get('/by-client/:clientName', getTransactionsByClient);
+
+// Route to get transactions by currency name
+router.get('/by-currency/:currencyNameInArabic', getTransactionsByCurrency);
+
+// Route to delete a transaction by its ID
+router.delete('/delete/:id', deleteTransactionById);
+
+//grouped by currency
+router.get('/by-client-gr-currency/:clientName', getTransactionsByClientGroupedByCurrency);
+
+//grouped by client
+router.get('/by-currency-gr-client/:clientName', getTransactionsByClientGroupedByCurrency);
+
+//archive
+router.patch('/update/:id/archive', archiveTransaction);
+
+//unarchive
+router.patch('/update/:id/unarchive', unarchiveTransaction);
+
+// Get transactions based on client names and currency names
+router.post('/transactions-by-names', getTransactionsByNames);
+
+// Get transactions based on client names and currency names and date
+router.post('/transactions-by-names-and-date', getTransactionsByNamesAndDate);
 
 
 

@@ -4,21 +4,33 @@ const transactionSchema = new mongoose.Schema({
 fromClient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
+},
+fromClientName: {
+    type: String,
     required: true
 },
 toClient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Client',
+},
+toClientName: {
+    type: String,
     required: true
+},
+fromCurrency: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Currency',
 },
 fromNameCurrency: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Currency',
+    type: String,
     required: true
 },
-toNameCurrency: {
+toCurrency: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Currency',
+},
+toNameCurrency: {
+    type: String,
     required: true
 },
 deptedForUs: {
@@ -29,17 +41,9 @@ creditForUs: {
     type: Number,
     required: true
 },
-deptedForUsDollars: {
-    type: Number,
-    required: true
-},
-creditForUsDollars: {
-    type: Number,
-    required: true
-},
+
 ResultInDollars: {
     type: Number,
-    required: true
 },
 description: {
     type: String,
@@ -48,7 +52,10 @@ description: {
 user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+},
+userName:{
+    type:String,
+    required:true,
 },
 date: {
     type: Date,
@@ -61,7 +68,11 @@ type: {
 archived: {
     type: Boolean,
     default: false
-}
+},
+transactionNumber: {
+    type: Number,
+    required: true,
+    unique: true}
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

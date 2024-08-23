@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/journal.css">
+</head>
+<body>
+    <div class="bar">
+        <a href="/finances">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z"></path></svg>الإدارة المالية
+        </a>
+    </div>
+    
+    <h1>دفتر اليومية</h1>
+
+    <form action="" method="post" class="search-form">
+        <div class="row">
+            <input type="date" name="date">
+            <label for="type">ابحث عن حركة</label>
+
+            
+            <input type="text" name="type">
+            <label for="date">اختر التاريخ</label>
+        </div>
+        <div class="row">
+            <input type="submit" value="submit" class="submit-btn">
+        </div>
+    </form>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>نوع الحركة</th>
+                <th>المستخدم</th>
+                <th>التاريخ</th>
+                <th>نتيجة الحركة</th>
+                <th>المبلغ علينا</th>
+                <th>العملة</th>
+                <th>إلي حساب</th>
+                <th>البيان</th>
+                <th>المبلغ لنا</th>
+                <th>العملة</th>
+                <th>من حساب</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (locals.transactions) {%>
+                <% transactions.forEach(transaction => { %>
+                    <tr class="data" id=<%= transaction._id %>>
+                        <td><%= transaction.type %></td>
+                        <td><%= transaction.userName %></td>
+                        <td><%= transaction.date %></td>
+                        <td><%= transaction.ResultInDollars %></td>
+                        <td><%= transaction.deptedForUs %></td>
+                        <td><%= transaction.toNameCurrency %></td>
+                        <td><%= transaction.toClientName %></td>
+                        <td><%= transaction.description %></td>
+                        <td><%= transaction.creditForUs %></td>
+                        <td><%= transaction.fromNameCurrency %></td>
+                        <td><%= transaction.fromClientName %></td>
+                        <td><%= transaction.number %></td>
+
+                    </tr>
+                <% }) %>
+            <% } else {%>
+                <tr class="data">
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+
+    <div class="pop-up hidden">
+        <button class="close">X</button>
+        <h2>haraka</h2>
+        <button class="modify">تعديل الحركة</button>
+        <button class="cancel">إلغاء الحركة</button>
+        <button class="delete">حذف الحركة</button>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="/js/journal-script.js"></script>
+</body>
+</html>
