@@ -25,7 +25,7 @@
                 <button class="type-reconciliation type active">حركة نسوية</button>
             </div>
             
-            <form action="/new" method="post" class="type-form multiple hidden">
+            <form action="" method="" class="type-form multiple hidden">
                 <div class="column cln-1 from">
                     <div class="row">
                         <select name="fromClientName" id="">
@@ -70,21 +70,21 @@
                 </div>
 
                 <div class=" column cln-2">
-                    <p>0$</p>
+                    <p></p>
                 </div>
 
                 <input type="submit" value="submit" class="submit-btn">
             </form>
 
             
-            <form action="/new" method="post" class="type-form move hidden">
+            <form action="/finances/reconciliation/new" method="post" class="type-form move hidden">
 
                     <div class="column description cln-2">
                         <div class="row">
-                            <select name="toCurrencyNameInArabic" id="" required>
+                            <select name="currency" required>
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
-                                        <option value=<%= currency._id %>><%= currency.nameInArabic %></option>
+                                        <option value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -124,14 +124,14 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="exchRate" step="0.00001" required>
+                            <input type="number" name="toExchRate" step="0.00001" required>
                             <label for="exchRate">سعر الصرف</label>
                         </div>
 
                         <div class="row">
-                            <input type="number" name="wages">
+                            <input type="number" name="toWages">
                             <span>أو</span>
-                            <input type="number" name="wages" step="0.01" max="100" placeholder="%">
+                            <input type="number" name="toWages" step="0.01" max="100" placeholder="%">
                             <label for="tax">أجور</label>
                         </div>
 
@@ -167,14 +167,14 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="exchRate" step="0.00001" required>
+                            <input type="number" name="fromExchRate" step="0.00001" required>
                             <label for="exchRate">سعر الصرف</label>
                         </div>
 
                         <div class="row">
-                            <input type="number" name="wages">
+                            <input type="number" name="fromWages">
                             <span>أو</span>
-                            <input type="number" name="wages" step="0.01" max="100" placeholder="%">
+                            <input type="number" name="fromWages" step="0.01" max="100" placeholder="%">
                             <label for="tax">أجور</label>
                         </div>
 
@@ -185,14 +185,14 @@
                     </div>
 
                     <div class=" column cln-2">
-                        <p>0$</p>
+                        <p></p>
                     </div>
 
                     <input type="submit" value="submit" class="submit-btn">
 
             </form>
                 
-            <form action="/new" method="post" class="type-form reconciliation">
+            <form action="/finances/reconciliation/new" method="post" class="type-form reconciliation">
                     <div class="column description cln-2">
                         <div class="row">
                             <input type="text" name="description">
@@ -224,7 +224,7 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="" placeholder="أدخل المبلغ">
+                            <input type="number" name="toNameCurrency" placeholder="أدخل المبلغ">
                             <label for="number">المبلغ</label>
                         </div>
                     </div>
@@ -254,13 +254,13 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" placeholder="أدخل المبلغ">
+                            <input type="number" name="fromNameCurrency" placeholder="أدخل المبلغ">
                             <label for="number">المبلغ</label>
                         </div>
                     </div>
 
                     <div class=" column display cln-2">
-                        <p>0$</p>
+                        <p class="diff"></p>
                     </div>
                     <input type="submit" class="submit-btn">
             </form>

@@ -1,3 +1,5 @@
+const { json } = require("body-parser");
+
 $('.overview-data').on('click', function () {
     const id = $(this).id;
     try {
@@ -27,15 +29,17 @@ $('form').on('submit', function (event) {
     console.log(clientName);
     
     try {
-        const response = fetch(`/by-client-gr-currency/${clientName}`, {
+        const response = fetch(`/finances/by-client-gr-currency/${clientName}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             }
         })
 
+
+
         if (!response.ok) {
-            throw Error("error fetching");
+            console.log(response)
         }
 
 

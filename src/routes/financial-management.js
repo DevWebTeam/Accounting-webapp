@@ -40,8 +40,21 @@ router.get('/', getFinances);
 
 
 
+//create transaction
+router.post('/reconciliation/new', createTransaction);
 
-router.post('/new', createTransaction);
+
+//grouped by currency
+//ledger client search
+router.get('/by-client-gr-currency/:clientName', getTransactionsByClientGroupedByCurrency);
+
+
+
+// Route to get transactions by client name
+//ledger client currency search
+router.get('/by-client/:clientName', getTransactionsByClient);
+
+
 
 
 router.put('/update/:id', updateTransaction);
@@ -49,8 +62,6 @@ router.put('/update/:id', updateTransaction);
 // Route to get a transaction by its ID
 router.get('/get/:id', getTransactionById);
 
-// Route to get transactions by client name
-router.get('/by-client/:clientName', getTransactionsByClient);
 
 // Route to get transactions by currency name
 router.get('/by-currency/:currencyNameInArabic', getTransactionsByCurrency);
@@ -58,11 +69,7 @@ router.get('/by-currency/:currencyNameInArabic', getTransactionsByCurrency);
 // Route to delete a transaction by its ID
 router.delete('/delete/:id', deleteTransactionById);
 
-//grouped by currency
-router.get('/by-client-gr-currency/:clientName', getTransactionsByClientGroupedByCurrency);
 
-//grouped by client
-router.get('/by-currency-gr-client/:clientName', getTransactionsByClientGroupedByCurrency);
 
 //archive
 router.patch('/update/:id/archive', archiveTransaction);
