@@ -19,22 +19,16 @@ const generateTransactionNumber = async () => {
 // Create
 export const createTransaction = async (req, res) => {
     try {
-        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic,deptedForUsNum ,creditForUsNum , description, type, userName } = req.body;
+        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum, creditForUsNum, description, type, userName } = req.body;
 
         const fromClient = await Client.findOne({ name: fromClientName });
         const toClient = await Client.findOne({ name: toClientName });
-
-
         const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
         const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
-
-
         const user = await User.findOne({ username: userName });
 
-
-        const resultInDollars = (creditForUsNum * fromCurrency.exchRate) - (deptedForUsNum * toCurrency.exchRate);
-
-        const shortResultInDollars = toShortNumber(resultInDollars, 2);
+        const resultInDollars = (Number(creditForUsNum) * fromCurrency.exchRate) - (Number(deptedForUsNum) * toCurrency.exchRate);
+        const shortResultInDollars = toShortNumber(resultInDollars, 2);  // Shortened result
 
         const transactionNumber = await generateTransactionNumber();
 
@@ -50,12 +44,12 @@ export const createTransaction = async (req, res) => {
             description: description,
             type: type,
             date: Date.now(),
-            fromClientName:fromClientName,
-            toClientName:toClientName,
-            fromNameCurrency:fromCurrencyNameInArabic,
-            toNameCurrency:toCurrencyNameInArabic,
-            user:user._id,
-            userName:userName,
+            fromClientName: fromClientName,
+            toClientName: toClientName,
+            fromNameCurrency: fromCurrencyNameInArabic,
+            toNameCurrency: toCurrencyNameInArabic,
+            user: user._id,
+            userName: userName,
             transactionNumber: transactionNumber,
         });
 
@@ -71,22 +65,39 @@ export const createTransaction = async (req, res) => {
         await fromCurrency.save();
         await toCurrency.save();
 
+        // Shorten resultInDollars before updating defaultClient
+        const shortResultInDollarsForDefaultClient = toShortNumber(resultInDollars, 2);
+        const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
+        if (shortResultInDollarsForDefaultClient < 0) {
+            defaultClient.totalDebt += shortResultInDollarsForDefaultClient;
+        } else {
+            defaultClient.totalCredit += shortResultInDollarsForDefaultClient;
+        }
+        await defaultClient.save();
+
+        const defaultClient1 = await Client.findOne({ name: "ارباح و الخسائر يومية" });
+        if (shortResultInDollarsForDefaultClient < 0) {
+            defaultClient1.totalDebt += shortResultInDollarsForDefaultClient;
+        } else {
+            defaultClient1.totalCredit += shortResultInDollarsForDefaultClient;
+        }
+        await defaultClient1.save();
+
         res.status(201).send(transaction);
     } catch (error) {
         res.status(400).send(error);
     }
 };
 
-
 export const updateTransaction = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum, creditForUsNum, description, type, userName } = req.body;
+        const { transactionId } = req.params;
+        const updates = req.body;
 
-        const transaction = await Transaction.findById(id);
-        if (!transaction) {
-            return res.status(404).send({ error: 'Transaction not found' });
-        }
+        const transaction = await Transaction.findById(transactionId);
+        if (!transaction) return res.status(404).send('Transaction not found');
+
+        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum, creditForUsNum, description, type, userName } = updates;
 
         const fromClient = await Client.findOne({ name: fromClientName });
         const toClient = await Client.findOne({ name: toClientName });
@@ -94,24 +105,11 @@ export const updateTransaction = async (req, res) => {
         const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
         const user = await User.findOne({ username: userName });
 
-        const oldFromClient = await Client.findById(transaction.fromClient);
-        const oldToClient = await Client.findById(transaction.toClient);
-        const oldFromCurrency = await Currency.findById(transaction.fromCurrency);
-        const oldToCurrency = await Currency.findById(transaction.toCurrency);
-
-        oldFromClient.totalDebt = toShortNumber(oldFromClient.totalDebt - (transaction.creditForUs * oldFromCurrency.exchRate), 2);
-        oldToClient.totalCredit = toShortNumber(oldToClient.totalCredit - (transaction.deptedForUs * oldToCurrency.exchRate), 2);
-        oldFromCurrency.credit = toShortNumber(oldFromCurrency.credit - transaction.deptedForUs, 2);
-        oldToCurrency.credit = toShortNumber(oldToCurrency.credit + transaction.creditForUs, 2);
-
-        await oldFromClient.save();
-        await oldToClient.save();
-        await oldFromCurrency.save();
-        await oldToCurrency.save();
-
+        // Calculate new result
         const resultInDollars = (creditForUsNum * fromCurrency.exchRate) - (deptedForUsNum * toCurrency.exchRate);
         const shortResultInDollars = toShortNumber(resultInDollars, 2);
 
+        // Update transaction fields
         transaction.fromClient = fromClient._id;
         transaction.toClient = toClient._id;
         transaction.fromCurrency = fromCurrency._id;
@@ -121,7 +119,6 @@ export const updateTransaction = async (req, res) => {
         transaction.ResultInDollars = shortResultInDollars;
         transaction.description = description;
         transaction.type = type;
-        // Optionally update date or keep original
         transaction.date = Date.now();
         transaction.fromClientName = fromClientName;
         transaction.toClientName = toClientName;
@@ -132,19 +129,47 @@ export const updateTransaction = async (req, res) => {
 
         await transaction.save();
 
-        // Update client and currency balances with new values
-        fromClient.totalDebt = toShortNumber(fromClient.totalDebt + (creditForUsNum * fromCurrency.exchRate), 2);
-        toClient.totalCredit = toShortNumber(toClient.totalCredit + (deptedForUsNum * toCurrency.exchRate), 2);
-        fromCurrency.credit = toShortNumber(fromCurrency.credit + deptedForUsNum, 2);
-        toCurrency.credit = toShortNumber(toCurrency.credit - creditForUsNum, 2);
+        // Revert old balances
+        const oldFromClient = await Client.findById(transaction.fromClient);
+        const oldToClient = await Client.findById(transaction.toClient);
+        const oldFromCurrency = await Currency.findById(transaction.fromCurrency);
+        const oldToCurrency = await Currency.findById(transaction.toCurrency);
+
+        oldFromClient.totalDebt -= (transaction.creditForUs * oldFromCurrency.exchRate);
+        oldToClient.totalCredit -= (transaction.deptedForUs * oldToCurrency.exchRate);
+        oldFromCurrency.credit -= transaction.creditForUs;
+        oldToCurrency.credit += transaction.deptedForUs;
+
+        await oldFromClient.save();
+        await oldToClient.save();
+        await oldFromCurrency.save();
+        await oldToCurrency.save();
+
+        // Update new balances
+        fromClient.totalDebt += (creditForUsNum * fromCurrency.exchRate);
+        toClient.totalCredit += (deptedForUsNum * toCurrency.exchRate);
+        fromCurrency.credit += creditForUsNum;
+        toCurrency.credit -= deptedForUsNum;
 
         await fromClient.save();
         await toClient.save();
         await fromCurrency.save();
         await toCurrency.save();
 
-        await createNotification(user._id, `Transaction ${transactionNumber} updated by ${userName}.`);
-
+        // Update defaultClient based on resultInDollars
+        const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
+        const oldResultInDollars = transaction.ResultInDollars;
+        if (oldResultInDollars < 0) {
+            defaultClient.totalDebt -= oldResultInDollars;
+        } else {
+            defaultClient.totalCredit -= oldResultInDollars;
+        }
+        if (resultInDollars < 0) {
+            defaultClient.totalDebt += resultInDollars;
+        } else {
+            defaultClient.totalCredit += resultInDollars;
+        }
+        await defaultClient.save();
 
         res.status(200).send(transaction);
     } catch (error) {
@@ -155,37 +180,39 @@ export const updateTransaction = async (req, res) => {
 //delete
 export const deleteTransactionById = async (req, res) => {
     try {
-        const id = req.params.id;
-        const transaction = await Transaction.findById(id);
-        
-        if (!transaction) {
-            return res.status(404).send({ error: 'Transaction not found' });
+        const { transactionId } = req.params;
+        const transaction = await Transaction.findById(transactionId);
+        if (!transaction) return res.status(404).send('Transaction not found');
+
+        const { fromClient, toClient, fromCurrency, toCurrency, ResultInDollars, creditForUs, deptedForUs } = transaction;
+
+        await transaction.remove();
+
+        const fromClientDoc = await Client.findById(fromClient);
+        const toClientDoc = await Client.findById(toClient);
+        const fromCurrencyDoc = await Currency.findById(fromCurrency);
+        const toCurrencyDoc = await Currency.findById(toCurrency);
+
+        fromClientDoc.totalDebt -= (creditForUs * fromCurrencyDoc.exchRate);
+        toClientDoc.totalCredit -= (deptedForUs * toCurrencyDoc.exchRate);
+        fromCurrencyDoc.credit -= creditForUs;
+        toCurrencyDoc.credit += deptedForUs;
+
+        await fromClientDoc.save();
+        await toClientDoc.save();
+        await fromCurrencyDoc.save();
+        await toCurrencyDoc.save();
+
+        // Update defaultClient based on ResultInDollars
+        const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
+        if (ResultInDollars < 0) {
+            defaultClient.totalDebt -= ResultInDollars;
+        } else {
+            defaultClient.totalCredit -= ResultInDollars;
         }
+        await defaultClient.save();
 
-        // Fetch client and currency details related to the transaction
-        const fromClient = await Client.findById(transaction.fromClient);
-        const toClient = await Client.findById(transaction.toClient);
-        const fromCurrency = await Currency.findById(transaction.fromCurrency);
-        const toCurrency = await Currency.findById(transaction.toCurrency);
-
-        // Revert balances for clients and currencies
-        fromClient.totalDebt = toShortNumber(fromClient.totalDebt - (transaction.creditForUs * fromCurrency.exchRate), 2);
-        toClient.totalCredit = toShortNumber(toClient.totalCredit - (transaction.deptedForUs * toCurrency.exchRate), 2);
-        fromCurrency.credit = toShortNumber(fromCurrency.credit - transaction.deptedForUs, 2);
-        toCurrency.credit = toShortNumber(toCurrency.credit + transaction.creditForUs, 2);
-
-        await fromClient.save();
-        await toClient.save();
-        await fromCurrency.save();
-        await toCurrency.save();
-
-        // Delete the transaction
-        await Transaction.findByIdAndDelete(id);
-
-        await createNotification(user._id, `Transaction ${transaction.transactionNumber} deleted.`);
-
-
-        res.status(200).send({ message: 'Transaction deleted successfully' });
+        res.status(200).send('Transaction deleted successfully');
     } catch (error) {
         res.status(400).send(error);
     }
@@ -305,7 +332,7 @@ export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
                         {
                             $group: {
                                 _id: "$fromNameCurrency",
-                                totalCreditForUs: { $sum: "$creditForUs" },
+                                totalCreditForUs: { $sum: { $multiply: ["$creditForUs", "$fromCurrency.exchRate"] } },
                                 transactionIds: { $push: "$_id" }
                             }
                         }
@@ -315,7 +342,7 @@ export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
                         {
                             $group: {
                                 _id: "$toNameCurrency",
-                                totalDeptedForUs: { $sum: "$deptedForUs" },
+                                totalDeptedForUs: { $sum: { $multiply: ["$deptedForUs", "$toCurrency.exchRate"] } },
                                 transactionIds: { $push: "$_id" }
                             }
                         }
@@ -366,18 +393,30 @@ export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
                 }
             },
             {
+                $lookup: {
+                    from: 'currencies',
+                    localField: '_id',
+                    foreignField: 'nameInEnglish',
+                    as: 'currencyDetails'
+                }
+            },
+            {
+                $unwind: "$currencyDetails"
+            },
+            {
                 $project: {
                     _id: 0,
                     currencyName: "$_id",
                     totalCreditForUs: 1,
                     totalDeptedForUs: 1,
-                    transactionIds: { 
-                        $reduce: {
-                            input: "$transactionIds",
-                            initialValue: [],
-                            in: { $concatArrays: ["$$value", "$$this"] }
-                        }
-                    }
+                    result: { $subtract: ["$totalCreditForUs", "$totalDeptedForUs"] },
+                    resultInDollars: {
+                        $multiply: [
+                            { $subtract: ["$totalCreditForUs", "$totalDeptedForUs"] },
+                            "$currencyDetails.exchRate"
+                        ]
+                    },
+                    transactionIds: { $reduce: { input: "$transactionIds", initialValue: [], in: { $concatArrays: ["$$value", "$$this"] } } }
                 }
             }
         ]);
@@ -387,7 +426,6 @@ export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
         res.status(500).send(error);
     }
 };
-
 
 export const getTransactionsByCurrencyGroupedByClient = async (req, res) => {
     try {
