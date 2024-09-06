@@ -5,7 +5,7 @@ import session from "express-session";
 import passport from "passport";
 import env from "dotenv";
 import initializePassport from "./src/configs/passport.js"
-import { checkIfAuthorized } from "./src/controllers/functions.js";
+import { checkIfAuthorized, checkIfBanned } from "./src/controllers/functions.js";
 
 
 //routes
@@ -24,8 +24,6 @@ const app = express();
 const port = process.env.PORT;
 
 
-
-//middle-ware
 app.use(session({
   secret: process.env.SESSION_SECRET,
   cookie: {
@@ -44,11 +42,11 @@ app.use(passport.session());
 
 
 //routes
-app.use("/finances", financesRoute);
-app.use("/clients", clientsRoute);
-app.use("/currencies", currenciesRoute);
-app.use("/users",checkIfAuthorized() , usersRoute);
-app.use("/settings", settingsRoute);
+app.use("/finances", checkIfBanned(), financesRoute);
+app.use("/clients", checkIfBanned(), clientsRoute);
+app.use("/currencies", checkIfBanned() , currenciesRoute);
+app.use("/users", checkIfAuthorized('admin'), checkIfBanned() , usersRoute);
+app.use("/settings", checkIfBanned(), settingsRoute);
 app.use("/", signupRoute);
 
 

@@ -9,6 +9,9 @@ body * {
     margin: 0;
 }
 
+h2 {
+    font-size: x-large;
+}
 
 .bar {
     display: flex;
@@ -25,11 +28,18 @@ body * {
     border-radius: 5px;
 }
 
+
 .view {
     background-color: white;
     border-radius: 10px;
     margin: 20px auto;
     width: 90%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.view h3 {
+    padding-top: 10px;
+
 }
 
 .overview-data {
@@ -77,6 +87,9 @@ body * {
 }
 
 .count {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #0c997a49;
     border-radius: 10px;
     height: 5vh;
@@ -84,6 +97,7 @@ body * {
     margin: auto;
     
 }
+
 
 table {
     background-color: #0c997a77;

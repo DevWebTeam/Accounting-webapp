@@ -1,6 +1,4 @@
 #content table {
-    /* background-color: #31313118; */
-    /* background-color: #3e5e598a; */
     background-color: #0c997a77;
     border: 1px solid black;
     border-radius: 10px;
@@ -8,6 +6,8 @@
     width: 700px;
     padding: 20px;
 }
+
+
 
 #clients-table {
     margin-top: 50px;
@@ -46,7 +46,6 @@ div.group {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: rgba(0, 0, 0, 0.075); */
     background-color: #0c997a77;
     border-radius: 10px;
     height: 70px;
@@ -101,4 +100,3 @@ div.group {
     display: flex;
     justify-content: flex-end;
 }
-

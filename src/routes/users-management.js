@@ -4,23 +4,29 @@ import {
     getAllUsers,
     getUserById,
     updateUserById,
-    // updateUserRoleById,
     deleteUserById,
+    banUserById,
+    updateUserPassword
 } from "../controllers/userControllers.js"
+import { checkIfAuthorized } from "../controllers/functions.js";
 
 
 const router = express.Router();
 
 
-router.get("/",getAllUsers);
+router.get("/", checkIfAuthorized() , getAllUsers);
 
-router.get("/user/:id", getUserById);
+router.get("/user/:id", checkIfAuthorized(), getUserById);
 
-router.post("/add", createUser);
+router.post("/add", checkIfAuthorized() , createUser);
 
-router.patch("/user/Update/:id", updateUserById);
+router.patch("/user/update/:id", checkIfAuthorized(), updateUserById);
 
-router.delete("/user/delete/:id", deleteUserById);
+router.patch("/user/ban/:id", checkIfAuthorized() , banUserById);
+
+router.patch("/user/password/:id", checkIfAuthorized(), updateUserPassword);
+
+router.delete("/user/delete/:id", checkIfAuthorized() ,deleteUserById);
 
 
 

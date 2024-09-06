@@ -1,0 +1,191 @@
+table {
+    background-color: #0c997a77;
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 0 auto;
+    width: 700px;
+    padding: 20px;
+}
+
+
+
+h4 {
+    text-align: right;
+    margin: 20px;
+}
+
+p {
+    margin: 8px;
+}
+
+
+#users-table {
+    margin-top: 50px;
+}
+
+
+.btn-container {
+    display:flex;
+    justify-content: space-between;
+}
+
+
+
+
+.user-pop-up {
+    position: fixed;
+    left: 10%;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 10px;
+    z-index: 2;
+    width: 60%;
+    height: 60vh;
+}
+
+
+.pop-up-btn-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.user-pop-up .row {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 5px 20px;
+}
+
+
+.user-pop-up .column {
+    background-color: #0c997a54;
+    border-radius: 5px;
+    width: 35%;
+    height: 60px;
+}
+
+
+.user-pop-up .row button {
+    height: 50px;
+    width: 25%;
+}
+
+
+.modify-form-password {
+    position: fixed;
+    z-index: 3;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    width: 60%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    padding: 10px 0;
+    left: 10%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.modify-form-password div {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+.dlt-btn {
+    margin: 0 20px;
+    border-radius: 10px;
+    background-color: rgba(216, 0, 0, 0.699) !important;
+}
+
+
+.dlt-btn:hover {
+    background-color: rgba(255, 0, 0, 0.61) !important;
+    color: white;
+}
+
+
+.modify-btn {
+    background-color: #0c997ae1 !important;
+
+}
+
+.modify-btn:hover {
+    background-color: #0c997ab4 !important;
+    color: white;
+}
+
+.ban-btn {
+    background-color: rgba(255, 153, 0, 0.719) !important;
+}
+
+.ban-btn:hover {
+    background-color: rgba(255, 187, 0, 0.651) !important;
+    color: white;
+}
+
+
+.pop-up-modify {
+    position: fixed;
+    z-index: 5;
+    left: 25%;
+    top: 30%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 30%;
+}
+
+.pop-up-modify .btn {
+    height: 45px;
+    color: black !important;
+}
+
+.pop-up-modify div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pop-up-modify .btn:hover {
+    background-color: rgba(128, 128, 128, 0.116);
+}
+
+.pop-up-modify .info {
+    color: #0c997aa8;
+    height: 100%;
+}
+
+.pop-up-modify .password {
+    color: rgba(0, 0, 190, 0.671);
+    height: 100%;
+}
+
+.pop-up-modify .btn button:hover {
+    background-color: transparent;
+}
+
+
+.pop-up-modify h5 {
+    margin: 0;
+
+}
+
+
+.upper-layer {
+    position: fixed;
+    z-index: 4;
+    top: 0%;
+    left: 0;
+    grid-column: 1;
+    width: 100%;
+    height: 100%;
+}
+
+
+.dim {
+    background-color: rgba(0, 0, 0, 0.425);
+}
+
+

@@ -1,4 +1,4 @@
-section div {
+section .setting {
     background-color:  #3E5E59;
     height: 50px;
     width: 200px;
@@ -19,4 +19,69 @@ a {
 
 div a:hover {
     background-color: #0c997a77;
+}
+
+
+div button {
+    height: 100%;
+    width: 100%;
+    color: white;
+    border-radius: 5px;
+}
+
+div button:hover {
+    background-color: #0c997a77;
+}
+
+
+
+
+.pop-up-modify {
+    position: fixed;
+    z-index: 5;
+    left: 25%;
+    top: 30%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    width: 30%;
+}
+
+.pop-up-modify .btn {
+    height: 45px;
+}
+
+.pop-up-modify div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pop-up-modify .btn:hover {
+    background-color: rgba(128, 128, 128, 0.116);
+}
+
+.pop-up-modify .info {
+    color: #0c997aa8;
+    height: 100%;
+}
+
+.pop-up-modify .password {
+    color: rgba(0, 0, 190, 0.671);
+    height: 100%;
+}
+
+.pop-up-modify .btn button:hover {
+    background-color: transparent;
+}
+
+
+.btn-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.close {
+    width: 30px;
+    color: black;
 }

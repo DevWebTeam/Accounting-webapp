@@ -9,7 +9,7 @@ import {
     getAllGroups,
     deleteGroupById
 } from "../controllers/clientControllers.js"
-import {checkIfAuthorized, checkIfBanned} from "../controllers/functions.js"
+import {checkIfAuthorized } from "../controllers/functions.js"
 
 
 const router = express.Router();
@@ -18,22 +18,22 @@ const router = express.Router();
 
 router.get("/", getAllClients);
 
-router.get("/client/:id",checkIfAuthorized(), getClientById);
+router.get("/client/:id", getClientById);
 
-router.post("/add",checkIfAuthorized(), createClient);
+router.post("/add", createClient);
 
-router.patch("/client/patch/:id",checkIfAuthorized(), updateClientById);
+router.patch("/client/patch/:id", updateClientById);
 
-router.delete("/client/delete/:id",checkIfAuthorized(), deleteClientById);
+router.delete("/client/delete/:id", checkIfAuthorized('admin', 'manager'), deleteClientById);
 
 
 
 //groups
 router.get('/groups', getAllGroups);
 
-router.post('/groups/add', checkIfAuthorized(), createGroup);
+router.post('/groups/add', checkIfAuthorized('admin', 'manager'), createGroup);
 
-router.delete('/groups/delete/:id', checkIfAuthorized(), deleteGroupById);
+router.delete('/groups/delete/:id', checkIfAuthorized('admin', 'manager'), deleteGroupById);
 
 
 

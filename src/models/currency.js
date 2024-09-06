@@ -38,4 +38,18 @@ const currencySchema = new mongoose.Schema({
     }
 });
 
+
+
+// currencySchema.pre('findOneAndUpdate', async function(next) {
+//     const update = this.getUpdate();
+//     if (update.nameInArabic) {
+//         const currencyId = this.getQuery()._id;
+//         await Transaction.updateMany({ fromCurrency: currencyId }, { fromNameCurrency: update.nameInArabic });
+//         await Transaction.updateMany({ toCurrency: currencyId }, { toNameCurrency: update.nameInArabic });
+//     }
+//     next();
+// });
+
+
+
 export default mongoose.model('Currency', currencySchema);

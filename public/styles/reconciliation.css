@@ -6,6 +6,14 @@ body * {
     font-size: large;
 }
 
+body {
+    background-color: aliceblue;
+}
+
+h2 {
+    font-size: x-large;
+}
+
 .types {
     margin: 40px auto;
     width: 60%;
@@ -21,7 +29,7 @@ body * {
     cursor: pointer;
 }
 
-.active {
+button.active {
     background-color: #0c997a94;
 }
 
@@ -33,10 +41,12 @@ form {
     display: grid;
     grid-template-rows: 2fr 0.1fr;
     grid-template-columns: 1fr 1fr;
-    background-color: #B9D2E6;
+    background-color: #559b9086;
     border-radius: 10PX;
     width: 90%;
+    min-height: 50vh;
     margin: 50px auto;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .reconciliation, .move  {
@@ -65,9 +75,6 @@ form .column {
     grid-column: span 2;
 }
 
-.desplay {
-    grid-row: 2;
-}
 
 .description {
     grid-row: 1;
@@ -81,22 +88,17 @@ form .column {
     width: 79%;
 }
 
-.cln-2 > P {
-    width: 200px;
-    height: 30px;
-    background-color: #0c997a71;
-    margin: 20px auto;
-    border-radius: 10px;
-}
+
 
 .submit-btn {
     grid-column: span 2;
     background-color: #0c997aea;
     border: 0;
     border-radius: 10px;
-    width: 100%;
-    height: 30px;
+    width: 90%;
+    height: 40px;
     cursor: pointer;
+    margin: 10px auto;
 }
 
 .submit-btn:hover {
@@ -110,4 +112,21 @@ form .column {
 .bar a {
     color: black;
     text-decoration: none;
+}
+
+.difference p {
+    width: 200px;
+    height: 30px;
+    background-color: #0aa78563;
+    color: #075544;
+    margin: 20px auto;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.not-zero {
+    background-color: rgba(255, 5, 5, 0.301) !important;
+    color: rgb(100, 4, 4) !important;
 }

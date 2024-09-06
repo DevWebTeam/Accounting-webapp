@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financify</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/users-management.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+</head>
+<body>
+
+    <main class="container">
+
+        <section id="content">
+                <h1>إدارة المستخدمين</h1>
+
+
+
+                <!-- add form -->
+                <form action="/users/add" method="post" class="add-form hidden">
+                    <button type="button" class="close">X</button>
+                    <div>
+                        <input type="text" name="username" placeholder="أدخل اسم المستخدم" required>
+                        <label for="username">اسم المستخدم</label>
+                    </div>
+                    <div>
+                        <input type="email" name="email" placeholder="أدخل البريد الإلكتروني">
+                        <label for="email">بريد إلكتروني</label>
+                    </div>
+                    <div>
+                        <input type="number" name="number" maxlength="13" placeholder="رقم الجوال">
+                        <label for="number">رقم الجوال</label>
+                    </div>
+                    <div>
+                        <select name="role">
+                            <option value="manager">مدير</option>
+                            <option value="user">مستخدم بسيط</option>
+                        </select>
+                        <label for="role">دور</label>
+                    </div>
+                    <div>
+                        <input type="password" name="password" placeholder="أدخل كلمة المرور">
+                        <label for="password1">كلمة المرور</label>
+                    </div>
+                    <div>
+                        <input type="password" name="password2" placeholder="أعد إدخال كلمة المرور">
+                        <label for="password2">التحقق من كلمة المرور</label>
+                    </div>
+
+                    <input type="submit" value="إضافة المستخدم" class="submit-btn">
+                </form>
+
+
+
+
+                <!-- modify form -->
+                <form method="post" class="modify-form info hidden">
+
+                    <button type="button" class="close">X</button>
+
+                    <div>
+                        <input type="text" name="username" placeholder="أدخل اسم المستخدم" required>
+                        <label for="username">اسم المستخدم</label>
+                    </div>
+                    <div>
+                        <input type="email" name="email" placeholder="أدخل البريد الإلكتروني">
+                        <label for="email">بريد إلكتروني</label>
+                    </div>
+                    <div>
+                        <input type="number" name="number" maxlength="13" placeholder="رقم الجوال">
+                        <label for="number">رقم الجوال</label>
+                    </div>
+                    <div>
+                        <select name="role">
+                            <option value="manager">مدير</option>
+                            <option value="user">مستخدم بسيط</option>
+                        </select>
+                        <label for="role">دور</label>
+                    </div>
+
+                    <input type="submit" value="حفظ التغييرات" class="submit-btn patch-btn">
+                </form>
+
+                <form method="post" class="modify-form-password hidden">
+                    <button type="button" class="close">X</button>
+                    <h5></h5>
+                    <div>
+                        <input type="password" name="password" required placeholder="أدخل كلمة المرور">
+                        <label for="password">كلمة المرور</label>
+                    </div>
+                    <div>
+                        <input type="password" name="password2" required placeholder="أعد إدخال كلمة المرور">
+                        <label for="password2">أعد كتابة كلمة المرور</label>
+                    </div>
+                    <input type="submit" value="تعديل كلمة المرور" class="submit-btn">
+                </form>
+
+
+
+                <div class="user-pop-up hidden">
+                    <div class="pop-up-btn-container">
+                        <button class="pop-up-close close">X</button>
+                    </div>
+                    
+                    <h4>معلومات المستخدم</h4>
+                    <div class="row">
+                        <div class="column">
+                            <p>البريد الإلكتروني</p>
+                            <p class="email info"></p>
+                        </div>
+                        <div class="column">
+                            <p>اسم المستخدم</p>
+                            <p class="username info"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="column">
+                            <p>الدور</p>
+                            <p class="role info"></p>
+                        </div>  
+                        <div class="column">
+                            <p>حالة المستخدم</p>
+                            <p class="status info"></p>
+                        </div>
+                    </div>
+
+
+                    <h4>الإجراءات</h4>
+                    <div class="row">
+                        <button class="column dlt-btn delete-btn">حذف المستخدم</button>
+                        <button class="column ban-btn"></button>
+                        <button class="column modify-btn">تعديل المستخدم</button>
+                    </div>
+                </div>
+
+                <div class="pop-up-modify hidden">
+                    <div class="btn-container">
+                        <button class="close">X</button>
+                    </div>
+                    <h5></h5>
+                    <div class="btn">
+                        <button class="info">تعديل المعلومات</button>
+                    </div>
+                    <div class="btn">
+                        <button class="password">تغيير كلمة المرور</button>
+                    </div>
+                </div>
+
+                
+
+                <div id="users-table">
+                    <button id="add-btn" class="add-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(49,49,49,1)"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z"></path></svg>
+                    </button>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الحالة</th>
+                                <th>الدور</th>
+                                <th>بريد إلكتروني</th>
+                                <th>رقم الجوال</th>
+                                <th>الاسم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.users) { %>
+                                <% users.forEach(user => { %>
+                                    <% if (user.username != userName) {%>
+
+                                        <tr class="data" id=<%= user._id %>>
+                                        <% if (user.banned) { %>
+                                            <td>محظور</td>
+                                            <% } else { %>
+                                                <td>فعال</td>
+                                                <% } %>
+                                                
+                                                <% if (user.role === 'manager' || user.role === 'admin') { %>
+                                            <td>مدير</td>
+                                            <% } else { %>
+                                                <td>مستخدم بسيط</td>
+                                                <% } %>
+                                                <td><%= user.email %></td>
+                                                <td><%= user.number %></td>
+                                                <td><%= user.username %></td>
+                                        </tr>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="upper-layer dim hidden">
+                </div>
+
+        </section>
+
+        <%- include('sidebar.ejs') %>
+    
+
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+        <script src="js/users-management-script.js"></script>
+</body>
+</html>

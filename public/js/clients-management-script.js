@@ -55,6 +55,9 @@ $('.dlt-btn').on('click', async function () {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
+        const result = response.json()
+        alert(`تم حذف المجموعة`);
+
         // Fetch the updated group list
         const groupListResponse = await fetch('/clients/groups');
         if (!groupListResponse.ok) {
@@ -63,7 +66,7 @@ $('.dlt-btn').on('click', async function () {
 
         // Parse the JSON from the correct response
         const groups = await groupListResponse.json();
-        console.log(groups);
+        
 
         const groupListDiv = $('.group-list');
         groupListDiv.empty(); // Clear the existing content
@@ -94,9 +97,8 @@ $('.dlt-btn').on('click', async function () {
 
 
 
-
 let clientId = ''         
-                                           
+let result;                                
 $('.data').on('click', async function () {                 
 
     clientId = this.id
@@ -109,7 +111,7 @@ $('.data').on('click', async function () {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const result = await response.json();
+        result = await response.json();
         
         
         $('.modify-form').removeClass('hidden');          
@@ -174,8 +176,12 @@ $('.delete-btn').on('click', function (event) {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const result = await response.json();
-            console.log('fetch successful:', result);
+            
+            if (method === 'DELETE') {
+                alert(`تم حذف العميل ${result.name}`)
+            } else {
+                alert(`تم تعديل معلومات العميل ${result.name}`)
+            }
             
             window.location.href = "/clients";
 

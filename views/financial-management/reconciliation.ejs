@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- <link rel="stylesheet" href="/styles/global.css"> -->
+    <title>financify</title>
     <link rel="stylesheet" href="/styles/reconciliation.css">
 </head>
     <body>
@@ -17,7 +16,6 @@
         
         <section>
             <h2>حركة تسوية جديدة</h2>
-
 
             <div class="types">
                 <button class="type-multiple type">حركة متعددة</button>
@@ -73,7 +71,7 @@
                     <p></p>
                 </div>
 
-                <input type="submit" value="submit" class="submit-btn">
+                <input type="submit" value="أضف الحركة" class="submit-btn">
             </form>
 
             
@@ -90,7 +88,7 @@
                             </select>
                             <label for="currency">عملة الحوالة</label>
 
-                            <input type="number" name="amount" step="0.001" required>
+                            <input type="number" name="amount" step="0.001" required class="amount">
                             <label for="amount">مبلغ الحوالة</label>
 
                             <input type="text" name="description">
@@ -101,10 +99,12 @@
 
                     <div class="column cln-1 to">
                         <div class="row">
-                            <select name="toClientName" id="" required>
+                            <select name="toClientName" required>
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <option value=<%= client._id %>><%= client.name %></option>
+                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                            <option value=<%= client.name %>><%= client.name %></option>
+                                        <% } %>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -115,7 +115,7 @@
                             <select name="toCurrencyNameInArabic" id="" required>
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
-                                        <option value=<%= currency._id %>><%= currency.nameInArabic %></option>
+                                        <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -129,14 +129,14 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="toWages">
+                            <input type="number" name="toWages" class="toWages">
                             <span>أو</span>
-                            <input type="number" name="toWages" step="0.01" max="100" placeholder="%">
+                            <input type="number" name="toWages" step="0.01" max="100" placeholder="%" class="toWages">
                             <label for="tax">أجور</label>
                         </div>
 
                         <div class="row">
-                            <input type="number" name="DeptForUsNum">
+                            <input type="number" name="deptedForUsNum" class="dept">
                             <label for="DeptForUsNum">المبلغ الإجمالي علينا</label>
                         </div>
                     </div>
@@ -144,10 +144,12 @@
 
                     <div class="column cln-1 from">
                         <div class="row">
-                            <select name="fromClientName" id="" required>
+                            <select name="fromClientName" required>
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <option value=<%= client._id %>><%= client.name %></option>
+                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                            <option value=<%= client.name %>><%= client.name %></option>
+                                        <% } %>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -158,7 +160,7 @@
                             <select name="fromCurrencyNameInArabic" id="" required>
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
-                                        <option value=<%= currency._id %>><%= currency.nameInArabic %></option>
+                                        <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -172,30 +174,30 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="fromWages">
+                            <input type="number" name="fromWages" class="fromWages">
                             <span>أو</span>
-                            <input type="number" name="fromWages" step="0.01" max="100" placeholder="%">
+                            <input type="number" name="fromWages" step="0.01" max="100" placeholder="%" class="fromWages">
                             <label for="tax">أجور</label>
                         </div>
 
                         <div class="row">
-                            <input type="number" name="CreditForUsNum">
+                            <input type="number" name="creditForUsNum" class="credit">
                             <label for="CreditForUsNum">المبلغ الإجمالي لنا</label>
                         </div>
                     </div>
 
-                    <div class=" column cln-2">
-                        <p></p>
+                    <div class=" column cln-2 difference">
+                        <p>0</p>
                     </div>
 
-                    <input type="submit" value="submit" class="submit-btn">
+                    <input type="submit" value="أضف الحركة" class="submit-btn">
 
             </form>
                 
-            <form action="/finances/reconciliation/new" method="post" class="type-form reconciliation">
+            <form action="/finances/reconciliation/new" method="post" class="type-form reconciliation active">
                     <div class="column description cln-2">
                         <div class="row">
-                            <input type="text" name="description">
+                            <input type="text" name="description" required>
                             <label for="description">البيان</label>
                         </div>
                     </div>
@@ -205,7 +207,9 @@
                             <select name="toClientName" id="">
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <option value=<%= client._id %>><%= client.name %></option>
+                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                            <option value=<%= client.name %>><%= client.name %></option>
+                                        <% } %>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -216,7 +220,7 @@
                             <select name="toCurrencyNameInArabic" id="">
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
-                                        <option value=<%= currency._id %>><%= currency.nameInArabic %></option>
+                                        <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -224,17 +228,19 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="toNameCurrency" placeholder="أدخل المبلغ">
+                            <input type="number" name="deptedForUsNum" placeholder="أدخل المبلغ" step="0.00001" class="dept">
                             <label for="number">المبلغ</label>
                         </div>
                     </div>
 
                     <div class="column cln-1 from">
                         <div class="row">
-                            <select name="fromClientName" id="">
+                            <select name="fromClientName">
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <option value=<%= client._id %>><%= client.name %></option>
+                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                            <option value=<%= client.name %>><%= client.name %></option>
+                                        <% } %>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -242,10 +248,10 @@
                         </div>
 
                         <div class="row">
-                            <select name="toCurrencyNameInArabic" id="">
+                            <select name="fromCurrencyNameInArabic" id="">
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
-                                        <option value=<%= currency._id %>><%= currency.nameInArabic %></option>
+                                        <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
                                     <% }) %>
                                 <% } %>
                             </select>
@@ -254,24 +260,25 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="fromNameCurrency" placeholder="أدخل المبلغ">
+                            <input type="number" name="creditForUsNum" placeholder="أدخل المبلغ" step="0.0001" class="credit">
                             <label for="number">المبلغ</label>
                         </div>
                     </div>
 
-                    <div class=" column display cln-2">
-                        <p class="diff"></p>
+                    <div class=" column cln-2 difference active">
+                        <p>0</p>
                     </div>
-                    <input type="submit" class="submit-btn">
+                    <input type="submit" value="أضف الحركة" class="submit-btn">
             </form>
 
         </section>
 
 
-
+        <div id="user-data" data-username="<%= userName %>"></div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
         <script src="/js/reconciliation-script.js"></script>
 
+        
     </body>
 </html>

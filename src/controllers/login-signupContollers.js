@@ -9,7 +9,6 @@ controller.use(bodyParser.urlencoded({extended: true}));
 controller.use(express.json());
 
 export const signup = async (req, res) => {
-
     if (req.body.password === req.body.password2) {
         try {
             const hash = await hashPassword(req.body.password);
@@ -21,12 +20,11 @@ export const signup = async (req, res) => {
                 role: "admin"
             };
 
-            
             const user = new User(newUser);
             await user.save();
 
             console.log(newUser);
-            
+
             req.login(user, (err) => {
                 if (err) {
                     console.error("Login error:", err.message);
@@ -35,15 +33,20 @@ export const signup = async (req, res) => {
                     console.log("success");
                     res.redirect("/currencies");
                 }
-            })
+            });
 
-
-        } catch(error) {
-            res.json("User already exists");
+        } catch (error) {
+            if (error.code === 11000) {
+                console.log("User already exists error:", error.message);
+                res.send("User already exists");
+            } else {
+                console.log("Error occurred:", error.message);
+                res.status(500).send("An error occurred");
+            }
         }
 
     } else {
-        res.json("passwords must match")
+        res.send("Passwords must match");
     }
 };
 

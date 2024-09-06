@@ -28,6 +28,7 @@ h1 {
     height: 10%;
 }
 
+
 input::placeholder {
     opacity: 0.5;
 }
@@ -64,6 +65,7 @@ input[type="number"]::-webkit-outer-spin-button {
 /*the forms*/
 .add-form, .modify-form {
     position: fixed;
+    z-index: 3;
     background-color: rgb(255, 255, 255);
     border-radius: 5px;
     width: 60%;
@@ -83,6 +85,16 @@ input[type="number"]::-webkit-outer-spin-button {
     width: 50%;
 }
 
+.add-form label, .modify-form label {
+    width: 40%;
+}
+
+form input, form select {
+    width: 60%;
+}
+
+
+
 
 
 /*button to show add-form*/
@@ -94,6 +106,12 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 /*button to submit the form*/
+.submit-container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+
 .submit-btn {
     background-color: #0c997ae1;
     color: white;
@@ -133,7 +151,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /*to hide the forms*/
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 

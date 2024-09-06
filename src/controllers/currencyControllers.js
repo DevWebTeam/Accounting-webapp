@@ -49,6 +49,17 @@ export const getAllCurrencies = async (req, res) => {
 };
 
 
+export const getAllCurrenciesAsJson = async (req, res) => {
+    try {
+        const result = await Currency.find().sort({priorityCu: 1});
+        res.json(result);
+    } catch (error) {
+        console.log(error)
+        res.error(error.message);
+    }
+}
+
+
 
 
 
@@ -77,7 +88,7 @@ export const getCurrencyById = async (req, res) => {
 export const patchCurrencyById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await Currency.findByIdAndUpdate(req.params.id , req.body, { new: true, runValidators: true });
+            const currency = await Currency.findByIdAndUpdate(req.params.id , req.body, { new: true, runValidators: true });
             res.status(200).json({message: "patch successeful"})
         } else {
             res.redirect("/login");
@@ -109,11 +120,11 @@ export const deleteCurrencyById = async (req, res) => {
 
 
 
-
 export default {
     createCurrency,
     getAllCurrencies,
     getCurrencyById,
     patchCurrencyById,
-    deleteCurrencyById
+    deleteCurrencyById,
+    getAllCurrenciesAsJson
 };

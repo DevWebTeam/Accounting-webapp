@@ -3,39 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>financify</title>
     <link rel="stylesheet" href="/styles/account-statment.css">
 
 </head>
 <body>
     
     <div class="bar">
-        <a href="/finances">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z"></path></svg>الإدارة المالية
+        <a href="/finances/ledger">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z"></path></svg>دفتر الحسابات
         </a>
     </div>
     <h2>كشف حساب</h2>
 
     <div class="view">
 
-        <% if (locals.transaction) {%>
-            <h3> <%= transaction.currency %> لعملة <%= transaction.client %> كشف حساب</h3>
+        <% if (locals.account) {%>
+            <h3> لعملة <%= account.currencyName %> <%= account.clientName %> كشف حساب</h3>
         <% } %>
-        <h3>kachf hisab</h3>
 
         <div class="overview-data">
-        <div>
-                <p>رصيد العملة</p>
-                <span>0$</span>
-            </div>
-            <div>
-                <p>دالن علينا</p>
-                <span>0$</span>
-            </div>
-            <div>
-                <p>مدين لنا</p>
-                <span>0$</span>
-            </div>
+            <% if (locals.total) { %>
+                <div>
+                    <p>رصيد العملة</p>
+                    <span><%= total.totalCredit %> $</span>
+                </div>
+                <div>
+                    <p>دالن علينا</p>
+                    <span><%= total.totalDeptedForUs %> $</span>
+                </div>
+                <div>
+                    <p>مدين لنا</p>
+                    <span><%= total.totalCreditForUs %> $</span>
+                </div>
+            <% } else { %>
+                <div>
+                    <p>رصيد العملة</p>
+                    <span>0$</span>
+                </div>
+                <div>
+                    <p>دالن علينا</p>
+                    <span>0$</span>
+                </div>
+                <div>
+                    <p>مدين لنا</p>
+                    <span>0$</span>
+                </div>
+            <% } %>
         </div>
 
         <form action="" method="post">
@@ -56,7 +70,7 @@
 
     <div class="count">
         <% if (locals.transactions) {%>
-            <% let count = transactions.count() %>
+            <% let count = transactions.length %>
             <p><%= count %> عدد النتائج الإجمالي</p>
         <% } %>
     </div>
@@ -71,19 +85,20 @@
                 <th>دالن علينا</th>
                 <th>مدين لنا</th>
                 <th>رقم الحركة</th>
+                <th>#</th>
             </tr>
         </thead>
         <tbody>
             <% if (locals.transactions) {%>
                 <% transactions.forEach( transaction => { %>
                     <tr class="data" id=<%= transaction._id %>>
-                        <td><%= transaction.username %></td>
+                        <td><%= transaction.userName %></td>
                         <td><%= transaction.date %></td>
                         <td><%= transaction.description %></td>
-                        <td><%= transaction.credit %></td>
+                        <td><%= transaction.ResultInDollars %></td>
+                        <td><%= transaction.deptedForUs %></td>
                         <td><%= transaction.creditForUs %></td>
-                        <td><%= transaction.deptForUs %></td>
-                        <td><%= transaction.number %></td>
+                        <td><%= transaction.transactionNumber %></td>
                     </tr>
                 <% }) %>
             <% } %>

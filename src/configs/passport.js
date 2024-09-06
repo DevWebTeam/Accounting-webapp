@@ -14,7 +14,7 @@ export function initializePassport(passport) {
                 if (samePassword) {
                     return cb(null, user);
                 } else {
-                    return cb(null, false);
+                    return cb("Incorrect password");
                 }
                 
             } catch (error) {
@@ -24,9 +24,15 @@ export function initializePassport(passport) {
         })
     )
 
+
+
+
+
     passport.serializeUser((user, cb) => {
-        cb(null, {userId: user._id, userRole: user.role});
+        cb(null, {userId: user._id, userName: user.username , userRole: user.role});
     });
+
+
 
     passport.deserializeUser( async (sessionData, cb) => {
         try {
@@ -35,6 +41,7 @@ export function initializePassport(passport) {
             if (user) {
                 // Attach role to the user object
                 user.role = sessionData.userRole;
+                user.username = sessionData.userName;
                 cb(null, user);
             } else {
                 cb('User not found');

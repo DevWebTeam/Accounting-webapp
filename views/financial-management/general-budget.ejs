@@ -38,16 +38,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (locals.clients) {%>
+                            <% if (locals.clients) { %>
+                                <% let counter = 1; %> <!-- Initialize counter -->
                                 <% clients.forEach(client => { %>
-                                    <tr class="data" id=<%= client._id %>>
+                                    <tr class="data" id="<%= client._id %>">
                                         <td>الدولار المقوم</td>
                                         <td><%= client.balanceCredit %></td>
                                         <td><%= client.balanceDebt %></td>
                                         <td><%= client.totalCredit %></td>
                                         <td><%= client.totalDebt %></td>
                                         <td><%= client.name %></td>
-                                        <td><%= %></td>
+                                        <td><%= counter++ %></td> <!-- Display and increment counter -->
                                     </tr>
                                 <% }) %>
                             <% } %>
@@ -62,16 +63,16 @@
                         <p><%= total.diff %></p>
                     </div>
                     <div>
-                        <p>رصيد دالن علينا</p>
+                        <p>رصيد دائن علينا</p>
                         <p><%= total.balanceCredit %></p>
                     </div>
                     <div>
-                        <p>رصيد دالن علينا</p>
+                        <p>رصيد مدين لنا</p>
                         <p><%= total.balanceDebt %></p>
 
                     </div>
                     <div>
-                        <p>إجمالي دالن علينا</p>
+                        <p>إجمالي دائن علينا</p>
                         <p><%= total.CreditOnUs %></p>
 
                     </div>

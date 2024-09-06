@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Financify</title>
     <link rel="stylesheet" href="/styles/journal.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
         </a>
     </div>
     
-    <h1>دفتر اليومية</h1>
+    <h2>دفتر اليومية</h2>
 
     <form action="" method="post" class="search-form">
         <div class="row">
@@ -29,66 +29,68 @@
         </div>
     </form>
 
-
-    <table>
-        <thead>
-            <tr>
-                <th>نوع الحركة</th>
-                <th>المستخدم</th>
-                <th>التاريخ</th>
-                <th>نتيجة الحركة</th>
-                <th>المبلغ علينا</th>
-                <th>العملة</th>
-                <th>إلي حساب</th>
-                <th>البيان</th>
-                <th>المبلغ لنا</th>
-                <th>العملة</th>
-                <th>من حساب</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if (locals.transactions) {%>
-                <% transactions.forEach(transaction => { %>
-                    <tr class="data" id=<%= transaction._id %>>
-                        <td><%= transaction.type %></td>
-                        <td><%= transaction.userName %></td>
-                        <td><%= transaction.date %></td>
-                        <td><%= transaction.ResultInDollars %></td>
-                        <td><%= transaction.deptedForUs %></td>
-                        <td><%= transaction.toNameCurrency %></td>
-                        <td><%= transaction.toClientName %></td>
-                        <td><%= transaction.description %></td>
-                        <td><%= transaction.creditForUs %></td>
-                        <td><%= transaction.fromNameCurrency %></td>
-                        <td><%= transaction.fromClientName %></td>
-                        <td><%= transaction.number %></td>
-
-                    </tr>
-                <% }) %>
-            <% } else {%>
-                <tr class="data">
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
+    <div class="transaction-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>نوع الحركة</th>
+                    <th>المستخدم</th>
+                    <th>التاريخ</th>
+                    <th>نتيجة الحركة</th>
+                    <th>المبلغ علينا</th>
+                    <th>العملة</th>
+                    <th>إلي حساب</th>
+                    <th>البيان</th>
+                    <th>المبلغ لنا</th>
+                    <th>العملة</th>
+                    <th>من حساب</th>
+                    <th>#</th>
                 </tr>
-            <% } %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% if (locals.transactions) {%>
+                    <% transactions.forEach(transaction => { %>
+                        <tr class="data" id=<%= transaction.transactionNumber %>>
+                            <td><%= transaction.type %></td>
+                            <td><%= transaction.userName %></td>
+                            <td><%= transaction.date %></td>
+                            <td><%= transaction.ResultInDollars %></td>
+                            <td><%= transaction.deptedForUs %></td>
+                            <td><%= transaction.toNameCurrency %></td>
+                            <td><%= transaction.toClientName %></td>
+                            <td><%= transaction.description %></td>
+                            <td><%= transaction.creditForUs %></td>
+                            <td><%= transaction.fromNameCurrency %></td>
+                            <td><%= transaction.fromClientName %></td>
+                            <td><%= transaction.transactionNumber %></td>
+    
+                        </tr>
+                    <% }) %>
+                <% } else {%>
+                    <tr class="data">
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+   
 
 
     <div class="pop-up hidden">
         <button class="close">X</button>
-        <h2>haraka</h2>
+        <h3></h3>
         <button class="modify">تعديل الحركة</button>
         <button class="cancel">إلغاء الحركة</button>
         <button class="delete">حذف الحركة</button>

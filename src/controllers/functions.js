@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-
+import User from "../models/user.js"
 
 export async function hashPassword (password, saltRounds = 10) {
     const hash = await bcrypt.hash(password, saltRounds);
@@ -33,14 +33,14 @@ export function checkIfAuthorized(role = ['admin']) {
 
 
 
-export function checkIfBanned() {
-    return (req, res, next) => {
-        const userIsBanned = req.body.banned;
-        console.log("banned:", userIsBanned)
-        if (!userIsBanned) {
+export function checkIfBanned () {
+    return async (req, res, next) => {
+        
+        // const user = await User.findOne({username: req.session.passport.user.userName});
+        if (!false) {
             next();
         } else {
-            return res.status(401).json("لقد تم حظرك من قبل الإدارة العامة")
+            res.status(401).send("لقد تم حظرك من قبل الإدارة العامة")
         }
     }
 }
@@ -50,5 +50,6 @@ export function checkIfBanned() {
 export default {
     hashPassword,
     checkHashedPassword,
-    checkIfAuthorized
+    checkIfAuthorized,
+    checkIfBanned
 }

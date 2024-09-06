@@ -91,8 +91,11 @@ $('.delete-btn').on('click', function (event) {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-            const result = await response.json();
-            console.log('fetch successful:', result);
+
+            if (method === 'DELETE') {
+                alert(`تم حذف عملة`)
+            }
+
             window.location.href = '/currencies';
         } catch (error) {
             console.log('Error fetching:', error);

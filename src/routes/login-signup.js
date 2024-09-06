@@ -10,7 +10,7 @@ router.use(express.json());
 
 
 //*signup
-router.get('/signup', (req, res) => {
+router.get('/', (req, res) => {
     res.status(200).render("signup.ejs")
 })
 
@@ -29,7 +29,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res, next) => {
     passport.authenticate("local", {
         successRedirect: "/clients",
-        failureRedirect: "/login",
+        failureRedirect: "/",
     }) (req, res, next)
 });
 

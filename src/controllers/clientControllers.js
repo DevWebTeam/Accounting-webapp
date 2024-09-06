@@ -1,3 +1,4 @@
+import cron from "node-cron"
 import Client from '../models/client.js';
 import group from '../models/group.js';
 import { checkIfAuthorized } from '../controllers/functions.js';
@@ -25,6 +26,8 @@ export const getAllClients = async (req, res, next) => {
         if (req.isAuthenticated()) {
             const clients = await Client.find().sort({priorityCli: 1});
             const groups = await group.find();
+
+            console.log(clients);
             res.status(200).render("clients-management.ejs", {clients: clients, groups: groups});
         } else {
             res.redirect("/login");
@@ -59,7 +62,7 @@ export const updateClientById = async (req, res) => {
             res.redirect("/login")
         }
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         res.status(400).send("Error: Something went wrong.")
     }
 };
@@ -69,7 +72,7 @@ export const deleteClientById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             await Client.findByIdAndDelete(req.params.id);
-            res.status(200).json({message: "successful operation"});
+            res.status(200).json({alertMessage: `تم حذف العميل`});
         } else {
             res.redirect("/login")
         }
@@ -120,9 +123,8 @@ export const getAllGroups = async (req, res, next) => {
 export const deleteGroupById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            console.log(req.params);
             await group.findByIdAndDelete(req.params.id);
-            res.status(200).json({message: 'successeful'});
+            res.status(200).json({alertMessage: 'تم حذف المجموعة'});
         } else {
             res.redirect("/login")
         }
@@ -131,6 +133,21 @@ export const deleteGroupById = async (req, res) => {
         res.status(500).send("Error: something went wrong");
     }
 }
+
+
+
+cron.schedule('0 0 0 * * *', async () => {
+    try {
+        // Update all clients' totalDebt and totalCredit to zero
+        const dailyEarnings = await Client.findOne({name: 'ارباح و الخسائر يومية'});
+        dailyEarnings.totalCredit = 0;
+        dailyEarnings.totalDebt = 0;
+        await dailyEarnings.save();
+        console.log('daily earnings data reset to zero');
+    } catch (error) {
+        console.error('Error resetting client data:', error);
+    }
+});
 
 
 
@@ -144,5 +161,5 @@ export default {
     deleteClientById,
     createGroup,
     getAllGroups,
-    deleteGroupById
+    deleteGroupById,
 };

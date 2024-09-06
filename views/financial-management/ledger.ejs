@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>financify</title>
     <link rel="stylesheet" href="/styles/ledger.css">
 
 </head>
@@ -16,12 +16,14 @@
     </div>
     <h1>دفتر الحسابات</h1>
 
-    <form action="" method="post">
+    <form  method="POST" class="search">
         
         <select name="client">
             <% if (locals.clients) { %>
                 <% clients.forEach( client => { %>
-                    <option value=<%= client.name %>> <%= client.name %> </option>
+                    <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                        <option value=<%= client.name %>><%= client.name %></option>
+                    <% } %>
                 <% }) %>
             <% } %>
         </select>
@@ -30,38 +32,14 @@
         </button>
     </form>
 
-    <% if (locals.transactions) { %>
-        <% transactions.forEach( transaction => { %>
-            <% const balance = transaction.creditForUs - transaction.debtedForUs %>
-            <div class="overview-data" id=<%= transaction._id %>>
-                <div>
-                    <p>الرصيد المقوم</p>
-                    <span><%=  %></span>
-                </div>
-                <div>
-                    <p>رصيد العملة</p>
-                    <span><%= balance %></span>
-
-                </div>
-                <div>
-                    <p>دالن علينا</p>
-                    <span><%= transaction.debtedForUs %></span>
-
-                </div>
-                <div>
-                    <p>مدين لنا</p>
-                    <span><%= transaction.creditForUs %></span>
-
-                </div>
-                <div>
-                    <p>العملة</p>
-                    <span><%= transaction.fromNameCurrency %></span>
-                </div>
-            </div>
-
-        <% }) %>
-    <% } %>
     
+    <div class="transactions-container">
+        <!-- Fetched transactions will be dynamically inserted here -->
+    </div>
+    
+    <div class="total-count hidden">
+        
+    </div>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

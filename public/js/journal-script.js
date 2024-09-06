@@ -7,7 +7,8 @@ $('.close').on('click', () => {
 
 
 $('.data').on('click', function () {
-    const id = $(this).id;
+    const id = $(this).attr('id');
+    console.log(id)
     $('.pop-up').removeClass('hidden');
-    //fetch
+    $('.pop-up h3').html(`${id} اجراءات الحركة رقم `);
 })

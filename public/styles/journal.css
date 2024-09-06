@@ -10,6 +10,10 @@ body * {
 
 }
 
+h2 {
+    font-size: x-large;
+}
+
 .bar {
     display: flex;
     justify-content: space-between;
@@ -55,14 +59,40 @@ form label {
     background-color: #0c997a80;
 }
 
-
-table {
+.transaction-table {
     width: 92%;
     margin: 0 auto;
-    background-color: #0c997a77;
-    border: 1px solid black;
-    border-radius: 10px;
     overflow-x: scroll;
+    border-radius: 10px;
+}
+
+.transaction-table::-webkit-scrollbar {
+    background-color: #0023263f;
+    border-radius: 5px;
+    height: 10px;
+}
+
+.transaction-table::-webkit-scrollbar-thumb {
+    background-color: #0c997a77;
+    border-radius: 5px;
+}
+
+
+table {
+    width: 105%;
+    margin: 0 auto;
+    background-color: #0c997a77;
+    border: 01px solid black;
+    border-radius: 10px;
+    
+}
+
+td {
+    border-bottom: 1px solid gray !important;
+}
+
+.data {
+    color: rgba(0, 0, 0, 0.644);
 }
 
 .data:hover {
