@@ -93,14 +93,54 @@ function updateDifferenceMove() {
     }
 
 
+    //*wages type
+    const fromWagesType = $('form.active.move select[name="fromWagesType"]').val();
+    const toWagesType = $('form.active.move select[name="toWagesType"]').val();
 
+    //****** */
+    console.log(fromWagesType);
+    
+    
+    
     //*calculate credit & dept
     const fromExchRate = $('.move.active input[name="fromExchRate"]').val() || 1;
     const toExchRate = $('.move.active input[name="toExchRate"]').val() || 1;
 
-    const credit = (amount * fromExchRate + fromWages).toFixed(2) || 0;
-    const dept = (amount * toExchRate + toWages).toFixed(2) || 0;
 
+     //*operation
+     const forOperation = $('form.active.move select[name="fromOperation"]').val();
+     const toOperation = $('form.active.move select[name="toOperation"]').val();
+     
+     let fromNoWages = 0;
+     if (forOperation === 'multiply') {
+         fromNoWages = amount * fromExchRate;
+     } else {
+         fromNoWages = amount / fromExchRate;
+     }
+ 
+     let toNoWages = 0;
+     if (toOperation === 'multiply') {
+         toNoWages = amount * toExchRate;
+     } else {
+         toNoWages = amount / toExchRate;
+     }
+
+
+    
+    let credit = 0;
+    if (fromWagesType === 'forUs') {
+        credit = (fromNoWages + fromWages).toFixed(2) || 0;
+    } else {
+        credit = (fromNoWages - fromWages).toFixed(2) || 0;
+    }
+
+    let dept = 0;
+    if (toWagesType === 'forUs') {
+        dept = (toNoWages + toWages).toFixed(2) || 0;
+    } else {
+        dept = (toNoWages - toWages).toFixed(2) || 0;
+    }
+    
 
     $('.move.active .credit').val(credit);
     $('.move.active .dept').val(dept);
@@ -120,6 +160,14 @@ function updateDifferenceMove() {
     
 }
 
+
+
+$(document).on('change', 'form.active.move select[name="fromCurrencyNameInArabic"]', function() {
+    const selectedVal = $(this).val();
+    console.log(selectedVal);  // Check if the value is being logged
+
+    $('form.active.move select[name="toCurrencyNameInArabic"]').val(selectedVal);  // Update the second select
+});
 
 
 

@@ -67,7 +67,8 @@ form .column {
 }
 
 .row input, .row select {
-    width: 250px;
+    width: 60%;
+    height: 30px;
 }
 
 

@@ -120,15 +120,24 @@
                                 <% } %>
                             </select>
                             <label for="currency">العملة</label>
-
                         </div>
 
+                        
+
                         <div class="row">
+                            <select name="toOperation">
+                                <option value="divide">÷</option>
+                                <option value="multiply">x</option>
+                            </select>
                             <input type="number" name="toExchRate" step="0.00001" required>
                             <label for="exchRate">سعر الصرف</label>
                         </div>
 
                         <div class="row">
+                            <select name="toWagesType">
+                                <option value="forUs">لنا</option>
+                                <option value="onUs">علينا</option>
+                            </select>
                             <input type="number" name="toWages" class="toWages">
                             <span>أو</span>
                             <input type="number" name="toWages" step="0.01" max="100" placeholder="%" class="toWages">
@@ -165,15 +174,24 @@
                                 <% } %>
                             </select>
                             <label for="currency">العملة</label>
-
                         </div>
 
+                    
+
                         <div class="row">
+                            <select name="fromOperation">
+                                <option value="divide">÷</option>
+                                <option value="multiply">x</option>
+                            </select>
                             <input type="number" name="fromExchRate" step="0.00001" required>
                             <label for="exchRate">سعر الصرف</label>
                         </div>
 
                         <div class="row">
+                            <select name="fromWagesType">
+                                <option value="forUs">لنا</option>
+                                <option value="onUs">علينا</option>
+                            </select>
                             <input type="number" name="fromWages" class="fromWages">
                             <span>أو</span>
                             <input type="number" name="fromWages" step="0.01" max="100" placeholder="%" class="fromWages">

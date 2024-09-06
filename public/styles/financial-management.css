@@ -58,3 +58,13 @@
     border-radius: 10px;
     width: 300px;
 }
+
+
+.hide-btn {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.hide {
+    border-radius: 10px;
+}
