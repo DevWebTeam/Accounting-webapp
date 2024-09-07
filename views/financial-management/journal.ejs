@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financify</title>
+    <title>financify</title>
     <link rel="stylesheet" href="/styles/journal.css">
 </head>
 <body>
@@ -44,27 +44,43 @@
                     <th>المبلغ لنا</th>
                     <th>العملة</th>
                     <th>من حساب</th>
-                    <th>#</th>
+                    <th>رقم الحركة</th>
                 </tr>
             </thead>
             <tbody>
                 <% if (locals.transactions) {%>
                     <% transactions.forEach(transaction => { %>
-                        <tr class="data" id=<%= transaction.transactionNumber %>>
-                            <td><%= transaction.type %></td>
-                            <td><%= transaction.userName %></td>
-                            <td><%= transaction.date %></td>
-                            <td><%= transaction.ResultInDollars %></td>
-                            <td><%= transaction.deptedForUs %></td>
-                            <td><%= transaction.toNameCurrency %></td>
-                            <td><%= transaction.toClientName %></td>
-                            <td><%= transaction.description %></td>
-                            <td><%= transaction.creditForUs %></td>
-                            <td><%= transaction.fromNameCurrency %></td>
-                            <td><%= transaction.fromClientName %></td>
-                            <td><%= transaction.transactionNumber %></td>
-    
-                        </tr>
+                        <% if (transaction.isCanceled) {%>
+                            <tr class="data canceled" id=<%= transaction._id %>>
+                                <td><%= transaction.type %></td>
+                                <td><%= transaction.userName %></td>
+                                <td><%= transaction.date %></td>
+                                <td><%= transaction.ResultInDollars %></td>
+                                <td><%= transaction.deptedForUs %></td>
+                                <td><%= transaction.toNameCurrency %></td>
+                                <td><%= transaction.toClientName %></td>
+                                <td><%= transaction.description %></td>
+                                <td><%= transaction.creditForUs %></td>
+                                <td><%= transaction.fromNameCurrency %></td>
+                                <td><%= transaction.fromClientName %></td>
+                                <td><%= transaction.transactionNumber %></td>
+                            </tr>
+                        <% } else { %>
+                            <tr class="data" id=<%= transaction._id %>>
+                                <td><%= transaction.type %></td>
+                                <td><%= transaction.userName %></td>
+                                <td><%= transaction.date %></td>
+                                <td><%= transaction.ResultInDollars %></td>
+                                <td><%= transaction.deptedForUs %></td>
+                                <td><%= transaction.toNameCurrency %></td>
+                                <td><%= transaction.toClientName %></td>
+                                <td><%= transaction.description %></td>
+                                <td><%= transaction.creditForUs %></td>
+                                <td><%= transaction.fromNameCurrency %></td>
+                                <td><%= transaction.fromClientName %></td>
+                                <td><%= transaction.transactionNumber %></td>
+                            </tr>
+                        <% } %>
                     <% }) %>
                 <% } else {%>
                     <tr class="data">

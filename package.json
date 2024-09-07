@@ -21,10 +21,13 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "fs": "^0.0.1-security",
     "mongodb": "^6.8.0",
+    "mongodb-backup": "^1.6.9",
     "mongoose": "^8.5.2",
     "node-cron": "^3.0.3",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
   }
 }

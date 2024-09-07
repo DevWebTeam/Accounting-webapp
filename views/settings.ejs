@@ -12,20 +12,58 @@
     <body>
         <main class="container">
             <section id="content">
-                <div class="setting">
+
+                <form method="post" class="modify-form info hidden">
+                
+                    <button type="button" class="close">X</button>
+                
+                    <div>
+                        <input type="text" name="username" placeholder="أدخل اسم المستخدم" required>
+                        <label for="username">اسم المستخدم</label>
+                    </div>
+                    <div>
+                        <input type="email" name="email" placeholder="أدخل البريد الإلكتروني">
+                        <label for="email">بريد إلكتروني</label>
+                    </div>
+                    <div>
+                        <input type="number" name="number" maxlength="13" placeholder="رقم الجوال">
+                        <label for="number">رقم الجوال</label>
+                    </div>
+                
+                    <input type="submit" value="حفظ التغييرات" class="submit-btn patch-btn">
+                </form>
+                
+                <form method="post" class="modify-form-password hidden">
+                    <button type="button" class="close">X</button>
+                    <h5>تغيير كلمة المرور الخاصة بي</h5>
+                    <div>
+                        <input type="password" name="password" required placeholder="أدخل كلمة المرور">
+                        <label for="password">كلمة المرور</label>
+                    </div>
+                    <div>
+                        <input type="password" name="password2" required placeholder="أعد إدخال كلمة المرور">
+                        <label for="password2">أعد كتابة كلمة المرور</label>
+                    </div>
+                    <input type="submit" value="تعديل كلمة المرور" class="submit-btn">
+                </form>
+
+
+
+
+                <div class="setting modify">
                     <button>تعديل معلومات الحساب</button>
                 </div>
-                <div class="setting">
+                <div class="setting logout">
                     <a href="/logout">Log out</a>
                 </div>
 
 
 
-                <div class="pop-up-modify">
+                <div class="pop-up-modify hidden">
                     <div class="btn-container">
                         <button class="close">X</button>
                     </div>
-                    <h5></h5>
+                    <h4>تعديل حسابي</h4>
                     <div class="btn">
                         <button class="info">تعديل الحساب</button>
                     </div>
@@ -33,6 +71,10 @@
                         <button class="password">تعديل كلمة المرور</button>
                     </div>
                 </div>
+
+
+
+                <div class="hidden" id="account" data-account='<%= JSON.stringify(account) %>'></div>
 
             </section>
 

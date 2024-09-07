@@ -17,7 +17,8 @@ import {
     getJournal,
     getLedger,
     getLedgerAccount,
-    getTransactionsByCurrencyGroupedByClient
+    getTransactionsByCurrencyGroupedByClient,
+    cancelTransaction
 } from '../controllers/transactionControllers.js';
 
 const router = express.Router();
@@ -40,6 +41,11 @@ router.post('/ledger/currencies/client', getTransactionsByNames);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    journal
 router.get("/journal", getJournal);
 
+router.patch("/journal/update", updateTransaction);
+
+router.post("/journal/cancel/:id", cancelTransaction);
+
+router.delete("/journal/delete/:id", deleteTransactionById)
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    reconciliation
 router.get("/reconciliation", getReconciliation);

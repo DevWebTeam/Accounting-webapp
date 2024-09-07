@@ -1,5 +1,4 @@
 
-
 //**************************************************************************form pop-up handeling
 // Common functionality for handling the button click and form display
 function handleFormDisplay(buttonSelector, formSelector) {
@@ -162,12 +161,37 @@ function updateDifferenceMove() {
 
 
 
-$(document).on('change', 'form.active.move select[name="fromCurrencyNameInArabic"]', function() {
+$(document).on('change', 'form.active select[name="fromCurrencyNameInArabic"]', function() {
     const selectedVal = $(this).val();
-    console.log(selectedVal);  // Check if the value is being logged
 
-    $('form.active.move select[name="toCurrencyNameInArabic"]').val(selectedVal);  // Update the second select
+    $('form.active select[name="toCurrencyNameInArabic"]').val(selectedVal);  // Update the second select
 });
+
+
+
+//when update transaction
+// const transactionDataDiv = document.getElementById('transaction-data');
+// const transactionData = JSON.parse(transactionDataDiv.dataset.transaction);
+
+// // Now you can access each part of the transaction data
+// console.log(transactionData);
+
+// switch (transactionData.type) {
+//     case 'حركة تسوية':
+//         $('.type-reconciliation').click();
+//         $('.reconciliation input[name="description"]').val(transactionData.description);
+//         break;
+//     case 'حركة حوالة':
+//         $('.type-move').click();
+//         break;
+//     case 'حركة متعددة':
+//         $('.type-multiple').click();
+//         break;
+
+//     default:
+//         $('.type-reconciliation').click();
+//         break;
+// }
 
 
 
@@ -250,41 +274,105 @@ $('form.move').on('submit', async function (event) {
 
 
 
+let type = 'reconciliation';
 
+// Set event listeners for the buttons before form submission
+$('.recon-btn').on('click', () => {
+    type = 'reconciliation';
+    console.log(type)
+});
 
+$('.rely-btn').on('click', () => {
+    type = 'reliance';
+    console.log(type)
+});
 
+// Form submission logic
 $('form.reconciliation').on('submit', async function (event) {
+    event.preventDefault();
+
     try {
+        let response;
+        const formData = {
+            description: $('form.reconciliation input[name="description"]').val(),
+            fromClientName: $('form.reconciliation select[name="fromClientName"] option:selected').text(),
+            toClientName: $('form.reconciliation select[name="toClientName"] option:selected').text(),
+            fromCurrencyNameInArabic: $('form.reconciliation select[name="fromCurrencyNameInArabic"] option:selected').text(),
+            toCurrencyNameInArabic: $('form.reconciliation select[name="toCurrencyNameInArabic"] option:selected').text(),
+            creditForUsNum: $('form.reconciliation input[name="creditForUsNum"]').val(),
+            deptedForUsNum: $('form.reconciliation input[name="deptedForUsNum"]').val(),
+            userName: userName,
+            type: type == 'reconciliation' ? 'حركة نسوبة' : 'حركة اعتماد'  // Set the type based on the button clicked
 
-        event.preventDefault();
+        };
 
-        const response = await fetch('/finances/reconciliation/new', {
+        // Determine which type of transaction to submit
+
+        console.log(formData);
+
+        // Send the request
+        response = await fetch('/finances/reconciliation/new', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                description: $('form.reconciliation input[name="description"]').val(),
-                fromClientName: $('form.reconciliation select[name="fromClientName"] option:selected').text(),
-                toClientName: $('form.reconciliation select[name="toClientName"] option:selected').text(),
-                fromCurrencyNameInArabic: $('form.reconciliation select[name="fromCurrencyNameInArabic"] option:selected').text(),
-                toCurrencyNameInArabic: $('form.reconciliation select[name="toCurrencyNameInArabic"] option:selected').text(),
-                creditForUsNum: $('form.reconciliation input[name="creditForUsNum"]').val(),
-                deptedForUsNum: $('form.reconciliation input[name="deptedForUsNum"]').val(),
-                type: 'حركة نسوبة',
-                userName: userName
-            })
-        })
+            body: JSON.stringify(formData)
+        });
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
+        // Redirect on success
         window.location.href = '/finances/reconciliation';
 
-
-
     } catch (error) {
-        console.log(error.message)
+        console.error('Error during submission:', error);
     }
-})
+});
+
+
+
+
+
+
+// search for a value in drop down 
+$(document).ready(function(){
+    // Toggle the dropdown when clicking on the search input
+    $('#search').on('focus', function() {
+        $('#dropdownMenu').addClass('show');
+    });
+
+    // Hide dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('#dropdownMenu').removeClass('show');
+        }
+    });
+
+    // Filter function
+    $('#search').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('.dropdown-item').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+});
+//  end 
+
+$(document).ready(function(){
+    // Set the initial active state
+    $('#onButton').addClass('active');
+
+    // Click event for "ON" button
+    $('#onButton').on('click', function() {
+        $('#onButton').addClass('active');
+        $('#offButton').removeClass('active');
+    });
+
+    // Click event for "OFF" button
+    $('#offButton').on('click', function() {
+        $('#offButton').addClass('active');
+        $('#onButton').removeClass('active');
+    })
+});

@@ -131,3 +131,84 @@ form .column {
     background-color: rgba(255, 5, 5, 0.301) !important;
     color: rgb(100, 4, 4) !important;
 }
+
+
+
+/* search for a value in a drop down  */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 250px;
+}
+
+.dropdown-search {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100%;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.dropdown-item {
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #ccc;
+}
+
+.show {
+    display: block;
+}
+
+/* on/off btns */
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggle-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+    background-color: #fff;
+    color: #333;
+}
+
+.toggle-btn.active {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
+
+.toggle-btn:not(.active):first-of-type {
+    border-color: #f44336;
+}
+
+.toggle-btn:not(.active):last-of-type {
+    border-color: #f44336;
+}

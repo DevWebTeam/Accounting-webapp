@@ -17,6 +17,11 @@ a {
     border-radius: 5px;
 }
 
+h4 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
 div a:hover {
     background-color: #0c997a77;
 }
@@ -46,6 +51,30 @@ div button:hover {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     width: 30%;
 }
+
+.modify-form-password {
+    position: fixed;
+    z-index: 5;
+    background-color: rgb(255, 255, 255);
+    border-radius: 5px;
+    width: 60%;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    padding: 10px 0;
+    left: 10%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.modify-form-password div {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
 
 .pop-up-modify .btn {
     height: 45px;

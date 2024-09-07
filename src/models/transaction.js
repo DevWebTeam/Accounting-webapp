@@ -72,7 +72,14 @@ archived: {
 transactionNumber: {
     type: Number,
     required: true,
-    unique: true}
+    unique: true},
+isCanceled:{
+    type:Boolean,
+    default:false,
+    required: true,
+},
+CancelID: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' },
+
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

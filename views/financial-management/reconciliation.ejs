@@ -36,6 +36,19 @@
                         <label for="">من الحساب </label>
                     </div>
 
+                    <div class="dropdown">
+                        <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off">
+                        <div id="dropdownMenu" class="dropdown-content">
+                            
+                            <% if (locals.clients) { %>
+                                <% clients.forEach(client => { %>
+                                    <!-- <a href="#" class="dropdown-item">Apple</a> -->
+                                    <a href="#" class="dropdown-item" value=<%= client._id %>><%= client.name %></a>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <select name="toCurrencyNameInArabic" id="">
                             <% if (locals.currencies) { %>
@@ -145,7 +158,7 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="deptedForUsNum" class="dept">
+                            <input type="number" name="deptedForUsNum" class="dept" step="0.01">
                             <label for="DeptForUsNum">المبلغ الإجمالي علينا</label>
                         </div>
                     </div>
@@ -199,7 +212,7 @@
                         </div>
 
                         <div class="row">
-                            <input type="number" name="creditForUsNum" class="credit">
+                            <input type="number" name="creditForUsNum" class="credit" step="0.01">
                             <label for="CreditForUsNum">المبلغ الإجمالي لنا</label>
                         </div>
                     </div>
@@ -215,6 +228,11 @@
             <form action="/finances/reconciliation/new" method="post" class="type-form reconciliation active">
                     <div class="column description cln-2">
                         <div class="row">
+                            
+                            <div class="toggle-buttons" style="position: relative; right: 12vw;">
+                                <button type="button" id="onButton" class="recon-btn toggle-btn" value="تسوية">تسوية</button>
+                                <button type="button" id="offButton" class="rely-btn toggle-btn" value="اعتماد">اعتماد</button>
+                            </div>
                             <input type="text" name="description" required>
                             <label for="description">البيان</label>
                         </div>
@@ -235,7 +253,7 @@
                         </div>
 
                         <div class="row">
-                            <select name="toCurrencyNameInArabic" id="">
+                            <select name="toCurrencyNameInArabic" id="dropdown2">
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
                                         <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
@@ -266,7 +284,7 @@
                         </div>
 
                         <div class="row">
-                            <select name="fromCurrencyNameInArabic" id="">
+                            <select name="fromCurrencyNameInArabic" id="dropdown1">
                                 <% if (locals.currencies) { %>
                                     <% currencies.forEach( currency => { %>
                                         <option class=<%= currency.exchRate %> value=<%= currency.nameInArabic %>><%= currency.nameInArabic %></option>
@@ -300,3 +318,8 @@
         
     </body>
 </html>
+
+
+
+
+

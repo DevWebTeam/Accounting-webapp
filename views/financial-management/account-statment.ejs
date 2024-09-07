@@ -90,6 +90,7 @@
         </thead>
         <tbody>
             <% if (locals.transactions) {%>
+                <% let counter = 1 %>
                 <% transactions.forEach( transaction => { %>
                     <tr class="data" id=<%= transaction._id %>>
                         <td><%= transaction.userName %></td>
@@ -99,6 +100,7 @@
                         <td><%= transaction.deptedForUs %></td>
                         <td><%= transaction.creditForUs %></td>
                         <td><%= transaction.transactionNumber %></td>
+                        <td><%= counter++ %></td>
                     </tr>
                 <% }) %>
             <% } %>
