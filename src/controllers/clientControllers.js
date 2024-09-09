@@ -1,7 +1,7 @@
 import cron from "node-cron"
 import Client from '../models/client.js';
 import group from '../models/group.js';
-import { checkIfAuthorized } from '../controllers/functions.js';
+import {createNotification} from './notificationsControllers.js';
 
 
 // Function to create a new client
@@ -28,7 +28,7 @@ export const getAllClients = async (req, res, next) => {
             const groups = await group.find();
 
             console.log(clients);
-            res.status(200).render("clients-management.ejs", {clients: clients, groups: groups});
+            res.status(200).render("clients-management.ejs", {clients: clients, groups: groups, userName: req.session.passport.user.userName});
         } else {
             res.redirect("/login");
         }
@@ -56,7 +56,11 @@ export const getClientById = async (req, res) => {
 export const updateClientById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await Client.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+            const client = await Client.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+
+            const sessionName = req.session.passport.user.userName;        
+            await createNotification(sessionName, `${client.name} تم تحديث العميل` , `${sessionName} :تم تحديث العميل من قبل المستخدم`)
+
             res.status(200).json({message: "operation successeful"})
         } else {
             res.redirect("/login")
@@ -71,7 +75,13 @@ export const updateClientById = async (req, res) => {
 export const deleteClientById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            await Client.findByIdAndDelete(req.params.id);
+            const client = await Client.findByIdAndDelete(req.params.id);
+
+            // Send a notification about the deletion
+            const sessionName = req.session.passport.user.userName;        
+            await createNotification(sessionName, `${client.name} تم حذف العميل` , `${sessionName} :تم حذف العميل من قبل المستخدم`)
+
+
             res.status(200).json({alertMessage: `تم حذف العميل`});
         } else {
             res.redirect("/login")
@@ -124,6 +134,10 @@ export const deleteGroupById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             await group.findByIdAndDelete(req.params.id);
+
+            const sessionName = req.session.passport.user.userName;        
+            await createNotification(sessionName, `${group.name} تم حذف المجموعة` , `${sessionName} :تم حذف المجموعة من قبل المستخدم`)
+
             res.status(200).json({alertMessage: 'تم حذف المجموعة'});
         } else {
             res.redirect("/login")

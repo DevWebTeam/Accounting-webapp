@@ -15,9 +15,9 @@ const router = express.Router();
 
 router.get("/", getAllCurrencies);
 router.post("/add",checkIfAuthorized('admin', 'manager') ,createCurrency);
-router.get("/currency/:id", checkIfAuthorized('manager') , getCurrencyById);
-router.patch("/currency/patch/:id", checkIfAuthorized('manager') , patchCurrencyById);
-router.delete("/currency/delete/:id",checkIfAuthorized('manager'),  deleteCurrencyById);
+router.get("/currency/:id", checkIfAuthorized('admin','manager') , getCurrencyById);
+router.patch("/currency/patch/:id", checkIfAuthorized('admin', 'manager') , patchCurrencyById);
+router.delete("/currency/delete/:id",checkIfAuthorized('admin', 'manager'),  deleteCurrencyById);
 router.get("/exchRates", getAllCurrenciesAsJson);
 
 export default router;

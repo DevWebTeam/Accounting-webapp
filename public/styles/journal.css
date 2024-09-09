@@ -42,6 +42,10 @@ form {
     width: 90%;
 }
 
+form input, form select {
+    width: 20%;
+}
+
 form label {
     margin-right: 50px;
 }
@@ -59,12 +63,7 @@ form label {
     background-color: #0c997a80;
 }
 
-.transaction-table {
-    width: 92%;
-    margin: 0 auto;
-    overflow-x: scroll;
-    border-radius: 10px;
-}
+
 
 .transaction-table::-webkit-scrollbar {
     background-color: #0023263f;
@@ -79,7 +78,7 @@ form label {
 
 
 table {
-    width: 105%;
+    width: 92%;
     margin: 0 auto;
     background-color: #0c997a77;
     border: 01px solid black;
@@ -153,7 +152,7 @@ td {
 
 
 .canceled {
-    background-color: rgba(255, 123, 0, 0.301);
+    background-color: rgba(255, 166, 0, 0.514);
 }
 
 .hidden {

@@ -15,13 +15,21 @@
     
     <h2>دفتر اليومية</h2>
 
-    <form action="" method="post" class="search-form">
+    <form action="/finances/journal/date" method="post" class="search-form">
         <div class="row">
-            <input type="date" name="date">
-            <label for="type">ابحث عن حركة</label>
+            <input type="date" name="startDate">
+            <label for="type">البحث عن مستخدم</label>
 
             
-            <input type="text" name="type">
+            <!-- <input type="text" name="user"> -->
+             <select name="user">
+                <option value=""></option>
+                <% if (locals.users) {%>
+                    <% users.forEach(user => { %>
+                        <option value=<%= user.username %>><%= user.username %></option>
+                    <% }) %>
+                <% } %>
+             </select>
             <label for="date">اختر التاريخ</label>
         </div>
         <div class="row">
@@ -29,7 +37,7 @@
         </div>
     </form>
 
-    <div class="transaction-table">
+    
         <table>
             <thead>
                 <tr>
@@ -100,7 +108,6 @@
                 <% } %>
             </tbody>
         </table>
-    </div>
    
 
 

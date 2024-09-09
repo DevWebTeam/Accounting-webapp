@@ -1,0 +1,48 @@
+.notifications-container {
+    width: 100%;
+    max-height: 77vh;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow-y: scroll;
+}
+
+
+.notifications-container::-webkit-scrollbar {
+    background-color: #00232618;
+    border-radius: 5px;
+}
+
+.notifications-container::-webkit-scrollbar-thumb {
+    background-color: #0c997a77;
+    border-radius: 5px;
+}
+
+.notifications-container::-webkit-scrollbar-thumb:hover {
+    background-color: #0c997a60;
+}
+
+
+
+.notification {
+    background-color: white;
+    width: 90%;
+    margin: 25px auto;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.date {
+    color: rgba(0, 0, 0, 0.37);
+    font-size: small;
+}
+
+
+h3, .date, .message {
+    text-align: right;
+    margin: 7px auto;
+}
+
+h1 {
+    height: fit-content;
+}

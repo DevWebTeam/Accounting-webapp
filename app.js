@@ -22,7 +22,8 @@ import currenciesRoute from "./src/routes/currencies-management.js";
 import usersRoute from "./src/routes/users-management.js";
 import signupRoute from "./src/routes/login-signup.js"
 import settingsRoute from "./src/routes/settings.js";
-//models
+import notificationsRoute from "./src/routes/notifications-management.js"
+
 
 
 env.config();
@@ -58,6 +59,7 @@ app.use("/currencies", checkIfBanned() , currenciesRoute);
 app.use("/users", checkIfAuthorized('admin'), checkIfBanned() , usersRoute);
 app.use("/settings", checkIfBanned(), settingsRoute);
 app.use("/", signupRoute);
+app.use("/notifications", checkIfBanned(), notificationsRoute);
 
 
 // Backup database route
@@ -95,6 +97,6 @@ app.get('/backup', (req, res) => {
 initializePassport(passport);
 
 
-app.listen(port, () => {
+app.listen(port || 3000,'0.0.0.0', () => {
   console.log(`Server running on port ${port}`);
 });

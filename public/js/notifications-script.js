@@ -1,0 +1,1 @@
+$('.side-bar-link.notifications').addClass('active');

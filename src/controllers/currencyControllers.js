@@ -1,6 +1,7 @@
 import Currency from '../models/currency.js';
 import bodyParser from 'body-parser';
 import express from "express";
+import {createNotification} from './notificationsControllers.js';
 
 const controller = express();
 controller.use(bodyParser.urlencoded({extended: true}));
@@ -39,7 +40,7 @@ export const getAllCurrencies = async (req, res) => {
         if (req.isAuthenticated()) {
             const result = await Currency.find().sort({priorityCu: 1});
 
-            res.status(200).render("currency-management.ejs", {currencies: result});
+            res.status(200).render("currency-management.ejs", {currencies: result, userName: req.session.passport.user.userName});
         } else {
             res.redirect("/login");
         }
@@ -89,6 +90,10 @@ export const patchCurrencyById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             const currency = await Currency.findByIdAndUpdate(req.params.id , req.body, { new: true, runValidators: true });
+
+            const sessionName = req.session.passport.user.userName;        
+            await createNotification(sessionName, `تم تحديث عملة ${currency.nameInArabic}` , `${sessionName} :تم تحديث العملة من قبل المستخدم`)
+
             res.status(200).json({message: "patch successeful"})
         } else {
             res.redirect("/login");
@@ -107,7 +112,12 @@ export const deleteCurrencyById = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
             console.log(req.params);
-            await Currency.findByIdAndDelete(req.params.id);
+            const currency = await Currency.findByIdAndDelete(req.params.id);
+
+            const sessionName = req.session.passport.user.userName;        
+            await createNotification(sessionName, `${currency.nameInArabic} تم حذف عملة` , `${sessionName} :تم حذف العملة من قبل المستخدم`)
+
+
             res.status(200).json({message: "delete successful"});
         } else {
             res.redirect("/login");

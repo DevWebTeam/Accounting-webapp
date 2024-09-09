@@ -9,7 +9,7 @@ router.get('/',  async (req, res) => {
     if (req.isAuthenticated()) {
         const myUsername = req.session.passport.user.userName;
         const myAccount = await User.findOne({username: myUsername});
-        res.status(200).render("settings.ejs", {account: myAccount});
+        res.status(200).render("settings.ejs", {account: myAccount, userName: req.session.passport.user.userName});
     } else {
         res.redirect("/login");
     }

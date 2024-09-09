@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>financify</title>
+    <link rel="stylesheet" href="styles/global.css">
+    <link rel="stylesheet" href="styles/notifications.css">
+    <link rel="stylesheet" href="styles/sidebar.css">
+</head>
+<body>
+    
+    <main class="container">
+        <section id="content">
+
+            <h1>إشعارات</h1>
+            <div class="notifications-container">
+                <% if (locals.notifications) {%>
+                    <% notifications.forEach(notification => { %>
+                        <div class="notification">
+                            <h3><%= notification.title %></h3>
+                            <p class="date"><%= notification.date %></p>
+                            <p class="message"><%= notification.message %></p>
+                        </div>
+                    <% }) %>
+                <% } %>
+            </div>
+            
+            
+
+        </section>
+
+        <%- include('sidebar.ejs') %>
+    </main>
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="js/notifications-script.js"></script>
+
+</body>
+</html>

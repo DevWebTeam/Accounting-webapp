@@ -338,6 +338,12 @@ export const cancelTransaction = async (req, res) => {
         }
         await defaultClient1.save();
 
+
+        // Send a notification about the deletion
+        const sessionName = req.session.passport.user.userName;        
+        await createNotification(sessionName, `${transaction.transactionNumber} :تم إلغاء حركة الرقم` , `${sessionName} تم إلغاء الحركة من قبل المستخدم`)
+
+
         res.status(201).json(transactionn);
     } catch (error) {
         console.error(error);
@@ -449,9 +455,11 @@ export const deleteTransactionById = async (req, res) => {
         }
 
         // Send a notification about the deletion
-        await createNotification(transaction.user, `Transaction ${transaction.transactionNumber} deleted by ${req.session.passport.user.userName}.`);
+        const sessionName = req.session.passport.user.userName;        
+        await createNotification(sessionName, `${transaction.transactionNumber} :تم حذف حركة الرقم` , `${sessionName} تم حذف الحركة من قبل المستخدم`)
+        
 
-        res.status(200).send('Transaction deleted successfully');
+        res.status(200).send('deleted');
     } catch (error) {
         console.error('Error deleting transaction:', error);
         res.status(400).send(error.message || 'An error occurred while deleting the transaction');
@@ -558,8 +566,9 @@ export const getTransactionsByCurrency = async (req, res) => {
 
 export const getTransactionsByClientGroupedByCurrency = async (req, res) => {
     try {
-        const clientName = req.params.clientName;
 
+        const clientName = req.params.clientName;
+        const user = req.session.passport.user;
 
         const transactions = await Transaction.aggregate([
             {
@@ -789,6 +798,8 @@ const getCurrencyIdsByNames = async (names) => {
 export const getTransactionsByNames = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
+            console.log('by names');
+
             const ids = req.body.ids;
             const account = {
                 clientName: req.body.clientName,
@@ -1018,7 +1029,7 @@ export const getFinances = async (req, res) => {
 
             
 
-            res.render('financial-management.ejs', {currencies: currencies, total: total});
+            res.render('financial-management.ejs', {currencies: currencies, total: total, userName: req.session.passport.user.userName});
 
 
         } else {
@@ -1069,14 +1080,28 @@ export const getReconciliation = async (req, res) => {
 export const getJournal = async (req, res) => {
     try {
         if (req.isAuthenticated()) {
-            const result = await Transaction.find({})
+
+
+            const users = await User.find();
+
+            const today = new Date();
+
+            // Get today's date formatted as "Sep 7, 2024"
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const todayString = today.toLocaleDateString('en-US', options);
+
+            const result = await Transaction.find({
+                date: {
+                    $regex: `^${todayString}` 
+                }
+            })
             .populate('fromClient', 'name')
             .populate('toClient', 'name')
             .populate('fromCurrency', 'nameInArabic')
             .populate('toCurrency', 'nameInArabic')
             .populate('user', 'username');
 
-            res.render('financial-management/journal.ejs', {transactions: result});
+            res.render('financial-management/journal.ejs', {transactions: result, users: users});
         } else {
             res.redirect('/login')
         }
@@ -1085,6 +1110,48 @@ export const getJournal = async (req, res) => {
     }
 }
 
+
+export const getJournalByDate = async (req, res) => {
+    if (req.isAuthenticated()) {
+        try {
+
+            const users = await User.find();
+
+            let user = '';
+            let startDate = '';
+
+            if (req.body.startDate) {
+                startDate = req.body.startDate;
+                const startDateObject = new Date(startDate);
+                
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                startDate = startDateObject.toLocaleDateString('en-US', options);
+            }
+
+            if (req.body.user)
+                user = req.body.user;
+
+
+
+            const result = await Transaction.find({
+                date: {
+                    $regex: `^${startDate}`
+                },
+                userName: {
+                    $regex: `${user}`
+                }
+            })
+
+            res.render('financial-management/journal.ejs', {transactions: result, users: users});
+
+        } catch(error) {
+            console.log(error);
+            res.send(error.message);
+        }
+    } else {
+        res.redirect('/login');
+    }
+}
 
 
 export const getLedger = async (req, res) => {

@@ -1,8 +1,9 @@
 import Notification from '../models/notification.js';
 
-export const createNotification = async (userId, message) => {
+export const createNotification = async (username, title , message) => {
     const notification = new Notification({
-        user: userId,
+        user: username,
+        title: title,
         message: message,
         date: new Date().toLocaleString("en-US", {
             year: 'numeric',
@@ -29,4 +30,20 @@ export const getUserNotifications = async (req, res) => {
 };
 
 
-export default {createNotification};
+export const getAllNotifications = async (req, res) => {
+    if (req.isAuthenticated()) {
+        let notifications = await Notification.find();
+        notifications = notifications.reverse();
+
+        res.render('notifications.ejs', {notifications: notifications, userName: req.session.passport.user.userName});
+
+    } else {
+        res.redirect('/login');
+    }
+}
+
+
+export default {
+    createNotification,
+    getAllNotifications
+};

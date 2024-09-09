@@ -22,7 +22,7 @@ export function checkIfAuthorized(role = ['admin']) {
             if (role.includes(userRole)) {
                 return next()
             } else {
-                return res.status(403).json("..ليس لديك صلاحية كافية")
+                return res.status(403).send("..ليس لديك صلاحية كافية")
             }
 
         } else {
