@@ -122,9 +122,6 @@ form .column {
     color: #075544;
     margin: 20px auto;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .not-zero {
@@ -211,4 +208,84 @@ form .column {
 
 .toggle-btn:not(.active):last-of-type {
     border-color: #f44336;
+}
+
+
+
+/* multiple transactions */
+.transaction {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:rgba(56, 56, 56, 0.288);
+    border-radius: 20px;
+    height: 70px;
+    width: 90%;
+    margin: 10px auto;
+}
+
+
+.transaction .icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 20px;
+    margin: 30px;
+}
+
+
+.transaction .icon.on-us {
+    background-color: rgba(255, 0, 0, 0.315);
+}
+
+.transaction .icon.for-us {
+    background-color: #0755445b;
+}
+
+
+.transaction button {
+    background-color: transparent;
+    border: 0;
+    border-radius: 20px;
+    width: 50px;
+    height: 50px;
+    margin-left: 30px;
+    cursor: pointer;
+}
+
+
+.transaction button:hover {
+    background-color: rgba(255, 0, 0, 0.288);
+}
+
+.multiple .add-transaction {
+    width: 90%;
+    margin: 30px auto;
+    height: 40px;
+    border: 0;
+    border-radius: 10px;
+    background-color: #33333334;
+    cursor: pointer;
+}
+
+.multiple .add-transaction:hover {
+    background-color: #4d4d4d6b;
+
+}
+
+
+.multiple div.item p {
+    height: 30px;
+}
+
+.multiple div.item {
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
+
+.multiple .diff {
+    height: 50px;
 }

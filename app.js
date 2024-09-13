@@ -59,7 +59,7 @@ app.use("/currencies", checkIfBanned() , currenciesRoute);
 app.use("/users", checkIfAuthorized('admin'), checkIfBanned() , usersRoute);
 app.use("/settings", checkIfBanned(), settingsRoute);
 app.use("/", signupRoute);
-app.use("/notifications", checkIfBanned(), notificationsRoute);
+app.use("/notifications",checkIfAuthorized('admin'), checkIfBanned(), notificationsRoute);
 
 
 // Backup database route

@@ -46,7 +46,6 @@ $('.pop-up .delete').on('click', async function() {
 
 $('.pop-up .cancel').on('click', async function() {
     try {
-
         const response = await fetch(`/finances/journal/cancel/${id}`, {
             method: 'POST',
             headers: {
@@ -59,7 +58,7 @@ $('.pop-up .cancel').on('click', async function() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        $(`#${id}`).addClass('canceled');
+        
         $('.pop-up').removeClass('hidden');
 
 
@@ -73,25 +72,5 @@ $('.pop-up .cancel').on('click', async function() {
 
 
 $('.pop-up .modify').on('click', async function() {
-    try {
-        const response = await fetch(`/finances/reconciliation`, {
-            method: 'Post',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: id
-            })
-        })
-
-
-        if (!response.ok) {
-            throw new Error("http error! Status:", response.status);
-        }
-
-        window.location.href = `/finances/reconciliation/${id}`
-
-    } catch (error) {
-        console.log("Error fetching:", error)
-    }
+    window.location.href = `/finances/update-reconciliation/${id}`
 })

@@ -21,9 +21,8 @@ const generateTransactionNumber = async () => {
 export const createTransaction = async (req, res) => {
     try {
         
-        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum , creditForUsNum, description, type, userName } = req.body;
+        const { fromClientName, toClientName, fromCurrencyNameInArabic, toCurrencyNameInArabic, deptedForUsNum , creditForUsNum, description, type } = req.body;
 
-        console.log(req.body);
 
         const fromClient = await Client.findOne({ name: fromClientName });
         const toClient = await Client.findOne({ name: toClientName });
@@ -32,8 +31,9 @@ export const createTransaction = async (req, res) => {
         const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyNameInArabic });
         const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyNameInArabic });
 
-
-        const user = await User.findOne({ username: userName });
+        const userName = req.session.passport.user.userName;
+        // const user = await User.findOne({ username: userName });
+        const user = req.session.passport.user.userId;
 
 
         const resultInDollars = (+creditForUsNum * fromCurrency.exchRate) - (+deptedForUsNum * toCurrency.exchRate);
@@ -66,8 +66,8 @@ export const createTransaction = async (req, res) => {
             toClientName:toClientName,
             fromNameCurrency:fromCurrencyNameInArabic,
             toNameCurrency:toCurrencyNameInArabic,
-            user: user._id,
-            userName:userName,
+            user: user,
+            userName: userName,
             transactionNumber: transactionNumber,
         });
 
@@ -110,7 +110,261 @@ export const createTransaction = async (req, res) => {
 };
 
 
+//helper functions
+const deleteLogic = async (transaction) => {
+    // Update logic for client and currency balances
+    const { fromClient, toClient, fromCurrency, toCurrency, deptedForUs, creditForUs, ResultInDollars } = transaction;
 
+
+    const fromClientDoc = await Client.findById(fromClient);
+    const toClientDoc = await Client.findById(toClient);
+    const fromCurrencyDoc = await Currency.findById(fromCurrency);
+    const toCurrencyDoc = await Currency.findById(toCurrency);
+
+    if (fromClientDoc && fromCurrencyDoc) {
+        fromClientDoc.totalDebt -= (creditForUs * fromCurrencyDoc.exchRate);
+        fromCurrencyDoc.credit -= creditForUs;
+        await fromClientDoc.save();
+        await fromCurrencyDoc.save();
+    }
+
+    if (toClientDoc && toCurrencyDoc) {
+        toClientDoc.totalCredit -= (deptedForUs * toCurrencyDoc.exchRate);
+        toCurrencyDoc.credit += deptedForUs;
+        await toClientDoc.save();
+        await toCurrencyDoc.save();
+    }
+
+    const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
+    if (defaultClient) {
+        if (ResultInDollars < 0) {
+            defaultClient.totalDebt -= ResultInDollars;
+        } else {
+            defaultClient.totalCredit -= ResultInDollars;
+        }
+        await defaultClient.save();
+    }
+
+    if (transaction.date === date.today()){
+    const defaultClient1 = await Client.findOne({ name: "ارباح و الخسائر يومية" });
+    if (defaultClient1) {
+        if (ResultInDollars < 0) {
+            defaultClient1.totalDebt -= ResultInDollars;
+        } else {
+            defaultClient1.totalCredit -= ResultInDollars;
+        }
+        if (fromClientName= "ارباح و الخسائر"){
+            defaultClient1.totalDebt = toShortNumber(defaultClient1.totalDebt - (creditForUs * fromCurrencyDoc.exchRate), 2);
+            }
+        if (toClientName = "ارباح و الخسائر") {
+            defaultClient1.totalCredit = toShortNumber(defaultClient1.totalCredit - (deptedForUs * toCurrencyDoc.exchRate), 2);
+        }
+        await defaultClient1.save();
+    }}
+
+    if (type === "إلغاء" && CancelID) {
+        const originalTransaction = await Transaction.findById(CancelID);
+        if (originalTransaction) {
+            originalTransaction.isCanceled = false;
+            await originalTransaction.save();
+        }
+    }
+
+};
+
+
+const addLogic = async (transaction) => {
+
+    const {
+        fromClient,
+        toClient,
+        fromClientName,
+        toClientName,
+        fromCurrency,
+        toCurrency,
+        deptedForUs,
+        creditForUs,
+        ResultInDollars,
+    } = transaction;
+
+
+    const fromClientDoc = await Client.findById(fromClient);
+    const toClientDoc = await Client.findById(toClient);
+    const fromCurrencyDoc = await Currency.findById(fromCurrency);
+    const toCurrencyDoc = await Currency.findById(toCurrency);
+
+
+    fromClientDoc.totalDebt += creditForUs * fromCurrencyDoc.exchRate;
+    toClientDoc.totalCredit += deptedForUs * toCurrencyDoc.exchRate;
+    fromCurrencyDoc.credit += creditForUs;
+    toCurrencyDoc.credit -= deptedForUs;
+
+    await fromClientDoc.save();
+    await toClientDoc.save();
+    await fromCurrencyDoc.save();
+    await toCurrencyDoc.save();
+
+
+    const resultInDollars = (Number(creditForUs) * fromCurrencyDoc.exchRate) - (Number(deptedForUs) * toCurrencyDoc.exchRate);
+    const shortResultInDollarsForDefaultClient = toShortNumber(resultInDollars, 2);
+
+
+    const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
+    if (ResultInDollars < 0) {
+        defaultClient.totalDebt += ResultInDollars;
+    } else {
+        defaultClient.totalCredit += ResultInDollars;
+    }
+    await defaultClient.save();
+
+
+    const defaultClient1 = await Client.findOne({ name: "ارباح و الخسائر يومية" });
+
+
+    if (shortResultInDollarsForDefaultClient < 0) {
+        defaultClient1.totalDebt += shortResultInDollarsForDefaultClient;
+    } else {
+        defaultClient1.totalCredit += shortResultInDollarsForDefaultClient;
+    }
+
+
+    if (fromClientName === "ارباح و الخسائر") {
+        defaultClient1.totalDebt = toShortNumber(defaultClient1.totalDebt + (creditForUs * fromCurrencyDoc.exchRate), 2);
+    }
+    if (toClientName === "ارباح و الخسائر") {
+        defaultClient1.totalCredit = toShortNumber(defaultClient1.totalCredit + (deptedForUs * toCurrencyDoc.exchRate), 2);
+    }
+
+    await defaultClient1.save();
+};
+
+const exchangeToDollar = async(currencyname,rate)=>{
+    const CurrencyDoc = await Currency.findOne({nameInArabic: currencyname});
+    return(rate * CurrencyDoc.exchRate);
+}
+
+
+
+export const createMultipleTransactions = async (req, res) => {
+    const transactionsData = req.body.transactions;
+
+    if (!Array.isArray(transactionsData) || transactionsData.length === 0) {
+        return res.status(400).send({ error: "Invalid input: transactions should be a non-empty array." });
+    }
+
+    try {
+        const createdTransactions = [];
+        const date = new Date().toLocaleString("en-US", {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        const number = await generateTransactionNumber();
+        const description = transactionsData[0].description;
+        let sumDept = 0;
+        let sumCredit = 0;
+
+        for (const transactionData of transactionsData) {
+            let {
+                fromClientName,
+                toClientName,
+                fromCurrencyName,
+                toCurrencyName,
+                deptedForUs,
+                creditForUs,
+                description,
+                userName,
+                type,
+            } = transactionData;
+
+            userName = req.session.passport.user.userName;
+
+            const fromClient = await Client.findOne({ name: fromClientName });
+            const toClient = await Client.findOne({ name: toClientName });
+            const fromCurrency = await Currency.findOne({ nameInArabic: fromCurrencyName });
+            const toCurrency = await Currency.findOne({ nameInArabic: toCurrencyName });
+            // const user = await User.findOne({ username: userName });
+            const user = req.session.passport.user.userId;
+
+            if (!fromClient || !toClient || !fromCurrency || !toCurrency || !user) {
+                return res.status(400).send({ error: "Client, Currency or User not found." });
+            }
+
+            
+            const resultInDollars = creditForUs - deptedForUs;
+
+            const transaction = new Transaction({
+                fromClient,
+                toClient,
+                fromCurrency,
+                toCurrency,
+                deptedForUs,
+                creditForUs,
+                ResultInDollars: resultInDollars,
+                description:description,
+                user,
+                userName,
+                type,
+                transactionNumber: number,
+                date: date,
+                fromClientName: fromClientName,
+                toClientName: toClientName,
+                fromNameCurrency: fromCurrencyName,
+                toNameCurrency: toCurrencyName,
+            });
+
+            const savedTransaction = await transaction.save();
+            createdTransactions.push(savedTransaction);
+
+            
+            await addLogic(transaction);
+
+            
+            sumDept += await exchangeToDollar(toCurrencyName, deptedForUs);
+            sumCredit += await exchangeToDollar(fromCurrencyName, creditForUs);
+        }
+
+        
+        const defaultClientName2 = await Client.findOne({ name: "حسابات متعددة" });
+        const defaultCurrencyName2 = await Currency.findOne({ nameInArabic: "الدولار الأمريكي" });
+
+        if (!defaultClientName2 || !defaultCurrencyName2) {
+            return res.status(400).send({ error: "Default client or currency not found." });
+        }
+
+        const motherTransaction = new Transaction({
+            fromClient: defaultClientName2,
+            toClient: defaultClientName2,
+            fromCurrency: defaultCurrencyName2,
+            toCurrency: defaultCurrencyName2,
+            deptedForUs: toShortNumber(sumDept, 2),
+            creditForUs: toShortNumber(sumCredit, 2),
+            ResultInDollars: sumCredit - sumDept,
+            description:description,
+            user: req.session.passport.user.userId,
+            userName: req.session.passport.user.userName,
+            transactionNumber: number,
+            date: date,
+            fromClientName: "حسابات متعددة",
+            toClientName: "حسابات متعددة",
+            fromNameCurrency: "دولار أمريكي",
+            toNameCurrency: "دولار أمريكي",
+            type: "متعددة",
+        });
+
+        const savedMotherTransaction = await motherTransaction.save();
+        createdTransactions.push(savedMotherTransaction);
+
+        res.status(201).send(createdTransactions);
+    } catch (error) {
+        // console.error("Error creating transactions:", error);
+        console.log(error);
+        res.status(500).send(error.message);
+    }
+};
 
 
 
@@ -240,8 +494,7 @@ export const updateTransaction = async (req, res) => {
 export const cancelTransaction = async (req, res) => {
     const  transactionId = req.params.id;
 
-    // const userName = req.session.passport.user.username;
-    const userName = "djahid";
+    const userName = req.session.passport.user.userName;
 
     if (!transactionId || !mongoose.Types.ObjectId.isValid(transactionId)) {
         return res.status(400).send({ error: 'Invalid or missing transactionId' });
@@ -346,7 +599,7 @@ export const cancelTransaction = async (req, res) => {
 
         res.status(201).json(transactionn);
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(400).send({ error: error.message });
     }
 };
@@ -360,7 +613,6 @@ export const deleteTransactionById = async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(transactionId)) {
             return res.status(400).send('Invalid transaction ID');
         }
-''
 
         const transaction = await Transaction.findById(transactionId);
         if (!transaction) {
@@ -455,14 +707,21 @@ export const deleteTransactionById = async (req, res) => {
         }
 
         // Send a notification about the deletion
-        const sessionName = req.session.passport.user.userName;        
+        const sessionName = req.session.passport.user.userName;
+        
+        let message = `${sessionName} من قبل المستخدم ${transaction.transactionNumber} تم حذف حركة الرقم
+        ${transaction.fromNameCurrency} ${transaction.creditForUs} ${transaction.fromClientName} من العميل
+        ${transaction.toNameCurrency} ${transaction.deptedForUs} ${transaction.toClientName} إلى العميل
+        ${transaction.ResultInDollars} نتيجة الحركة`
+
         await createNotification(sessionName, `${transaction.transactionNumber} :تم حذف حركة الرقم` , `${sessionName} تم حذف الحركة من قبل المستخدم`)
+        // await createNotification(sessionName, `${transaction.transactionNumber} :تم حذف حركة الرقم`, message);
         
 
         res.status(200).send('deleted');
     } catch (error) {
-        console.error('Error deleting transaction:', error);
-        res.status(400).send(error.message || 'An error occurred while deleting the transaction');
+        console.log(error);
+        res.status(400).send(error.message);
     }
 };
 
@@ -1075,6 +1334,22 @@ export const getReconciliation = async (req, res) => {
 };
 
 
+export const getUpdateReconciliation = async (req, res) => {
+    if (req.isAuthenticated()) {
+        try {
+
+            const transaction = await Transaction.findById(req.params.id);
+
+            res.render('financial-management/update-reconciliation.ejs', {transaction, userName: req.session.passport.user.userName});
+
+        } catch (error) {
+            console.log(error);
+            res.send(error.message)
+        }
+    } else {
+        res.redirect('/login')
+    }
+}
 
 
 export const getJournal = async (req, res) => {

@@ -40,6 +40,7 @@ export const getAllCurrencies = async (req, res) => {
         if (req.isAuthenticated()) {
             const result = await Currency.find().sort({priorityCu: 1});
 
+
             res.status(200).render("currency-management.ejs", {currencies: result, userName: req.session.passport.user.userName});
         } else {
             res.redirect("/login");

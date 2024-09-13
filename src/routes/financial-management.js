@@ -2,6 +2,7 @@ import express from 'express';
 import {
     archiveTransaction,
     createTransaction,
+    createMultipleTransactions,
     deleteTransactionById,
     getTransactionById,
     getTransactionsByClient,
@@ -14,6 +15,7 @@ import {
     getGeneralBudget,
     getFinances,
     getReconciliation,
+    getUpdateReconciliation,
     getJournal,
     getLedger,
     getLedgerAccount,
@@ -54,10 +56,14 @@ router.post("/journal/date", getJournalByDate);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    reconciliation
 router.get("/reconciliation", getReconciliation);
 
-//create transaction
+
+router.get("/update-reconciliation/:id", getUpdateReconciliation);
+
+//create transaction (recon / move)
 router.post('/reconciliation/new', createTransaction);
 
-
+//create transaction (mulitple)
+router.post('/reconciliation/new-multiple', createMultipleTransactions);
 
 
 export default router;

@@ -36,12 +36,12 @@ $('.type-reconciliation').on('click', function () {
 
 //**********************************************************************form displays handeling
 
-$(document).on('input', 'form.active.reconciliation .credit, form.active.reconciliation .dept', updateDifference);
+$(document).on('input', 'form.active.reconciliation .credit, form.active.reconciliation .dept', updateDifferenceReconciliation);
 
 $(document).on('input', 'form.active.move .amount, form.active.move .fromWages, form.active.move ', updateDifferenceMove);
 
 
-function updateDifference() {
+function updateDifferenceReconciliation() {
 
     //* get the exchrate
     fromExchRate = parseFloat($('.reconciliation.active select[name="fromCurrencyNameInArabic"] option:selected').attr('class')) || 1;
@@ -161,6 +161,164 @@ function updateDifferenceMove() {
 
 
 
+function updateDifferenceMultiple(movementList) {
+    let totalCredit = 0;
+    let totalDept = 0;
+    movementList.forEach(transaction => {
+        //get exchRate of currency and multiply currency*exchRate
+        if (transaction.creditForUs != 0)
+            totalCredit += transaction.creditForUs * transaction.ExchRate;
+
+        if (transaction.deptedForUs != 0)
+            totalDept += transaction.deptedForUs * transaction.ExchRate;
+    })
+
+
+    totalCredit = totalCredit.toFixed(3);
+    totalDept = totalDept.toFixed(3);
+
+    let diff = (totalCredit - totalDept).toFixed(3)
+
+    $('.active.multiple .diff').html(` لنا ${totalCredit}$ دولار --- علينا ${totalDept}$ دولار <br>  محصله الحركه <span dir="ltr"> ${diff}</span> دولار أمريكي`)
+
+    
+}
+
+
+
+
+let transactionList = [];
+$(document).ready(function() {
+    $(document).on('click', '.active.multiple .add-transaction' , () => {
+
+        let direction = '';
+        direction = $('.active.multiple select[name="direction"] option:selected').text();
+        
+        
+        const clientName = $('.active.multiple select[name="ClientName"] option:selected').text();
+        const currencyName = $('.active.multiple select[name="CurrencyName"] option:selected').text();
+        const ExchRate = $('.active.multiple select[name="CurrencyName"] option:selected').attr('class')
+        const ForUsNum = $('.active.multiple input[name="ForUsNum"]').val();
+
+
+        let transaction = {
+            description: $('.active.multiple input[name="description"]').val(),
+            fromClientName: direction === 'مدين لنا'? clientName : 'ارباح و الخسائر',
+            fromCurrencyName: direction === 'مدين لنا'? currencyName : 'الدولار الأمريكي',
+            ExchRate: ExchRate,
+            toClientName: direction === 'مدين لنا'? 'ارباح و الخسائر' : clientName,
+            toCurrencyName: direction === 'مدين لنا'? 'الدولار الأمريكي' : currencyName,
+            creditForUs: direction === 'مدين لنا'? ForUsNum : 0,
+            deptedForUs: direction === 'مدين لنا'? 0 : ForUsNum,
+            type: 'متعددة',
+            direction: direction
+        }
+
+
+        transactionList.push(transaction);
+
+        console.log(transactionList);
+
+        let htmlList = $('.transactions');
+        htmlList.empty();
+
+        transactionList.forEach( (transaction, index) => {
+            if (transaction.direction === "مدين لنا") {
+                html = `
+                <div class="transaction cln-2">
+                    <button type="button" class="item" id="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+                    </button>
+                        <div class="item">
+                            <p dir="rtl" lang="ar">لنا <span>${transaction.creditForUs}</span> <span>${transaction.fromCurrencyName}</span> على <span>${transaction.fromClientName}</span></p>        
+
+                            <div class="icon for-us">
+                                <p>لنا</p>
+                            </div>
+                        </div>
+                </div>`;
+            } else {
+                html = `
+                <div class="transaction cln-2">
+                    <button type="button" class="item" id="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+                    </button>
+    
+                    <div class="item">
+                        <p dir="rtl" lang="ar">علينا <span>${transaction.deptedForUs}</span> <span>${transaction.toCurrencyName}</span> على <span>${transaction.toClientName}</span></p>
+                                
+                        <div class="icon on-us">
+                            <p>علينا</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+        htmlList.append(html)})
+
+        updateDifferenceMultiple(transactionList);
+            
+
+
+    })
+});
+
+
+
+
+
+$(document).on('click', '.active.multiple .transaction button.item', function() {
+    const index = $(this).attr('id'); // Get the id which corresponds to the transaction index
+
+    transactionList.splice(index, 1); // Remove the transaction from the array
+    console.log(transactionList);
+
+    let htmlList = $('.transactions');
+    htmlList.empty(); // Clear the current list
+
+    transactionList.forEach((transaction, index) => {
+        let html;
+        if (transaction.direction === "مدين لنا") {
+            html = `
+            <div class="transaction cln-2">
+                <button class="item" id="${index}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)">
+                        <path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path>
+                    </svg>
+                </button>
+                <div class="item">
+                    <p dir="rtl" lang="ar">لنا <span>${transaction.creditForUs}</span> <span>${transaction.fromCurrencyName}</span> على <span>${transaction.fromClientName}</span></p>
+                    <div class="icon for-us">
+                        <p>لنا</p>
+                    </div>
+                </div>
+            </div>`;
+        } else {
+            html = `
+            <div class="transaction cln-2">
+                <button class="item" id="${index}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)">
+                        <path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path>
+                    </svg>
+                </button>
+                <div class="item">
+                    <p dir="rtl" lang="ar">علينا <span>${transaction.deptedForUs}</span> <span>${transaction.toCurrencyName}</span> على <span>${transaction.toClientName}</span></p>
+                    <div class="icon on-us">
+                        <p>علينا</p>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        htmlList.append(html);
+    });
+
+    updateDifferenceMultiple(transactionList);
+});
+
+
+
+
+//sync dropdown
 $(document).on('change', 'form.active select[name="fromCurrencyNameInArabic"]', function() {
     const selectedVal = $(this).val();
 
@@ -169,39 +327,14 @@ $(document).on('change', 'form.active select[name="fromCurrencyNameInArabic"]', 
 
 
 
-//when update transaction
-// const transactionDataDiv = document.getElementById('transaction-data');
-// const transactionData = JSON.parse(transactionDataDiv.dataset.transaction);
-
-// // Now you can access each part of the transaction data
-// console.log(transactionData);
-
-// switch (transactionData.type) {
-//     case 'حركة تسوية':
-//         $('.type-reconciliation').click();
-//         $('.reconciliation input[name="description"]').val(transactionData.description);
-//         break;
-//     case 'حركة حوالة':
-//         $('.type-move').click();
-//         break;
-//     case 'حركة متعددة':
-//         $('.type-multiple').click();
-//         break;
-
-//     default:
-//         $('.type-reconciliation').click();
-//         break;
-// }
 
 
 
 
 //*****************************************************************************form submit handeling
-const userDataElement = document.getElementById('user-data');
-const userName = userDataElement.getAttribute('data-username');
 
 
-
+//move form submission logic
 $('form.move').on('submit', async function (event) {
     try {
         event.preventDefault();
@@ -256,7 +389,6 @@ $('form.move').on('submit', async function (event) {
                 deptedForUsNum: dept,
                 type: 'حركة حوالة',
                 description: description,
-                userName: userName
             })
         })
 
@@ -274,6 +406,7 @@ $('form.move').on('submit', async function (event) {
 
 
 
+
 let type = 'reconciliation';
 
 // Set event listeners for the buttons before form submission
@@ -287,7 +420,7 @@ $('.rely-btn').on('click', () => {
     console.log(type)
 });
 
-// Form submission logic
+// reconciliation form submission logic
 $('form.reconciliation').on('submit', async function (event) {
     event.preventDefault();
 
@@ -301,7 +434,6 @@ $('form.reconciliation').on('submit', async function (event) {
             toCurrencyNameInArabic: $('form.reconciliation select[name="toCurrencyNameInArabic"] option:selected').text(),
             creditForUsNum: $('form.reconciliation input[name="creditForUsNum"]').val(),
             deptedForUsNum: $('form.reconciliation input[name="deptedForUsNum"]').val(),
-            userName: userName,
             type: type == 'reconciliation' ? 'حركة نسوبة' : 'حركة اعتماد'  // Set the type based on the button clicked
 
         };
@@ -333,9 +465,32 @@ $('form.reconciliation').on('submit', async function (event) {
 
 
 
+//multiple form submission logic
+$('.multiple').on('submit', async function(event) {
+    try {
+        event.preventDefault();
+        const response = await fetch('/finances/reconciliation/new-multiple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                transactions: transactionList
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // window.location.href = '/finances/reconciliation';
+    } catch (error) {
+        console.log("Error fetching:", error);
+    }
+});
 
 
-
+//*********************************************drop down
 // search for a value in drop down 
 $(document).ready(function(){
     // Toggle the dropdown when clicking on the search input
@@ -357,6 +512,9 @@ $(document).ready(function(){
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
+
+    let searchVal = $('#search').val();
+    $('.active.multiple').val(searchVal);
 });
 //  end 
 

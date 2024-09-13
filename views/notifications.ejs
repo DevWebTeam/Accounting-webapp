@@ -11,16 +11,16 @@
 <body>
     
     <main class="container">
-        <section id="content">
+        <section id="content" dir="ltr">
 
             <h1>إشعارات</h1>
             <div class="notifications-container">
                 <% if (locals.notifications) {%>
                     <% notifications.forEach(notification => { %>
-                        <div class="notification">
+                        <div class="notification" dir="ltr">
                             <h3><%= notification.title %></h3>
                             <p class="date"><%= notification.date %></p>
-                            <p class="message"><%= notification.message %></p>
+                            <p class="message" ><%= notification.message %></p>
                         </div>
                     <% }) %>
                 <% } %>

@@ -91,7 +91,6 @@ export const getUserById = async (req, res) => {
 
 // Update a user by ID
 export const updateUserById = async (req, res) => {
-    console.log('update user');
     try {
 
         if (req.isAuthenticated()) {
@@ -105,6 +104,7 @@ export const updateUserById = async (req, res) => {
                 }
     
             const user = await User.findByIdAndUpdate(req.params.id, updatedUser, { new: true, runValidators: true });
+            req.session.passport.user.userName = updatedUser.username;
             res.status(200).json(user);
         } else {
             res.redirect("/login")
