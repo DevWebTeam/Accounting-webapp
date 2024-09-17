@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar-AR">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,7 @@
             <div class="notifications-container">
                 <% if (locals.notifications) {%>
                     <% notifications.forEach(notification => { %>
-                        <div class="notification" dir="ltr">
+                        <div class="notification" dir="rtl">
                             <h3><%= notification.title %></h3>
                             <p class="date"><%= notification.date %></p>
                             <p class="message" ><%= notification.message %></p>

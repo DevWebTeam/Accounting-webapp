@@ -28,10 +28,10 @@
             <form action="" method="post" class="type-form multiple hidden">
                 <div class="column cln-1 from">
                     <div class="row">
-                        <select name="ClientName" id="">
+                        <select name="ClientName" id="clientSelect">
                             <% if (locals.clients) { %>
                                 <% clients.forEach(client => { %>
-                                    <% if (client.name != 'ارباح و الخسائر يومية') {%>
+                                    <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') {%>
                                         <option value=<%= client._id %>><%= client.name %></option>
                                     <% } %>
                                 <% }) %>
@@ -46,8 +46,9 @@
                             
                             <% if (locals.clients) { %>
                                 <% clients.forEach(client => { %>
-                                    <!-- <a href="#" class="dropdown-item">Apple</a> -->
-                                    <a href="#" class="dropdown-item" value=<%= client._id %>><%= client.name %></a>
+                                    
+                                    <a href="#" class="dropdown-item" data-id="<%= client._id %>"><%= client.name %></a>
+
                                 <% }) %>
                             <% } %>
                         </div>
@@ -131,7 +132,7 @@
                             <select name="toClientName" required>
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                        <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') { %>
                                             <option value=<%= client.name %>><%= client.name %></option>
                                         <% } %>
                                     <% }) %>
@@ -185,7 +186,7 @@
                             <select name="fromClientName" required>
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                        <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') { %>
                                             <option value=<%= client.name %>><%= client.name %></option>
                                         <% } %>
                                     <% }) %>
@@ -241,6 +242,9 @@
 
             </form>
                 
+
+
+
             <form action="/finances/reconciliation/new" method="post" class="type-form reconciliation active">
                     <div class="column description cln-2">
                         <div class="row">
@@ -259,7 +263,7 @@
                             <select name="toClientName" id="">
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                        <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') { %>
                                             <option value=<%= client.name %>><%= client.name %></option>
                                         <% } %>
                                     <% }) %>
@@ -290,7 +294,7 @@
                             <select name="fromClientName">
                                 <% if (locals.clients) { %>
                                     <% clients.forEach(client => { %>
-                                        <% if (client.name != 'ارباح و الخسائر يومية') { %>
+                                        <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') { %>
                                             <option value=<%= client.name %>><%= client.name %></option>
                                         <% } %>
                                     <% }) %>

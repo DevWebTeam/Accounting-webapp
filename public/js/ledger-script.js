@@ -1,6 +1,8 @@
 
 const clientName = $('select option:selected').text();
 let ids = {};
+let currencyName = '';
+
 
 
 
@@ -108,11 +110,10 @@ $('form.search').on('submit', async function (event) {
 
 
 
-
-
-$(document).on('click', '.overview-data', async function (event) {
+$(document).on('click', '.overview-data', async function () {
     try {
-        const currencyName = $(this).attr('id');
+        currencyName = $(this).attr('id');
+
         const response = await fetch('/finances/ledger/currencies/client', {
             method: 'POST',
             headers: {
@@ -122,20 +123,29 @@ $(document).on('click', '.overview-data', async function (event) {
                 ids: ids[currencyName],
                 clientName: clientName,
                 currencyName: currencyName
-
             })
         });
 
+
         if (!response.ok) {
-            console.error('Failed to fetch:', response.status, response.statusText);
+            console.error('Failed to fetch:', response.status);
             return;
         }
 
+
+
+
         // Handle the response (e.g., redirect or update the DOM)
-        const data = await response.text(); // Assuming the server sends back HTML
-        document.open(); // Open a new document
-        document.write(data); // Write the new content
-        document.close(); // Close the document to render the new content
+        const data = await response.json();
+
+        const transaction = encodeURIComponent(JSON.stringify(data.transactions));
+        const total = encodeURIComponent(JSON.stringify(data.total));
+        const account = encodeURIComponent(JSON.stringify(data.account));
+        const info = encodeURIComponent(JSON.stringify(data.info));
+
+        console.log(data);
+        window.location.href = `/finances/ledger/account-statement?transaction=${transaction}&total=${total}&account=${account}&info=${info}`;
+
     } catch (error) {
         console.log(error.message);
     }

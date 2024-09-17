@@ -17,20 +17,25 @@
 
     <form action="/finances/journal/date" method="post" class="search-form">
         <div class="row">
-            <input type="date" name="startDate">
-            <label for="type">البحث عن مستخدم</label>
 
+            <select name="user">
+               <option value=""></option>
+               <% if (locals.users) {%>
+                   <% users.forEach(user => { %>
+                       <option value=<%= user.username %>><%= user.username %></option>
+                   <% }) %>
+               <% } %>
+            </select>
+            <label for="date">من تاريخ</label>
+            
+            
+            <input type="date" name="startDate">
+            <label for="date">حتى يوم</label>
+            
             
             <!-- <input type="text" name="user"> -->
-             <select name="user">
-                <option value=""></option>
-                <% if (locals.users) {%>
-                    <% users.forEach(user => { %>
-                        <option value=<%= user.username %>><%= user.username %></option>
-                    <% }) %>
-                <% } %>
-             </select>
-            <label for="date">اختر التاريخ</label>
+            <input type="date" name="endDate">
+            <label for="date">البحث عن مستخدم</label>
         </div>
         <div class="row">
             <input type="submit" value="submit" class="submit-btn">
@@ -59,7 +64,7 @@
                 <% if (locals.transactions) {%>
                     <% transactions.forEach(transaction => { %>
                         <% if (transaction.isCanceled) {%>
-                            <tr class="data canceled" id=<%= transaction._id %>>
+                            <tr class="data <%= transaction.type %> canceled" id=<%= transaction._id %>>
                                 <td><%= transaction.type %></td>
                                 <td><%= transaction.userName %></td>
                                 <td><%= transaction.date %></td>
@@ -74,7 +79,7 @@
                                 <td><%= transaction.transactionNumber %></td>
                             </tr>
                         <% } else { %>
-                            <tr class="data" id=<%= transaction._id %>>
+                            <tr class="data <%= transaction.type %>" id=<%= transaction._id %>>
                                 <td><%= transaction.type %></td>
                                 <td><%= transaction.userName %></td>
                                 <td><%= transaction.date %></td>
@@ -90,25 +95,16 @@
                             </tr>
                         <% } %>
                     <% }) %>
-                <% } else {%>
-                    <tr class="data">
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
                 <% } %>
             </tbody>
         </table>
    
+
+    <div class="pop-up-cancel hidden">
+        <button class="close">X</button>
+        <h3></h3>
+        <button class="delete">حذف الحركة</button>
+    </div>
 
 
     <div class="pop-up hidden">

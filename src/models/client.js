@@ -62,6 +62,8 @@ ClientSchema.statics.ensureDefaultClient = async function() {
     if (!defaultClient) {
         defaultClient = new this({
             name: defaultClientName,
+            priorityCli: 1,
+            group: 'حسابات اساسيه',
             isDefault: true
         });
         await defaultClient.save();
@@ -75,6 +77,8 @@ ClientSchema.statics.ensureDefaultClient1 = async function() {
     if (!defaultClient) {
         defaultClient = new this({
             name: defaultClientName1,
+            priorityCli: 1,
+            group: 'حسابات اساسيه',
             isDefault: true
         });
         await defaultClient.save();
@@ -87,7 +91,9 @@ ClientSchema.statics.ensureDefaultClient2 = async function() {
     if (!defaultClient) {
         defaultClient = new this({
             name: defaultClientName2,
-            isDefault: true
+            priorityCli: 1,
+            group: 'حسابات اساسيه',
+            isDefault: true,
             //unseen:true//
         });
         await defaultClient.save();

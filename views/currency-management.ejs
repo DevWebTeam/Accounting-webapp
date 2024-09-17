@@ -109,12 +109,21 @@
                         <tbody>
                             <% if (locals.currencies) { %>   
                                 <% currencies.forEach(currency => { %>
+                                    <% if (currency.nameInArabic != 'دولار أمريكي') {%>
                                     <tr class="data" id="<%= currency._id %>">
                                         <td><%= currency.priorityCu %></td>
                                         <td><%= currency.exchRate %></td>
                                         <td><%= currency.code %></td>
                                         <td><%= currency.nameInArabic %></td>
                                     </tr>
+                                    <% } else { %>
+                                        <tr class="" id="<%= currency._id %>">
+                                            <td><%= currency.priorityCu %></td>
+                                            <td><%= currency.exchRate %></td>
+                                            <td><%= currency.code %></td>
+                                            <td><%= currency.nameInArabic %></td>
+                                        </tr>
+                                    <% } %>
                                 <% }) %>
                             <% } %>
                         </tbody>

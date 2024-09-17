@@ -1,83 +1,3 @@
-// import mongoose from 'mongoose';
-// import Transaction from './transaction.js';
-
-// const CurrencySchema = new mongoose.Schema({
-//     icon: {
-//         type: String
-//     },
-//     nameInEnglish: {
-//         type: String,
-//         required: true
-//     },
-//     nameInArabic: {
-//         type: String,
-//         required: true,
-//         unique: true
-//     },
-//     code: {
-//         type: String,
-//         maxlength: 3,
-//         set: v => v.toUpperCase(),
-//         required: true
-//     },
-//     symbol: {
-//         type: String,
-//         maxlength: 3,
-//         required: true
-//     },
-//     priorityCu: {
-//         type: Number,
-//         required: true
-//     },
-//     exchRate: {
-//         type: Number,
-//         required: true
-//     },
-//     credit: {
-//         type: Number,
-//         default:0,
-//     },
-//     isDefault:{
-//         type: Boolean,
-//         default:false,
-//     }
-// });
-
-// CurrencySchema.statics.ensureDefaultCurrency1 = async function() {
-//     const defaultCurrencyName2 = "دولار الأمريكي";
-//     let defaultCurrency = await this.findOne({ nameInArabic: defaultCurrencyName2 });
-
-//     if (!defaultCurrency) {
-//         defaultCurrency = new this({
-//             nameInArabic: defaultCurrencyName2,
-//             isDefault: true,
-//             exchRate: 1,
-//             nameInEnglish:"dollar",
-//             priorityCu: 100,
-//             symbol:"$",
-//             code:"USD"
-//         });
-//         await defaultCurrency.save();
-//     }
-// };
-
-// CurrencySchema.pre('findOneAndUpdate', async function(next) {
-//     const update = this.getUpdate();
-//     if (update.nameInArabic) {
-//         const currencyId = this.getQuery()._id;
-//         await Transaction.updateMany({ fromCurrency: currencyId }, { fromNameCurrency: update.nameInArabic });
-//         await Transaction.updateMany({ toCurrency: currencyId }, { toNameCurrency: update.nameInArabic });
-//     }
-//     next();
-// });
-
-// CurrencySchema.ensureDefaultCurrency1().catch(console.error);
-
-// export default mongoose.model('Currency', CurrencySchema);
-
-
-
-
 import mongoose from 'mongoose';
 import Transaction from './transaction.js';
 
@@ -107,7 +27,7 @@ const CurrencySchema = new mongoose.Schema({
     },
     priorityCu: {
         type: Number,
-        required: true
+        default: 100,
     },
     exchRate: {
         type: Number,

@@ -1,5 +1,6 @@
 $('.close').on('click', () => {
     $('.pop-up').addClass('hidden')
+    $('.pop-up-cancel').addClass('hidden')
 })
 
 
@@ -7,17 +8,30 @@ $('.close').on('click', () => {
 
 let id = '';
 $('.data').on('click', function () {
+
+    
     id = $(this).attr('id');
     const number = $(this).find('td:last').text();
 
+    const classes = $(this).attr('class');
+    console.log(classes);
 
-    $('.pop-up').removeClass('hidden');
-    $('.pop-up h3').html(`${number} اجراءات الحركة رقم `);
+
+    if (!classes.includes('canceled') && !classes.includes('إلغاء') && !classes.includes('إلـغـاء')) {
+
+        $('.pop-up').removeClass('hidden');
+        $('.pop-up h3').html(`${number} اجراءات الحركة رقم `);
+
+    } else if (classes.includes('إلغاء') || classes.includes('إلـغـاء')) {
+        console.log('else if')
+        $('.pop-up-cancel').removeClass('hidden');
+        $('.pop-up-cancel h3').html(`${number} اجراءات الحركة رقم `);
+    }
 })
 
 
 
-$('.pop-up .delete').on('click', async function() {
+$('.delete').on('click', async function() {
     try {
         
         const response = await fetch(`/finances/journal/delete/${id}`, {
@@ -44,7 +58,7 @@ $('.pop-up .delete').on('click', async function() {
 
 
 
-$('.pop-up .cancel').on('click', async function() {
+$('.cancel').on('click', async function() {
     try {
         const response = await fetch(`/finances/journal/cancel/${id}`, {
             method: 'POST',
@@ -71,6 +85,6 @@ $('.pop-up .cancel').on('click', async function() {
 
 
 
-$('.pop-up .modify').on('click', async function() {
+$('.modify').on('click', async function() {
     window.location.href = `/finances/update-reconciliation/${id}`
 })

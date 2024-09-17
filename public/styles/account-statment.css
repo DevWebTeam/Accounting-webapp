@@ -115,3 +115,59 @@ table {
 .canceled {
     background-color: rgba(255, 166, 0, 0.514);
 }
+
+
+.checked {
+    background-color: rgba(90, 90, 248, 0.397);
+}
+
+
+
+.pop-up, .pop-up-cancel {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    z-index: 3;
+    border-radius: 10px;
+    width: 30%;
+    left: 35%;
+    top: 35%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.pop-up button, .pop-up-cancel button {
+    background-color: transparent;
+    border: 0;
+    border-radius: 5px;
+    height:40px;
+    cursor: pointer;
+}
+
+.pop-up .close, .pop-up-cancel .close {
+    width: fit-content;
+    height: fit-content;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.pop-up button:hover, .pop-up-cancel button:hover {
+    background-color: rgba(0, 0, 0, 0.048);
+}
+
+.modify {
+    color: rgb(3, 133, 3);
+}
+
+.cancel {
+    color: rgb(209, 171, 2);
+}
+
+.delete {
+    color: rgb(179, 1, 1);
+}
+
+
+.hidden {
+    display: none;
+}

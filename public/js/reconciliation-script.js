@@ -147,9 +147,17 @@ function updateDifferenceMove() {
 
 
     const fromExchRateInial = parseFloat($('.move.active select[name="fromCurrencyNameInArabic"] option:selected').attr('class')) || 1;
-    const toExchRateInial = parseFloat($('.reconciliation.active select[name="toCurrencyNameInArabic"] option:selected').attr('class')) || 1;
+    const toExchRateInial = parseFloat($('.move.active select[name="toCurrencyNameInArabic"] option:selected').attr('class')) || 1;
     //*calculate diff
+
+    console.log('amount', amount)
+    console.log('fromExchRateInial:', fromExchRateInial,'toExchRateInital:', toExchRateInial)
+    console.log('fromwages:', fromWages, 'towages:', toWages)
+
+
     const diff = +((amount * fromExchRateInial + fromWages) - (amount * toExchRateInial + toWages)).toFixed(2);
+
+    console.log('diff:', diff);
     
     if(diff === 0) {
         $('.difference.active').html(`<p>${diff.toFixed(2)} نتيجة الحركة </p>`);
@@ -204,10 +212,10 @@ $(document).ready(function() {
         let transaction = {
             description: $('.active.multiple input[name="description"]').val(),
             fromClientName: direction === 'مدين لنا'? clientName : 'ارباح و الخسائر',
-            fromCurrencyName: direction === 'مدين لنا'? currencyName : 'الدولار الأمريكي',
+            fromCurrencyName: direction === 'مدين لنا'? currencyName : 'دولار أمريكي',
             ExchRate: ExchRate,
             toClientName: direction === 'مدين لنا'? 'ارباح و الخسائر' : clientName,
-            toCurrencyName: direction === 'مدين لنا'? 'الدولار الأمريكي' : currencyName,
+            toCurrencyName: direction === 'مدين لنا'? 'دولار أمريكي' : currencyName,
             creditForUs: direction === 'مدين لنا'? ForUsNum : 0,
             deptedForUs: direction === 'مدين لنا'? 0 : ForUsNum,
             type: 'متعددة',
@@ -483,7 +491,7 @@ $('.multiple').on('submit', async function(event) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // window.location.href = '/finances/reconciliation';
+        window.location.href = '/finances/reconciliation';
     } catch (error) {
         console.log("Error fetching:", error);
     }
@@ -513,8 +521,14 @@ $(document).ready(function(){
         });
     });
 
-    let searchVal = $('#search').val();
-    $('.active.multiple').val(searchVal);
+    $('#dropdownMenu a').on('click', function() {
+        let searchVal = $(this).data('id'); // Use data-id to get the value
+        console.log(searchVal);
+        console.log($('#clientSelect').val());
+        $('.multiple #clientSelect').val(searchVal);
+        console.log($('#clientSelect').val());
+    });
+    
 });
 //  end 
 

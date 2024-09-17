@@ -58,7 +58,7 @@ userName:{
     required:true,
 },
 date: {
-    type: String,
+    type: Date,
     default: Date.now
 },
 type: {
@@ -72,14 +72,21 @@ archived: {
 transactionNumber: {
     type: Number,
     required: true,
-    unique: true},
+    },
 isCanceled:{
     type:Boolean,
-    default:false,
+    default: false,
     required: true,
 },
-CancelID: { type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' },
-
+CancelID: { 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Transaction'
+},
+checked: {
+    type: Boolean,
+    required: true,
+    default: false,
+},
 });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);

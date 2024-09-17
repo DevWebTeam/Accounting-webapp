@@ -101,7 +101,7 @@ td {
 }
 
 
-.pop-up {
+.pop-up, .pop-up-cancel {
     display: flex;
     flex-direction: column;
     background-color: rgb(255, 255, 255);
@@ -114,7 +114,7 @@ td {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.pop-up button {
+.pop-up button, .pop-up-cancel button {
     background-color: transparent;
     border: 0;
     border-radius: 5px;
@@ -122,14 +122,14 @@ td {
     cursor: pointer;
 }
 
-.pop-up .close {
+.pop-up .close, .pop-up-cancel .close {
     width: fit-content;
     height: fit-content;
     align-self: flex-end;
     cursor: pointer;
 }
 
-.pop-up button:hover {
+.pop-up button:hover, .pop-up-cancel button:hover {
     background-color: rgba(0, 0, 0, 0.048);
 }
 

@@ -41,15 +41,27 @@
                             <% if (locals.clients) { %>
                                 <% let counter = 1; %> <!-- Initialize counter -->
                                 <% clients.forEach(client => { %>
-                                    <tr class="data" id="<%= client._id %>">
-                                        <td>الدولار المقوم</td>
-                                        <td><%= client.balanceCredit %></td>
-                                        <td><%= client.balanceDebt %></td>
-                                        <td><%= client.totalCredit %></td>
-                                        <td><%= client.totalDebt %></td>
-                                        <td><%= client.name %></td>
-                                        <td><%= counter++ %></td> <!-- Display and increment counter -->
-                                    </tr>
+                                    <% if (client.name == 'ارباح و الخسائر يومية' || client.name == 'ارباح و الخسائر') {%>
+                                        <tr class="data" id="<%= client._id %>"></tr>
+                                            <td>الدولار المقوم</td>
+                                            <td><%= Math.abs(client.balanceCredit) %></td>
+                                            <td><%= client.balanceDebt %></td>
+                                            <td><%= client.totalDebt %></td>
+                                            <td><%= client.totalCredit %></td>
+                                            <td><%= client.name %></td>
+                                            <td><%= counter++ %></td> <!-- Display and increment counter -->
+                                        </tr>
+                                        <% } else if (client.name != 'حسابات متعددة') {%>
+                                            <tr class="data" id="<%= client._id %>">
+                                                <td>الدولار المقوم</td>
+                                                <td><%= Math.abs(client.balanceCredit) %></td>
+                                                <td><%= client.balanceDebt %></td>
+                                                <td><%= client.totalCredit %></td>
+                                                <td><%= client.totalDebt %></td>
+                                                <td><%= client.name %></td>
+                                                <td><%= counter++ %></td> <!-- Display and increment counter -->
+                                            </tr>
+                                        <% } %>
                                 <% }) %>
                             <% } %>
                         </tbody>
@@ -87,7 +99,12 @@
 
 
             <section id="sidebar">
-                sidebar
+                <form action="" method="post" class="filter-priority">
+                    <label for="number">أدخل الأولوية</label>
+                    <input type="number" max="100" placeholder="1-100">
+
+                    <button type="button" class="submit-btn">filter</button>
+                </form>
             </section>
 
 
@@ -95,7 +112,7 @@
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-        <script src="js/general-budget-script.js"></script>
+        <script src="/js/general-budget-script.js"></script>
 
     </body>
 </html>

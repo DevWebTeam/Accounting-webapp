@@ -21,7 +21,9 @@ import {
     getLedgerAccount,
     getTransactionsByCurrencyGroupedByClient,
     cancelTransaction,
-    getJournalByDate
+    getJournalByDate,
+    checkTransaction,
+    getGeneralBudgetByPriority
 } from '../controllers/transactionControllers.js';
 
 import {checkIfAuthorized} from '../controllers/functions.js'
@@ -35,12 +37,21 @@ router.get('/', getFinances);
 
 router.get('/general-budget', getGeneralBudget);
 
+
+router.get('/general-budget/:priority', getGeneralBudgetByPriority);
+
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     ledger
 router.get('/ledger', getLedger);
 
 router.get('/ledger/currencies/:clientName', getTransactionsByClientGroupedByCurrency);
 
 router.post('/ledger/currencies/client', getTransactionsByNames);
+
+router.get('/ledger/account-statement', getLedgerAccount)
+
+router.post('/ledger/currencies/client/date', getTransactionsByNamesAndDate);
+
+router.post('/ledeger/currencies/client/:id', checkTransaction);
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    journal
 router.get("/journal", getJournal);
@@ -65,5 +76,8 @@ router.post('/reconciliation/new', createTransaction);
 //create transaction (mulitple)
 router.post('/reconciliation/new-multiple', createMultipleTransactions);
 
+
+//update (recon / move)
+router.patch('/reconciliation/update/:id', updateTransaction)
 
 export default router;

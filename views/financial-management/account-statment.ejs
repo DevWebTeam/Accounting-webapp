@@ -18,6 +18,9 @@
 
     <div class="view">
 
+
+       
+
         <% if (locals.account) {%>
             <h3> لعملة <%= account.currencyName %> <%= account.clientName %> كشف حساب</h3>
         <% } %>
@@ -52,20 +55,34 @@
             <% } %>
         </div>
 
-        <form action="" method="post">
+        <form action="/finances/ledger/currencies/client/date" method="post">
             <div class="row">
                 <div>
-                    <input type="date" name="date">
-                    <label for="date">اختر التاريخ</label>
+                    <input type="date" name="endDate">
+                    <label for="date">حتى يوم</label>
                 </div>
                 <div>
-                    <input type="text" name="type">
+                    <input type="date" name="startDate" >
+                    <label for="date">من تاريخ</label>
+                </div>
+                <div>
+                    <select name="type">
+                        <option value="متعددة">متعددة</option>
+                        <option value="حركة نسوبة">حركة نسوبة</option>
+                        <option value="حركة حوالة">حركة حوالة</option>
+                    </select>
                     <label for="type">البحث عن الحركة</label>
                 </div>
             </div>
             
             <button type="submit" class="submit-btn">Search</button>
         </form>
+
+        <% if (locals.info) {%>
+            <div id="data" class="info" data-info='<%= JSON.stringify(info) %>'></div>
+        <% } %>
+
+
     </div>
 
     <div class="count">
@@ -93,7 +110,8 @@
                 <% let counter = 1 %>
                 <% transactions.forEach( transaction => { %>
                     <% if(transaction.isCanceled) {%>
-                        <tr class="data canceled" id=<%= transaction._id %>>
+                        <tr class="data <%= transaction.type %> canceled" id=<%= transaction._id %>>
+                            
                             <td><%= transaction.userName %></td>
                             <td><%= transaction.date %></td>
                             <td><%= transaction.description %></td>
@@ -102,9 +120,15 @@
                             <td><%= transaction.creditForUs %></td>
                             <td><%= transaction.transactionNumber %></td>
                             <td><%= counter++ %></td>
+                            <% if (transaction.checked) { %>
+                                <td><input type="checkbox" value="checked" id=<%= transaction._id %> checked></td>
+                            <% } else {%>
+                                <td><input type="checkbox" value="unchecked" id=<%= transaction._id %>></td>
+                            <% } %>
                         </tr>
                     <% } else {%>
-                        <tr class="data" id=<%= transaction._id %>>
+                        <tr class="data <%= transaction.type %>" id=<%= transaction._id %>>
+                            
                             <td><%= transaction.userName %></td>
                             <td><%= transaction.date %></td>
                             <td><%= transaction.description %></td>
@@ -113,6 +137,11 @@
                             <td><%= transaction.creditForUs %></td>
                             <td><%= transaction.transactionNumber %></td>
                             <td><%= counter++ %></td>
+                            <% if (transaction.checked) { %>
+                                <td><input type="checkbox" value="checked" id=<%= transaction._id %> checked></td>
+                            <% } else {%>
+                                <td><input type="checkbox" value="unchecked" id=<%= transaction._id %>></td>
+                            <% } %>
                         </tr>
                     <% } %>
                 <% }) %>
@@ -120,6 +149,31 @@
         </tbody>
     </table>
 
+
+    
+    <div class="pop-up-cancel hidden">
+        <button class="close">X</button>
+        <h3></h3>
+        <button class="delete">حذف الحركة</button>
+    </div>
+
+
+    <div class="pop-up hidden">
+        <button class="close">X</button>
+        <h3></h3>
+        <button class="modify">تعديل الحركة</button>
+        <button class="cancel">إلغاء الحركة</button>
+        <button class="delete">حذف الحركة</button>
+    </div>
+
+
+    
+    <div id="data" data-info='<%= JSON.stringify(info) %>'></div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="/js/account-statment-script.js"></script>
 
 
 </body>
