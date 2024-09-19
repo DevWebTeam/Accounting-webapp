@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="row">
-                        <select name="CurrencyName" id="">
+                        <select name="CurrencyName">
                             <% if (locals.currencies) { %>
                                 <% currencies.forEach( currency => { %>
                                     <option value=<%= currency._id %> class=<%= currency.exchRate  %>><%= currency.nameInArabic %></option>
@@ -331,7 +331,7 @@
 
 
 
-        <div id="data" data-username="<%= userName %>" data-transaction='<%= JSON.stringify(transaction) %>'></div>
+        <div id="data" data-transaction='<%= JSON.stringify(transaction) %>'></div>
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

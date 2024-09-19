@@ -201,7 +201,7 @@ export const patchCurrencyById = async (req, res) => {
                     if (mumTransaction) {
                         const mumCreditForUs = mumTransaction.creditForUs || 0; // Default to 0 if undefined
                         mumTransaction.creditForUs = mumCreditForUs + sum;
-                        mumTransaction.resultInDollars += sum;
+                        mumTransaction.ResultInDollars += sum;
                         await mumTransaction.save();
                         
                     }
@@ -210,7 +210,7 @@ export const patchCurrencyById = async (req, res) => {
                 const defaultClient = await Client.findOne({ name: "ارباح و الخسائر" });
                 const defaultClient1 = await Client.findOne({ name: "ارباح و الخسائر يومية" });
 
-                if (transaction.resultInDollars < 0) {
+                if (transaction.ResultInDollars < 0) {
                     if (defaultClient) defaultClient.totalCredit -= sum;
                     if (transaction.date === DateTime.local().toISODate() && defaultClient1) {
                         defaultClient1.totalCredit -= sum;

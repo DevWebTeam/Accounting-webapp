@@ -1,5 +1,5 @@
 const DataElement = document.getElementById('data');
-const userName = DataElement.getAttribute('data-username');
+// const userName = DataElement.getAttribute('data-username');
 
 const transaction = JSON.parse(DataElement.getAttribute('data-transaction'));
 console.log(transaction);
@@ -158,10 +158,71 @@ function showDifferenceMove(fromCurrency, toCurrency) {
 }
 
 
+function displayTransactionsMultiple(transactions) {
+    let htmlList = $('.transactions');
+        htmlList.empty();
+
+        transactions.forEach( (transaction, index) => {
+            if (transaction.deptedForUs == 0) {
+                html = `
+                <div class="transaction cln-2">
+                    <button type="button" class="item" id="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+                    </button>
+                        <div class="item">
+                            <p dir="rtl" lang="ar">لنا <span>${transaction.creditForUs}</span> <span>${transaction.fromNameCurrency}</span> على <span>${transaction.fromClientName}</span></p>        
+
+                            <div class="icon for-us">
+                                <p>لنا</p>
+                            </div>
+                        </div>
+                </div>`;
+            } else {
+                html = `
+                <div class="transaction cln-2">
+                    <button type="button" class="item" id="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="rgba(255,0,0,1)"><path d="M7 4V2H17V4H22V6H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V6H2V4H7ZM6 6V20H18V6H6ZM9 9H11V17H9V9ZM13 9H15V17H13V9Z"></path></svg>
+                    </button>
+    
+                    <div class="item">
+                        <p dir="rtl" lang="ar">علينا <span>${transaction.deptedForUs}</span> <span>${transaction.toNameCurrency}</span> على <span>${transaction.toClientName}</span></p>
+                                
+                        <div class="icon on-us">
+                            <p>علينا</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+        htmlList.append(html)})
+
+        showDifferenceMultiple(transactions)
+}
+
+function showDifferenceMultiple(transactions) {
+    
+    let credit = 0;
+    let dept = 0;
+    let diff = 0;
+
+    transactions.forEach(transaction => {
+        if (transaction.deptedForUs == 0 ) {
+            $('.multiple select[name="CurrencyName"]').val(transaction.fromCurrency);
+            const fromExchRate = $('.multiple select[name="CurrencyName"] option:selected').attr('class');
+            credit += +transaction.creditForUs * +fromExchRate;
+        } else {
+            $('.multiple select[name="CurrencyName"]').val(transaction.toCurrency);
+            const toExchRate = $('.multiple select[name="CurrencyName"] option:selected').attr('class');
+            dept += +transaction.deptedForUs * +toExchRate;
+        }
+
+        diff = (credit - dept).toFixed(3)
+    })
+    $('.active.multiple .diff').html(` لنا ${credit}$ دولار --- علينا ${dept}$ دولار <br>  محصله الحركه <span dir="ltr"> ${diff}</span> دولار أمريكي`)
+}
 
 
-
-switch (transaction.type) {
+switch (transaction.type  || transaction[0].type) {
     case 'حركة نسوبة':
         handleFormDisplay('.type-reconciliation', '.reconciliation');
         $('#onButton').addClass('active');
@@ -207,8 +268,6 @@ switch (transaction.type) {
     case 'حركة حوالة':
         handleFormDisplay('.type-move', '.move');
 
-        //inputs
-
 
         //selects
         $('.move select[name="toClientName"]').val(transaction.toClient)
@@ -220,10 +279,10 @@ switch (transaction.type) {
         break;
 
     case 'متعددة':
-         handleFormDisplay('.type-multiple', '.multiple');
-        
+        handleFormDisplay('.type-multiple', '.multiple');
+        $('.multiple input[name="description"]').val(transaction[0].description);
+        displayTransactionsMultiple(transaction)
         break;
-
     default:
         break;
 }
@@ -359,6 +418,49 @@ function updateDifferenceMove() {
 }
 
 
+$(document).ready(function() {
+    $(document).on('click', '.active.multiple .add-transaction' , () => {
+
+        let direction = '';
+        direction = $('.active.multiple select[name="direction"] option:selected').text();
+        
+        
+        const clientName = $('.active.multiple select[name="ClientName"] option:selected').text();
+        const currencyName = $('.active.multiple select[name="CurrencyName"] option:selected').text();
+        const ExchRate = $('.active.multiple select[name="CurrencyName"] option:selected').attr('class')
+        const ForUsNum = $('.active.multiple input[name="ForUsNum"]').val();
+
+
+        let Atransaction = {
+            description: $('.active.multiple input[name="description"]').val(),
+            fromClientName: direction === 'مدين لنا'? clientName : 'ارباح و الخسائر',
+            fromCurrency: $('.active.multiple select[name="CurrencyName"]').val(),
+            toCurrency: $('.active.multiple select[name="CurrencyName"]').val(),
+            fromNameCurrency: direction === 'مدين لنا'? currencyName : 'دولار أمريكي',
+            ExchRate: ExchRate,
+            toClientName: direction === 'مدين لنا'? 'ارباح و الخسائر' : clientName,
+            toNameCurrency: direction === 'مدين لنا'? 'دولار أمريكي' : currencyName,
+            creditForUs: direction === 'مدين لنا'? +ForUsNum : 0,
+            deptedForUs: direction === 'مدين لنا'? 0 : +ForUsNum,
+            type: 'متعددة',
+            direction: direction
+        }
+
+
+        transaction.push(Atransaction);
+
+        displayTransactionsMultiple(transaction)
+    })
+});
+
+
+$(document).on('click', '.active.multiple .transaction button.item', function() {
+    const index = $(this).attr('id'); // Get the id which corresponds to the transaction index
+
+    transaction.splice(index, 1); // Remove the transaction from the array
+    console.log('after deleting:', transaction);
+    displayTransactionsMultiple(transaction);
+});
 
 
 //********************************************************************************form submit logic

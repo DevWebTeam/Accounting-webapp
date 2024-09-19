@@ -27,7 +27,19 @@
 
             <form action="" method="post" class="type-form multiple hidden">
                 <div class="column cln-1 from">
-                    <div class="row">
+                    <div class="row dropdown">
+                        <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off">
+                        <div id="dropdownMenu" class="dropdown-content">
+                            
+                            <% if (locals.clients) { %>
+                                <% clients.forEach(client => { %>
+                                    <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') {%>
+                                        <p href="#" class="dropdown-item" data-id="<%= client._id %>"><%= client.name %></p>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                        
                         <select name="ClientName" id="clientSelect">
                             <% if (locals.clients) { %>
                                 <% clients.forEach(client => { %>
@@ -40,19 +52,7 @@
                         <label for="">من الحساب </label>
                     </div>
 
-                    <div class="dropdown row">
-                        <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off">
-                        <div id="dropdownMenu" class="dropdown-content">
-                            
-                            <% if (locals.clients) { %>
-                                <% clients.forEach(client => { %>
-                                    
-                                    <a href="#" class="dropdown-item" data-id="<%= client._id %>"><%= client.name %></a>
-
-                                <% }) %>
-                            <% } %>
-                        </div>
-                    </div>
+                    
 
                     <div class="row">
                         <select name="CurrencyName" id="">
@@ -329,8 +329,6 @@
 
         </section>
 
-
-        <div id="user-data" data-username="<%= userName %>"></div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
         <script src="/js/reconciliation-script.js"></script>

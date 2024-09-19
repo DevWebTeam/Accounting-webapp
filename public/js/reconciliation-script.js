@@ -521,7 +521,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#dropdownMenu a').on('click', function() {
+    $('#dropdownMenu p').on('click', function() {
         let searchVal = $(this).data('id'); // Use data-id to get the value
         console.log(searchVal);
         console.log($('#clientSelect').val());

@@ -7,13 +7,14 @@ $('.close').on('click', () => {
 
 
 let id = '';
+let classes = '';
 $('.data').on('click', function () {
 
     
     id = $(this).attr('id');
     const number = $(this).find('td:last').text();
 
-    const classes = $(this).attr('class');
+    classes = $(this).attr('class');
     console.log(classes);
 
 
@@ -86,5 +87,9 @@ $('.cancel').on('click', async function() {
 
 
 $('.modify').on('click', async function() {
-    window.location.href = `/finances/update-reconciliation/${id}`
+    if (!classes.includes('متعددة')) {
+        window.location.href = `/finances/update-reconciliation/${id}`
+    } else {
+        window.location.href = `/finances/update-reconciliation/multiple/${id}`
+    }
 })

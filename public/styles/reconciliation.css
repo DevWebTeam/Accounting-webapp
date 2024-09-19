@@ -134,24 +134,23 @@ form .column {
 /* search for a value in a drop down  */
 .dropdown {
     position: relative;
-    display: inline-block;
-    width: 250px;
+    display: block;
 }
 
 .dropdown-search {
     width: 100%;
-    padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     outline: none;
+    justify-self: flex-start;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 100%;
+    min-width: 65%;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
     max-height: 200px;
@@ -161,7 +160,7 @@ form .column {
 }
 
 .dropdown-item {
-    padding: 10px;
+    padding: 7px;
     text-decoration: none;
     display: block;
     color: #333;

@@ -23,7 +23,8 @@ import {
     cancelTransaction,
     getJournalByDate,
     checkTransaction,
-    getGeneralBudgetByPriority
+    getGeneralBudgetByPriority,
+    getLinkedTrans
 } from '../controllers/transactionControllers.js';
 
 import {checkIfAuthorized} from '../controllers/functions.js'
@@ -67,8 +68,10 @@ router.post("/journal/date", getJournalByDate);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    reconciliation
 router.get("/reconciliation", getReconciliation);
 
-
+//get update (recon / move)
 router.get("/update-reconciliation/:id", getUpdateReconciliation);
+
+router.get("/update-reconciliation/multiple/:id", getLinkedTrans);
 
 //create transaction (recon / move)
 router.post('/reconciliation/new', createTransaction);

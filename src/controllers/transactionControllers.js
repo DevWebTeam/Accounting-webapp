@@ -1787,6 +1787,35 @@ export const checkTransaction = async (req, res) => {
 
 
 
+export const getLinkedTrans = async (req, res) => {
+    try {
+        
+        const clients = await Client.find();
+        const currencies = await Currency.find();
+
+        const Mother = await Transaction.findById(req.params.id);
+
+        
+        if (!Mother) {
+            return res.status(404).json({ message: "Mother transaction not found" });
+        }
+
+        
+        const transaction = await Transaction.find({
+            transactionNumber: Mother.transactionNumber,
+            fromClientName: { $ne: "حسابات متعددة" }
+        });
+
+
+        
+        res.status(200).render('financial-management/update-reconciliation.ejs', {transaction, clients, currencies});
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message);
+    }
+};
+
 //************************************************************************ page handling
 
 export const getGeneralBudget = async (req, res) => {
