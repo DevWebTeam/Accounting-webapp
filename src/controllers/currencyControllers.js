@@ -139,13 +139,12 @@ export const patchCurrencyById = async (req, res) => {
                 }
 
                 if (transaction.type === "إلـغـاء" || transaction.type === "متعددة") {
-                    const mumTransaction = await Transaction.findOne({ transactionNumber: transaction.transactionNumber });
+                    const mumTransaction = await Transaction.findOne({ transactionNumber: transaction.transactionNumber, fromClientName: 'حسابات متعددة' });
                     if (mumTransaction) {
                         const mumDeptedForUs = mumTransaction.deptedForUs || 0; // Default to 0 if undefined
                         mumTransaction.deptedForUs = mumDeptedForUs + sum;
                         mumTransaction.ResultInDollars -= sum;
                         await mumTransaction.save();
-                        
                     }
                 }
 
@@ -197,7 +196,7 @@ export const patchCurrencyById = async (req, res) => {
                 }
 
                 if (transaction.type === "إلـغـاء" || transaction.type === "متعددة") {
-                    const mumTransaction = await Transaction.findOne({ transactionNumber: transaction.transactionNumber });
+                    const mumTransaction = await Transaction.findOne({ transactionNumber: transaction.transactionNumber, fromClientName: 'حسابات متعددة'});
                     if (mumTransaction) {
                         const mumCreditForUs = mumTransaction.creditForUs || 0; // Default to 0 if undefined
                         mumTransaction.creditForUs = mumCreditForUs + sum;

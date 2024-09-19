@@ -97,19 +97,24 @@ $('.close').on('click', () => {
 
 
 let id = '';
+let classes = '';
 $('.data').on('click', function () {
+
+    
     id = $(this).attr('id');
     const number = $(this).find('td:last').text();
 
-    const classes = $(this).attr('class');
+    classes = $(this).attr('class');
+    console.log(classes);
 
-    if (!classes.includes('canceled') && !classes.includes('إلغاء')) {
+
+    if (!classes.includes('canceled') && !classes.includes('إلغاء') && !classes.includes('إلـغـاء')) {
 
         $('.pop-up').removeClass('hidden');
         $('.pop-up h3').html(`${number} اجراءات الحركة رقم `);
 
-    } else if (classes.includes('إلغاء')) {
-        $('.pop-up').addClass('hidden');
+    } else if (classes.includes('إلغاء') || classes.includes('إلـغـاء')) {
+        console.log('else if')
         $('.pop-up-cancel').removeClass('hidden');
         $('.pop-up-cancel h3').html(`${number} اجراءات الحركة رقم `);
     }
@@ -135,17 +140,15 @@ $('.delete').on('click', async function() {
         $(`#${id}`).addClass('deleted');
         $('.pop-up').removeClass('hidden');
 
-
-
-        window.location.href = '/finances/ledger'
+        window.location.href = '/finances/journal';
         
     } catch (error) {
         console.log("Error fetching:", error);
     }
 })
-       
-       
-       
+
+
+
 $('.cancel').on('click', async function() {
     try {
         const response = await fetch(`/finances/journal/cancel/${id}`, {
@@ -164,7 +167,7 @@ $('.cancel').on('click', async function() {
         $('.pop-up').removeClass('hidden');
 
 
-        window.location.href = '/finances/ledger';
+        window.location.href = '/finances/journal';
 
     } catch (error) {
         console.log("Error Fetching:", error)
@@ -174,5 +177,9 @@ $('.cancel').on('click', async function() {
        
        
 $('.modify').on('click', async function() {
-    window.location.href = `/finances/update-reconciliation/${id}`
+    if (!classes.includes('متعددة')) {
+        window.location.href = `/finances/update-reconciliation/${id}`
+    } else {
+        window.location.href = `/finances/update-reconciliation/multiple/${id}`
+    }
 })

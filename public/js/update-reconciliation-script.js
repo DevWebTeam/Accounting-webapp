@@ -3,7 +3,7 @@ const DataElement = document.getElementById('data');
 
 const transaction = JSON.parse(DataElement.getAttribute('data-transaction'));
 console.log(transaction);
-
+let id = ''
 
 
 function handleFormDisplay(buttonSelector, formSelector) {
@@ -281,6 +281,7 @@ switch (transaction.type  || transaction[0].type) {
     case 'متعددة':
         handleFormDisplay('.type-multiple', '.multiple');
         $('.multiple input[name="description"]').val(transaction[0].description);
+        id = transaction[0]._id;
         displayTransactionsMultiple(transaction)
         break;
     default:
@@ -592,5 +593,30 @@ $('form.reconciliation').on('submit', async function (event) {
 
     } catch (error) {
         console.error('Error during submission:', error);
+    }
+});
+
+
+
+$('.multiple').on('submit', async function(event) {
+    try {
+        event.preventDefault();
+        const response = await fetch(`/finances/reconciliation/update/multiple/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                transactions: transaction
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        window.location.href = '/finances/journal';
+    } catch (error) {
+        console.log("Error fetching:", error);
     }
 });

@@ -63,36 +63,36 @@ app.use("/notifications",checkIfAuthorized('admin'), checkIfBanned(), notificati
 
 
 // Backup database route
-app.get('/backup', (req, res) => {
-  // Path to store the backup
-  const backupPath = path.join(__dirname, 'backup');
-  const fileName = `backup_${new Date().toISOString().split('T')[0]}.gz`;
-  const fullPath = path.join(backupPath, fileName);
+// app.get('/backup', (req, res) => {
+//   // Path to store the backup
+//   const backupPath = path.join(__dirname, 'backup');
+//   const fileName = `backup_${new Date().toISOString().split('T')[0]}.gz`;
+//   const fullPath = path.join(backupPath, fileName);
 
-  // Create the backup folder if not exists
-  if (!fs.existsSync(backupPath)) {
-      fs.mkdirSync(backupPath);
-  }
+//   // Create the backup folder if not exists
+//   if (!fs.existsSync(backupPath)) {
+//       fs.mkdirSync(backupPath);
+//   }
 
-  // Run the mongodump command to create the backup
-  const command = `mongodump --uri="${process.env.MONGO_URL}" --archive=${fullPath} --gzip`;
+//   // Run the mongodump command to create the backup
+//   const command = `mongodump --uri="${process.env.MONGO_URL}" --archive=${fullPath} --gzip`;
   
-  exec(command, (error, stdout, stderr) => {
-      if (error) {
-          console.error(`Backup error: ${error}`);
-          return res.status(500).send('Error creating backup');
-      }
-      console.log('Backup completed:', stdout);
+//   exec(command, (error, stdout, stderr) => {
+//       if (error) {
+//           console.error(`Backup error: ${error}`);
+//           return res.status(500).send('Error creating backup');
+//       }
+//       console.log('Backup completed:', stdout);
 
-      // Provide the backup file for download
-      res.download(fullPath, fileName, (err) => {
-          if (err) {
-              console.error(`Download error: ${err}`);
-              res.status(500).send('Error downloading backup');
-          }
-      });
-  });
-});
+//       // Provide the backup file for download
+//       res.download(fullPath, fileName, (err) => {
+//           if (err) {
+//               console.error(`Download error: ${err}`);
+//               res.status(500).send('Error downloading backup');
+//           }
+//       });
+//   });
+// });
 
 initializePassport(passport);
 

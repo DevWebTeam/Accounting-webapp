@@ -618,6 +618,7 @@ export const updateTransaction = async (req, res) => {
 
 
 export const updateMultiTransaction = async (req, res) => {
+    
     const motherTransactionId = req.params.transactionID;
     const newTransactionsData = req.body.newTransactions;
 

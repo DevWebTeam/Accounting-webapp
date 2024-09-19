@@ -24,7 +24,8 @@ import {
     getJournalByDate,
     checkTransaction,
     getGeneralBudgetByPriority,
-    getLinkedTrans
+    getLinkedTrans,
+    updateMultiTransaction
 } from '../controllers/transactionControllers.js';
 
 import {checkIfAuthorized} from '../controllers/functions.js'
@@ -71,6 +72,7 @@ router.get("/reconciliation", getReconciliation);
 //get update (recon / move)
 router.get("/update-reconciliation/:id", getUpdateReconciliation);
 
+
 router.get("/update-reconciliation/multiple/:id", getLinkedTrans);
 
 //create transaction (recon / move)
@@ -82,5 +84,8 @@ router.post('/reconciliation/new-multiple', createMultipleTransactions);
 
 //update (recon / move)
 router.patch('/reconciliation/update/:id', updateTransaction)
+
+//update (multiple)
+router.patch('/reconciliation/update/multiple/:id', updateMultiTransaction);
 
 export default router;
