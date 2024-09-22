@@ -27,8 +27,23 @@
 
             <form action="" method="post" class="type-form multiple hidden">
                 <div class="column cln-1 from">
+                    <div class="row dropdown">
+                        <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off">
+                        <div id="dropdownMenu" class="dropdown-content">
+                            
+                            <% if (locals.clients) { %>
+                                <% clients.forEach(client => { %>
+                                    <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') {%>
+                                        <p class="dropdown-item" data-id="<%= client._id %>"><%= client.name %></p>
+                                    <% } %>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+
+
                     <div class="row">
-                        <select name="ClientName" id="">
+                        <select name="ClientName" id="clientSelect">
                             <% if (locals.clients) { %>
                                 <% clients.forEach(client => { %>
                                     <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') {%>
@@ -40,18 +55,6 @@
                         <label for="">من الحساب </label>
                     </div>
 
-                    <div class="dropdown row">
-                        <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off">
-                        <div id="dropdownMenu" class="dropdown-content">
-                            
-                            <% if (locals.clients) { %>
-                                <% clients.forEach(client => { %>
-                                    <!-- <a href="#" class="dropdown-item">Apple</a> -->
-                                    <a href="#" class="dropdown-item" value=<%= client._id %>><%= client.name %></a>
-                                <% }) %>
-                            <% } %>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <select name="CurrencyName">

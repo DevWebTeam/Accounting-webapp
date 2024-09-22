@@ -527,6 +527,7 @@ $(document).ready(function(){
         console.log($('#clientSelect').val());
         $('.multiple #clientSelect').val(searchVal);
         console.log($('#clientSelect').val());
+        $('#dropdownMenu').removeClass('show')
     });
     
 });

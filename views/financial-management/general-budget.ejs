@@ -19,11 +19,25 @@
 
                 <div class="general-budget-container">
 
-                    <form action="" method="post" class="search-form">
-                        <input type="search" name="search-account"  placeholder="ابحث عن حساب" class="search-input">
-                        <input type="submit" value="S" class="search-btn">
+                    <form action="/finances/general-budget/client" method="post" class="search-form">
+                        <div class="row dropdown">
+                            <input type="text" id="search" placeholder="Search..." class="dropdown-search" autocomplete="off" name="clientName">
+                            <div id="dropdownMenu" class="dropdown-content">
+                                
+                                <% if (locals.result) { %>
+                                    <% result.forEach(client => { %>
+                                        <% if (client.name != 'ارباح و الخسائر يومية' && client.name != 'حسابات متعددة') {%>
+                                            <p href="#" class="dropdown-item" data-id="<%= client._id %>"><%= client.name %></p>
+                                        <% } %>
+                                    <% }) %>
+                                <% } %>
+                            </div>
+                        </div>
+                        <input type="submit" value="البحث عن العميل" class="search-btn submit-btn">
                     </form>
 
+
+                    
 
                     <table class="general-budget-table">
                         <thead>

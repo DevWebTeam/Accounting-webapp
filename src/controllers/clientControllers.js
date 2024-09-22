@@ -92,6 +92,63 @@ export const deleteClientById = async (req, res) => {
 };
 
 
+export const SearchClient = async (req, res) => {
+    const clientName = req.body.clientName;
+
+    const query = await Client.findOne({name: clientName});
+    const allClients = await Client.find();
+
+    const client = [];
+    client.push(query);
+
+
+    const result = client.map(client => {
+        let balance = client.totalDebt - client.totalCredit;
+        let newBalance = 0;
+        if ( balance < 0) {
+            newBalance = balance;
+            balance = 0;
+        }
+
+
+        return {
+            _id: client._id,
+            name: client.name,
+            totalDebt: +client.totalDebt.toFixed(3),
+            totalCredit: +client.totalCredit.toFixed(3),
+            balanceDebt: +balance.toFixed(3),
+            balanceCredit: +newBalance.toFixed(3),
+        }
+    })
+
+    let total = {
+        DebtOnUs: 0,
+        CreditOnUs: 0,
+        balanceDebt: 0,
+        balanceCredit: 0,
+        diff: 0,
+    };
+    
+    result.forEach(client => {
+        total.DebtOnUs += +client.totalDebt.toFixed(3);
+        total.CreditOnUs += +client.totalCredit.toFixed(3);
+        total.balanceDebt += +client.balanceDebt;
+        total.balanceCredit += +client.balanceCredit;
+    });
+    
+
+    total.balanceDebt = +total.balanceDebt.toFixed(3);
+    total.balanceCredit = +total.balanceCredit.toFixed(3);
+
+
+
+    total.diff =  +total.balanceDebt.toFixed(2) - +total.balanceCredit.toFixed(2);
+    total.diff = +total.diff.toFixed(3)
+
+
+    res.render('financial-management/general-budget.ejs', {clients: result ,total: total, result: allClients})
+}
+
 
 
 
@@ -176,4 +233,5 @@ export default {
     createGroup,
     getAllGroups,
     deleteGroupById,
+    SearchClient
 };

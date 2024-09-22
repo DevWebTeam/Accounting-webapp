@@ -150,3 +150,33 @@ $(document).on('click', '.overview-data', async function () {
         console.log(error.message);
     }
 });
+
+
+
+
+
+// search for a value in drop down 
+$(document).ready(function(){
+    // Toggle the dropdown when clicking on the search input
+    $('#search').on('focus', function() {
+        $('#dropdownMenu').addClass('show');
+    });
+
+    // Hide dropdown when clicking outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+            $('#dropdownMenu').removeClass('show');
+        }
+    });
+
+    // Filter function
+    $('#search').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('.dropdown-item').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+   
+    
+});

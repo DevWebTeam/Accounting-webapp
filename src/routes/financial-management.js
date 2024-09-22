@@ -27,7 +27,7 @@ import {
     getLinkedTrans,
     updateMultiTransaction
 } from '../controllers/transactionControllers.js';
-
+import { SearchClient } from '../controllers/clientControllers.js';
 import {checkIfAuthorized} from '../controllers/functions.js'
 
 const router = express.Router();
@@ -41,6 +41,8 @@ router.get('/general-budget', getGeneralBudget);
 
 
 router.get('/general-budget/:priority', getGeneralBudgetByPriority);
+
+router.post('/general-budget/client', SearchClient);
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!     ledger
 router.get('/ledger', getLedger);

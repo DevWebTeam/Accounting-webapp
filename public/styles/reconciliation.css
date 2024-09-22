@@ -133,24 +133,26 @@ form .column {
 
 /* search for a value in a drop down  */
 .dropdown {
-    position: relative;
     display: block;
+    
 }
 
 .dropdown-search {
-    width: 100%;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     outline: none;
-    justify-self: flex-start;
+    width: 100%;
+    
+    
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
+    left: 13%;
     background-color: #f9f9f9;
-    min-width: 65%;
+    min-width: 25%;
     box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
     z-index: 1;
     max-height: 200px;
@@ -174,6 +176,8 @@ form .column {
 .show {
     display: block;
 }
+
+
 
 /* on/off btns */
 

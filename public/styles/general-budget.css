@@ -10,14 +10,15 @@ h2 {
 
 .search-form {
     height: fit-content;
+    width: 90%;
+    margin: 0 auto;
 }
 
-.search-form .search-input {
-    width: 60%;
-}
+
 
 .search-form .search-btn {
-    width: fit-content;
+    width: 90%;
+    margin: 20px 0;
 }
 
 .general-budget-container {
@@ -73,4 +74,54 @@ h1 {
 
 .submit-btn {
     margin: 0 auto;
+}
+
+
+
+
+/* search for a value in a drop down  */
+.dropdown {
+    display: block;
+    
+}
+
+.dropdown-search {
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    width: 100%;
+    height: 30px;
+    
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    width: 50%;
+    left: 14%;
+    background-color: #f9f9f9;
+    min-width: 25%;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.dropdown-item {
+    padding: 7px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #ccc;
+}
+
+.show {
+    display: block;
 }
